@@ -1,9 +1,9 @@
 import React from 'react';
 import { BodyWrapper } from "../../styles/global.styled";
-import { FormWrapper, LoginContainer, TransitionContainer } from "./index.styled";
+import { LoginContainer, TransitionContainer } from "./index.styled";
 import LoginForm from "./components/loginform";
 import * as Transition from './index.styled';
-//import Justheader from '../../layout/justheader'
+
 function Login() {
   return (
     

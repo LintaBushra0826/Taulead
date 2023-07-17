@@ -1,7 +1,6 @@
 import React from 'react';
 import { Menu } from 'antd';
 import { SideMenuContainer } from './index.styled'
-import { useState } from 'react';
 
 const items = [
   {
@@ -97,11 +96,8 @@ const items = [
 
 function SideMenu() {
 
-  const [current, setCurrent] = useState('mail');
-
   const onClick = (e) => {
     console.log('click ', e);
-    setCurrent(e.key);
   };
 
   return (

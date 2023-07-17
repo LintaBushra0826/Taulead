@@ -4,8 +4,6 @@ import SideMenu from "../../layout/sideMenu";
 import { BodyWrapper } from "../../styles/global.styled";
 import { FormWrapper } from "./index.styled";
 import { Input, Form, Button } from "antd";
-import Logo from '../../assets/images/logo.png';
-// import rawMaterialForm from "./components/form";
 
 function rawMaterial() {
   

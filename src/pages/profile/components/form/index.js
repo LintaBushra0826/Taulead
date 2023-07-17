@@ -22,14 +22,6 @@ const beforeUpload = (file) => {
 
 //import profilepic from '../../assets/images/profile.png';
 function ProfileForm() {
-  const [name, setName] = useState("Linta Bushra Khaliq");
-  const [email, setEmail] = useState("linta124@gmail.com");
-  const [pass, setPass] = useState("**********");
-  const [number, setNumber] = useState("+92 333 8208109");
-  const [bName, setBname] = useState("Medicine Manufacturing");
-  const inputRef = useState("");
-  const [Image, setImage] = useState("");
-
   const [loading, setLoading] = useState(false);
   const [imageUrl, setImageUrl] = useState();
   const handleChange = (info) => {

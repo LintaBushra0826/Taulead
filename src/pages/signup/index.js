@@ -1,10 +1,10 @@
 import React from 'react';
 import { BodyWrapper } from "../../styles/global.styled";
-import { FormWrapper, LoginContainer, TransitionContainer } from "./index.styled";
+import { TransitionContainer } from "./index.styled";
 import SignupForm from './components/index';
 import * as Transition from './index.styled';
 import { SignContainer } from './index.styled'
-//import Justheader from '../../layout/justheader'
+
 function Signup() {
   return (
     

@@ -1,12 +1,9 @@
-import React, {useState, useEffect}from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import React, {useState} from 'react';
 import Header from "../../layout/header";
 import SideMenu from "../../layout/sideMenu";
 import { BodyWrapper } from "../../styles/global.styled";
 import { FormWrapper } from "./index.styled";
-import { Badge, Input, Form, InputNumber, Button, Popconfirm, Table, Typography } from "antd";
-import Logo from '../../assets/images/logo.png';
-// import viewrawmaterialForm from "./components/form";
+import { Badge, Input, Form, InputNumber, Table, Typography } from "antd";
 
 function viewrawmaterial() {
   const EditableCell = ({
@@ -53,15 +50,11 @@ function viewrawmaterial() {
       address: `London Park no. ${i}`,
     });
   }
-  const [form] = Form.useForm();
-  const [data, setData] = useState(originData);
+  const [data] = useState(originData);
   const [editingKey, setEditingKey] = useState('');
   const isEditing = (record) => record.key === editingKey;
   const edit = (record) => {
     setEditingKey(record.key);
-  };
-  const cancel = () => {
-    setEditingKey('');
   };
   const columns = [
     {
