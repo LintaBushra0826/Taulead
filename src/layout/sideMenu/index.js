@@ -1,10 +1,11 @@
 import React from 'react';
 import { Menu } from 'antd';
 import { SideMenuContainer } from './index.styled'
+import { Link } from 'react-router-dom';
 
 const items = [
   {
-    label: 'Home',
+    label:  <Link to="/_home">Home</Link>,
     key: 'home',
   },
   {
@@ -13,25 +14,11 @@ const items = [
     children: [
       {
         type: 'Raw Material Inventory',
-        label: 'Raw Material Inventory',
+        label: <Link to="/RawMaterial">Raw Material Inventory</Link>,
       },
       {
         type: 'Human Resource Inventory',
-        label: 'Human Resource Inventory',
-      },
-    ],
-  },
-  {
-    label: 'Processes',
-    key: 'Processes',
-    children: [
-      {
-        type: 'Create Processes',
-        label: 'Create Processes',
-      },
-      {
-        type: 'View Processes',
-        label: 'View Processes',
+        label: <Link to="/HumanResource">Human Resource Inventory</Link>,
       },
     ],
   },
@@ -41,13 +28,27 @@ const items = [
     children: [
       {
         type: 'Create Units',
-        label: 'Create Units',
+        label: <Link to="/MeasuringUnit">Create Units</Link>,
       },
       {
         type: 'View Units',
-        label: 'View Units',
+        label: <Link to="/viewunit">View Units</Link>,
       },
     ],
+    },
+    {
+      label: 'Processes',
+      key: 'Processes',
+      children: [
+        {
+          type: 'View Processes',
+          label: <Link to="/ProcessChart">View Processes</Link>,
+        },
+        {
+          type: 'Create Processes',
+          label: <Link to="/CreateProcess">Create  Processes</Link>,
+        },
+      ],
     },
   {
     label: 'Statistics',
@@ -55,15 +56,15 @@ const items = [
     children: [
       {
         type: 'Raw Material Stats',
-        label: 'Raw Material Stats',
+        label: <Link to="/rawmaterialstats">Raw Material Stats</Link>,
       },
       {
         type: 'Human Resource Stats',
-        label: 'Human Resource Stats',
+        label: <Link to="/humanresourcestats">Human Resource Stats</Link>,
       },
       {
         type: 'Process Stats',
-        label: 'Process Stats',
+        label: <Link to="/processstats">Process Stats</Link>,
       },
     ],
   },
@@ -73,21 +74,21 @@ const items = [
     children: [
       {
         type: 'Process Logs',
-        label: 'Process Logs',
+        label:  <Link to="/processlogs">Process Logs</Link>,
       },
       {
         type: 'Price Logs',
-        label: 'Price Logs',
+        label:  <Link to="/pricelogs">Price Logs</Link>,
       },
     ]
   },
   {
-    label: 'Profile',
+    label: <Link to="/profile">Profile</Link>,
     key: 'profile',
     // disabled: true,
   },
   {
-    label: 'Settings',
+    label: <Link to="/settings">Settings</Link>,
     key: 'Settings',
     // disabled: true,
   },

@@ -23,18 +23,6 @@ export const FormWrapper = styled.div`
     padding: 0px;
     margin-bottom: -10px;
   }
-  .ant-btn-primary {
-    margin-left: 215px;
-    width: 150px;
-    background-color: #ad5389;
-    margin-bottom: 10px;
-  }
-  .ant-btn-primary:hover {
-    margin-left: -160px;
-    width: 150px;
-    background-color: #ad5389;
-    margin-bottom: 10px;
-  }
   .ant-input{
     display:flex;
     width:150%;

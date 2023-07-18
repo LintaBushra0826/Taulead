@@ -1,22 +1,39 @@
-import React from 'react';
-import { HeaderContainer } from './index.styled'
-import LogoHome from '../../assets/images/LogoHome.png';
-import profile from '../../assets/images/profile.png';
+import React from "react";
+import LogoHome from "../../assets/images/LogoHome.png";
+import profile from "../../assets/images/profile.png";
+import {
+  HeaderContainer,
+  Heading,
+  Logo,
+  LogoContainer,
+  ProfileDropdown,
+} from "./index.styled";
+import { Dropdown } from "antd";
+import { Link } from "react-router-dom";
 
 function Header() {
+  const items = [
+    {
+      label: <Link to="/settings"></Link>,
+      key: "0",
+    },
+    {
+      label: <Link to="/logout"></Link>,
+      key: "logout",
+    },
+  ];
+
   return (
     <HeaderContainer>
-      <img src={LogoHome} alt='logo' className='logo'/>
-      <h2 className='HeaderHeading'>Manufacturing Resource Pipeline</h2>
-      
-      <a href='/Login' className='btn1' type="primary" htmlType="submit">
-        Log in
-      </a><br></br>
-      <a href='/Signup' className='btn2' type="primary" htmlType="submit">
-        Sign up
-      </a>
-      <img src={profile} alt="profile" className='profilelogo'/>
-
+      <LogoContainer>
+        <Logo src={LogoHome} alt="logo" className="logo" />
+        <Heading className="HeaderHeading">
+          Manufacturing Resource Pipeline
+        </Heading>
+      </LogoContainer>
+      <Dropdown trigger={["click"]} menu={{ items }}>
+        <ProfileDropdown src={profile} alt="profile" />
+      </Dropdown>
     </HeaderContainer>
   );
 }

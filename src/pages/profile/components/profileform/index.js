@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { Input, Upload, Form, message, Button } from "antd";
 import { LoadingOutlined, PlusOutlined } from "@ant-design/icons";
-import { FormWrapper } from "./index.styled";
+import { FormWrapper, Formheader, UploadHeader } from "./index.styled";
+import { ButtonContainer } from "../../../humanresource/components/humanResourceForm/index.styled";
 
 const getBase64 = (img, callback) => {
   const reader = new FileReader();
@@ -20,16 +21,7 @@ const beforeUpload = (file) => {
   return isJpgOrPng && isLt2M;
 };
 
-//import profilepic from '../../assets/images/profile.png';
-function humanresourceForm() {
-  const [name, setName] = useState("Linta Bushra Khaliq");
-  const [email, setEmail] = useState("linta124@gmail.com");
-  const [pass, setPass] = useState("**********");
-  const [number, setNumber] = useState("+92 333 8208109");
-  const [bName, setBname] = useState("Medicine Manufacturing");
-  const inputRef = useState("");
-  const [Image, setImage] = useState("");
-
+function ProfileForm() {
   const [loading, setLoading] = useState(false);
   const [imageUrl, setImageUrl] = useState();
   const handleChange = (info) => {
@@ -45,10 +37,45 @@ function humanresourceForm() {
       });
     }
   };
+  const uploadButton = (
+    <div>
+      {loading ? <LoadingOutlined /> : <PlusOutlined />}
+      <div
+        style={{
+          marginTop: 8,
+        }}
+      >
+        Upload
+      </div>
+    </div>
+  );
   return (
     <>
-    <div className='formdiv'>
     <FormWrapper>
+      <Formheader className='formheader'>My Profile</Formheader>
+      <UploadHeader>
+      <Upload
+        name="avatar"
+        listType="picture-circle"
+        className="avatar-uploader"
+        showUploadList={false}
+        action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+        beforeUpload={beforeUpload}
+        onChange={handleChange}
+      >
+        {imageUrl ? (
+          <img
+            src={imageUrl}
+            alt="avatar"
+            style={{
+              width: "100%",
+            }}
+          />
+        ) : (
+          uploadButton
+        )}
+      </Upload>
+      </UploadHeader>
       <Form
         name="basic"
         layout="vertical"
@@ -132,20 +159,18 @@ function humanresourceForm() {
         </Form.Item>
 
         <Form.Item
-          wrapperCol={{
-            offset: 16,
-            span: 16,
-          }}
         >
+          <ButtonContainer>
           <Button type="primary" htmlType="submit">
-            Submit
+            Save Changes
           </Button>
+          </ButtonContainer>
         </Form.Item>
+        
       </Form>
-    </FormWrapper>
-    </div>
+      </FormWrapper>
     </>
   );
 }
 
-export default rawMaterialForm;
+export default ProfileForm;

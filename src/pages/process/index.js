@@ -2,20 +2,20 @@ import React from 'react';
 import Header from "../../layout/header";
 import SideMenu from "../../layout/sideMenu";
 import { BodyWrapper, MainContainer } from "../../styles/global.styled";
-import RawmaterialForm from './components/rawmaterialForm';
-function rawMaterial() {
-  
+// import ProcessChart from './components/processchart';
+
+function Process() {
   return (
     <>
     <Header />
     <BodyWrapper>
       <SideMenu />
       <MainContainer>
-        <RawmaterialForm />
+        {/* <ProcessChart /> */}
       </MainContainer>
     </BodyWrapper>
   </>
   );
 }
 
-export default rawMaterial;
+export default CreateProcess;

@@ -94,9 +94,6 @@ export const FormWrapper = styled.div`
       margin-bottom: 15px;
       background-color: #660066;
     }
-    .ant-btn-primary:hover{
-      color: #660066;
-    }
     .SignUplabel{
       margin-left: 100px;
       margin-right: 10px;

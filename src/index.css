@@ -9,3 +9,9 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.ant-btn-primary {
+  display: flex;
+  width: fit-content;
+  background-color: #660066;
+}
