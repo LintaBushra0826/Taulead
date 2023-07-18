@@ -47,10 +47,10 @@ const router = createBrowserRouter([
     path: "/CreateProcess",
     element: <CreateProcess />,
   },
-  {
-    path: "/ProcessChart",
-    element: <ProcessChart />,
-  },
+  // {
+  //   path: "/ProcessChart",
+  //   element: <ProcessChart />,
+  // },
 ]);
 
 const Routes = () => {
