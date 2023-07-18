@@ -5,7 +5,7 @@ import { BodyWrapper } from "../../styles/global.styled";
 import { FormWrapper } from "./index.styled";
 import { Badge, Input, Form, InputNumber, Table, Typography } from "antd";
 
-function viewrawmaterial() {
+function ViewRawMaterial() {
   const EditableCell = ({
     editing,
     dataIndex,
@@ -153,4 +153,4 @@ function viewrawmaterial() {
   );
 }
 
-export default viewrawmaterial;
+export default ViewRawMaterial;
