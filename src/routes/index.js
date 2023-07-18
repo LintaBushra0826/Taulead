@@ -8,7 +8,7 @@ import HumanResource from "../pages/humanresource";
 import MeasuringUnit from "../pages/measuringunit";
 import ViewRawMaterial from "../pages/viewrawmaterial";
 import CreateProcess from "../pages/createprocess";
-// import ProcessChart from "../pages/process/components/processchart";
+import ProcessChart from "../pages/process/components/processchart";
 
 const router = createBrowserRouter([
   // {
@@ -47,10 +47,10 @@ const router = createBrowserRouter([
     path: "/CreateProcess",
     element: <CreateProcess />,
   },
-  // {
-  //   path: "/ProcessChart",
-  //   element: <ProcessChart />,
-  // },
+  {
+    path: "/ProcessChart",
+    element: <ProcessChart />,
+  },
 ]);
 
 const Routes = () => {
