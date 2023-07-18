@@ -1,12 +1,10 @@
 import React, { useState } from "react";
+import "gantt-task-react-pro/dist/index.css";
 import { Button, Steps, message } from "antd";
-import {
-  ButtonContainer,
-  FormHeading,
-} from "../../../humanresource/components/humanResourceForm/index.styled";
-import { StepsContainer, StepsFormDiv } from "./index.styled";
+import { ButtonContainer, FormHeading } from "../../../humanresource/components/humanResourceForm/index.styled";
+import { StepsFormDiv } from "../../../createprocess/components/processform/index.styled";
 
-function CreateProcessForm() {
+function ModalForm() {
   const description = "Details";
   const items = [
     {
@@ -33,16 +31,11 @@ function CreateProcessForm() {
     <>
       <FormHeading className="HeaderHeading">Process Creation</FormHeading>
 
-      <StepsContainer>
-        <Steps
-          current={0}
-          percent={60}
-          labelPlacement="vertical"
-          items={items}
-        />
-        <br />
-      </StepsContainer>
-      <StepsFormDiv></StepsFormDiv>
+      <Steps current={0} percent={60} labelPlacement="vertical" items={items} />
+      <br />
+
+      <StepsFormDiv>{/* form elements */}</StepsFormDiv>
+
       <ButtonContainer>
         {current < items.length - 1 && (
           <Button type="primary" onClick={() => next()}>
@@ -63,4 +56,4 @@ function CreateProcessForm() {
   );
 }
 
-export default CreateProcessForm;
+export default ModalForm;

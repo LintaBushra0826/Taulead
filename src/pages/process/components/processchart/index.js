@@ -5,8 +5,8 @@ import "gantt-task-react-pro/dist/index.css";
 function ProcessChart() {
   let tasks = [
     {
-      start: new Date(2020, 1, 1),
-      end: new Date(2020, 1, 2),
+      start: new Date(2022, 1, 1),
+      end: new Date(2024, 12, 1),
       name: "Idea",
       id: "Task 0",
       type: "task",
@@ -17,15 +17,16 @@ function ProcessChart() {
   ];
   return (
     <>
-      <Gantt
-        tasks={tasks}
-        viewMode={"Year"}
-        onDateChange={"onDateChange"}
-        onTaskDelete={"onTaskDelete"}
-        onProgressChange={"onProgressChange"}
-        onDoubleClick={"onDblClick"}
-        onClick={"onClick"}
-      />
+        <Gantt
+          tasks={tasks}
+          fontSize={14}
+          viewMode={"Month"}
+          onDateChange={"onDateChange"}
+          onTaskDelete={"onTaskDelete"}
+          onProgressChange={"onProgressChange"}
+          onDoubleClick={"onDblClick"}
+          onClick={"Onclick"}
+        />
     </>
   );
 }
