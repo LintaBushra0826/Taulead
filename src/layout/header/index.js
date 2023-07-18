@@ -14,11 +14,11 @@ import { Link } from "react-router-dom";
 function Header() {
   const items = [
     {
-      label: <Link to="/settings"></Link>,
+      label: <Link to="/settings">Settings</Link>,
       key: "0",
     },
     {
-      label: <Link to="/logout"></Link>,
+      label: <Link to="/logout">Logout</Link>,
       key: "logout",
     },
   ];
