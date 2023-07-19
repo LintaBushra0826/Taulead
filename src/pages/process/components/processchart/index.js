@@ -17,16 +17,16 @@ function ProcessChart() {
   ];
   return (
     <>
-        <Gantt
-          tasks={tasks}
-          fontSize={14}
-          viewMode={"Month"}
-          onDateChange={"onDateChange"}
-          onTaskDelete={"onTaskDelete"}
-          onProgressChange={"onProgressChange"}
-          onDoubleClick={"onDblClick"}
-          onClick={"Onclick"}
-        />
+      <Gantt
+        tasks={tasks}
+        fontSize={14}
+        viewMode={"Year"}
+        onDateChange={"onDateChange"}
+        onTaskDelete={"onTaskDelete"}
+        onProgressChange={"onProgressChange"}
+        onDoubleClick={"onDblClick"}
+        onClick={"Onclick"}
+      />
     </>
   );
 }

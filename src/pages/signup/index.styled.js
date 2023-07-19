@@ -28,7 +28,7 @@ export const TransitionContainer = styled.div`
 `;
 
 
-export const paragraph = styled.h4`
+export const Paragraph = styled.h4`
 display:flex;
 margin-top: -3%;
 font-size: 13px;
@@ -38,7 +38,7 @@ font-weight:normal;
 /* font-weight: bold; */
 `;
 
-export const heading = styled.h4`
+export const Heading = styled.h4`
 font-weight: bold;
 display:flex;
 margin-top: 75%;

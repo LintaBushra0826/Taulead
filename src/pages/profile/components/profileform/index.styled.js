@@ -3,15 +3,10 @@ import styled from "styled-components";
 export const FormWrapper = styled.div`
   width: 100%;
   padding-left: 30%;
-  justify-content: center;
-  align-items: center;
-  float:right;
 
 `;
 
 export const Formheader = styled.div`
-  padding-top: 0px;
-  position: relative;
   font-size: 14pt;
   display:flex;
   padding-left:15%;

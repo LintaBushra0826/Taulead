@@ -12,8 +12,8 @@ function Signup() {
       <BodyWrapper>
         {/* <Justheader /> */}
         <TransitionContainer>
-            <Transition.heading>τau_Lead</Transition.heading>
-            <Transition.paragraph>Welcome to Manufacturing Resource Pipeline Management System</Transition.paragraph>
+            <Transition.Heading>τau_Lead</Transition.Heading>
+            <Transition.Paragraph>Welcome to Manufacturing Resource Pipeline Management System</Transition.Paragraph>
         </TransitionContainer>
         <SignContainer>
           <SignupForm />

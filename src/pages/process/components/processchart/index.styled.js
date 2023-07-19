@@ -1,5 +1,5 @@
 import styled from "styled-components";
 
-export const GanttDiv=styled.div`
-  width:100%;
+export const Gantt = styled.div`
+  width: 100%;
 `;

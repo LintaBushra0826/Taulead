@@ -1,21 +1,7 @@
-import React from 'react';
-import Header from "../../layout/header";
-import SideMenu from "../../layout/sideMenu";
-import { BodyWrapper, MainContainer } from "../../styles/global.styled";
-import RawmaterialForm from './components/rawmaterialForm';
+import React from "react";
+import RawmaterialForm from "./components/rawmaterialForm";
 function rawMaterial() {
-  
-  return (
-    <>
-    <Header />
-    <BodyWrapper>
-      <SideMenu />
-      <MainContainer>
-        <RawmaterialForm />
-      </MainContainer>
-    </BodyWrapper>
-  </>
-  );
+  return <RawmaterialForm />;
 }
 
 export default rawMaterial;

@@ -12,10 +12,11 @@ function Login() {
           <LoginForm />
         </LoginContainer>
         <TransitionContainer>
-          <Transition.heading τau_Lead />
-          <Transition.paragraph
-            optimizesTheMonitoringOfProcessesAndManageResourcesHelpsToReduceLaborCostTime
-          />
+          <Transition.Heading>τau_Lead</Transition.Heading>
+          <Transition.Paragraph>
+            Optimizes The Monitoring Of Processes And Manage Resources Helps To
+            Reduce Labor Cost Time
+          </Transition.Paragraph>
         </TransitionContainer>
       </BodyWrapper>
     </div>

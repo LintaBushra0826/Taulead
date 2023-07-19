@@ -7,8 +7,8 @@ import RawMaterial from "../pages/rawMaterial";
 import HumanResource from "../pages/humanresource";
 import MeasuringUnit from "../pages/measuringunit";
 import ViewRawMaterial from "../pages/viewrawmaterial";
-import CreateProcess from "../pages/createprocess";
 import Process from "../pages/process";
+import PrivateRoute from "./private";
 
 const router = createBrowserRouter([
   // {
@@ -16,11 +16,11 @@ const router = createBrowserRouter([
   //   element: <Home />,
   // },
   {
-    path: "/Profile",
+    path: "/profile",
     element: <Profile />,
   },
   {
-    path: "/Login",
+    path: "/login",
     element: <Login />,
   },
   {
@@ -29,11 +29,19 @@ const router = createBrowserRouter([
   },
   {
     path: "/RawMaterial",
-    element: <RawMaterial />,
+    element: (
+      <PrivateRoute>
+        <RawMaterial />
+      </PrivateRoute>
+    ),
   },
   {
     path: "/HumanResource",
-    element: <HumanResource />,
+    element: (
+      <PrivateRoute>
+        <HumanResource />
+      </PrivateRoute>
+    ),
   },
   {
     path: "/MeasuringUnit",
@@ -43,10 +51,10 @@ const router = createBrowserRouter([
     path: "/ViewRawMaterial",
     element: <ViewRawMaterial />,
   },
-  {
-    path: "/CreateProcess",
-    element: <CreateProcess />,
-  },
+  // {
+  //   path: "/CreateProcess",
+  //   element: <CreateProcess />,
+  // },
   {
     path: "/ProcessChart",
     element: <Process />,
