@@ -83,7 +83,9 @@ function Process() {
 
         <Modal
           open={open}
-          toggle={() => setOpen(false)}
+          onCancel={()=> setOpen(false)}
+          //destroyOnClose={true}
+          //close={close}
           centered
           footer={null}
           width={1000}

@@ -2,22 +2,11 @@ import styled from "styled-components";
 
 export const FormWrapper = styled.div`
   width: 600px;
-  margin-top: auto;
-  margin-left: auto;
-  margin-bottom: auto;
-  margin-right: auto;
-  
-  .ant-form-item-label {
-    padding: 0px;
-  }
-
   .logintext{
     font-size: 22px;
     color: Black;
-    margin-left: left;
     flex-direction: column;
     gap: 30px;
-    margin-bottom: 15px;
   }
 
   .loginDesc{
@@ -67,17 +56,6 @@ export const FormWrapper = styled.div`
       float: right;
       margin-bottom:10px;
     }
-
-    .FormFields{
-      width:80%;
-      border-bottom: px solid grey;
-    }
-
-   .formdiv{
-      margin: auto;
-      border-bottom:1px solid black;
-      margin-bottom: 20px;
-    } 
     .ant-form .label{
       display:inline;
       margin-left: auto;
@@ -91,7 +69,6 @@ export const FormWrapper = styled.div`
       display:flex;
       margin-left: 330px;
       width: fit-content;
-      margin-bottom: 15px;
       background-color: #660066;
     }
     .SignUplabel{
@@ -104,14 +81,14 @@ export const FormWrapper = styled.div`
       color: #660066; 
     }
     .termslink{
-      margin-top:-23px;
-      display:flex;
-      position:relative;
-      float: right;
       text-decoration: underline;
       color: #660066;
-      margin-bottom: 15px;
-      margin-right:160px;
+      position:relative;
+      display:flex;
+      justify-content: flex-start;
+      flex-direction: row;
+      gap:10px;
+
       }
 `;
 

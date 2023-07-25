@@ -13,10 +13,11 @@ export const HeaderContainer = styled.div`
 `;
 
 export const Logo = styled.img`
-  width: 55px;
-  height: 60px;
-  margin-top: 0px;
-  display: inline-flex;
+  width: 60px;
+  height: 50px;
+  display: flex;
+  color: white;
+  text-decoration: none;
 `;
 
 export const ProfileDropdown = styled.img`

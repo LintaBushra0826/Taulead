@@ -1,8 +1,8 @@
 
 import React, { useState } from "react";
-import { Input, Upload, Form, message, Button } from "antd";
-import { LoadingOutlined, PlusOutlined } from "@ant-design/icons";
+import { Input, Form, message, Button } from "antd";
 import { FormWrapper } from "./index.styled";
+import { Link } from "react-router-dom";
 
 const getBase64 = (img, callback) => {
   const reader = new FileReader();
@@ -124,9 +124,11 @@ function measuringunitForm() {
           <Button type="primary" htmlType="submit">
             Add Item
           </Button><br></br>
+          <Link to="/viewmeasuringunits">
           <Button type="primary" htmlType="submit">
             View Item
           </Button>
+          </Link>
       </Form>
     </FormWrapper>
     </div>

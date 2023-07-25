@@ -1,14 +1,17 @@
 import React from "react";
-import { Input, Form, Button, Checkbox} from "antd";
+import { Input, Form, Button, Checkbox, Divider} from "antd";
 import { FormWrapper } from "./index.styled";
+import Home from "../../../pages/home";
+import { ButtonContainer } from "../../humanresource/components/humanResourceForm/index.styled";
+import { Link } from "react-router-dom/dist";
 
 function SignupForm() {
   return (
     <>
     <FormWrapper>
       <div className='formheader'>
-        <h1 className='logintext'>Create account</h1>
-        <h2 className='loginDesc'>Get access to exclusive features by creating account</h2>
+        <div className='logintext'>Create account</div>
+        <div className='loginDesc'>Get access to exclusive features by creating account</div>
       </div>
         <Form
       name="normal_login"
@@ -53,14 +56,16 @@ function SignupForm() {
         />
       </Form.Item>
         </div>
-        <div classname='formfooter'>
-        <Form.Item name="remember" valuePropName="checked" noStyle>
-          <Checkbox className="checkbox">I've read and accept the</Checkbox><a className='termslink' href='/Signup'>Terms & Conditions</a>
-          <Button type="primary" htmlType="submit" className="login-form-button">
+        <Divider />
+        <ButtonContainer>
+        <Form.Item name="remember" valuePropName="checked">
+          <Checkbox className="checkbox">I've read and accept the</Checkbox>
+            <Link to="/Home"><Button type="primary" htmlType="submit" className="login-form-button" onClick={Home}>
            create my account
-          </Button><label className='SignUplabel'>Already have an account?</label><a className='signuplink' href='/Login'>Sign in</a>
+          </Button></Link>
+          <label className='SignUplabel'>Already have an account?</label><a className='signuplink' href='/Login'>Sign in</a>
       </Form.Item>
-      </div>
+      </ButtonContainer>
     </Form>
     </FormWrapper>
     </>

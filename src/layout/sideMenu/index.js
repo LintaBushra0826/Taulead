@@ -1,117 +1,111 @@
-import React from 'react';
-import { Menu } from 'antd';
-import { SideMenuContainer } from './index.styled'
-import { Link } from 'react-router-dom';
+import React from "react";
+import { Menu } from "antd";
+import { SideMenuContainer } from "./index.styled";
+import { Link } from "react-router-dom";
 
 const items = [
   {
-    label:  <Link to="/_home">Home</Link>,
-    key: 'home',
+    label: <Link to="/home">Home</Link>,
+    key: "home",
   },
   {
-    label: 'Inventory',
-    key: 'Inventory',
+    label: "Inventory",
+    key: "Inventory",
     children: [
       {
-        type: 'Raw Material Inventory',
+        type: "Raw Material Inventory",
         label: <Link to="/RawMaterial">Raw Material Inventory</Link>,
       },
       {
-        type: 'Human Resource Inventory',
+        type: "Human Resource Inventory",
         label: <Link to="/HumanResource">Human Resource Inventory</Link>,
       },
     ],
   },
   {
-    label: 'Measuring Units',
-    key: 'Measuring Units',
+    label: "Measuring Units",
+    key: "Measuring Units",
     children: [
       {
-        type: 'Create Units',
+        type: "Create Units",
         label: <Link to="/MeasuringUnit">Create Units</Link>,
       },
       {
-        type: 'View Units',
-        label: <Link to="/viewunit">View Units</Link>,
+        type: "View Units",
+        label: <Link to="/viewmeasuringunits">View Units</Link>,
       },
     ],
-    },
-    {
-      label: 'Processes',
-      key: 'Processes',
-      children: [
-        {
-          type: 'View Processes',
-          label: <Link to="/ProcessChart">View Processes</Link>,
-        },
-        // {
-        //   type: 'Create Processes',
-        //   label: <Link to="/CreateProcess">Create  Processes</Link>,
-        // },
-      ],
-    },
+  },
   {
-    label: 'Statistics',
-    key: 'Statistics',
+    label: "Processes",
+    key: "Processes",
     children: [
       {
-        type: 'Raw Material Stats',
+        type: "View Processes",
+        label: <Link to="/process">View Processes</Link>,
+      },
+      // {
+      //   type: 'Create Processes',
+      //   label: <Link to="/CreateProcess">Create  Processes</Link>,
+      // },
+    ],
+  },
+  {
+    label: "Statistics",
+    key: "Statistics",
+    children: [
+      {
+        type: "Raw Material Stats",
         label: <Link to="/rawmaterialstats">Raw Material Stats</Link>,
       },
       {
-        type: 'Human Resource Stats',
+        type: "Human Resource Stats",
         label: <Link to="/humanresourcestats">Human Resource Stats</Link>,
-      },
-      {
-        type: 'Process Stats',
-        label: <Link to="/processstats">Process Stats</Link>,
       },
     ],
   },
   {
-    label: 'Logs',
-    key: 'Logs',
+    label: "Logs",
+    key: "Logs",
     children: [
       {
-        type: 'Process Logs',
-        label:  <Link to="/processlogs">Process Logs</Link>,
+        type: "Process Logs",
+        label: <Link to="/viewprocesslogs">Process Logs</Link>,
       },
       {
-        type: 'Price Logs',
-        label:  <Link to="/pricelogs">Price Logs</Link>,
+        type: "Price Logs",
+        label: <Link to="/viewpricelogs">Price Logs</Link>,
       },
-    ]
+    ],
   },
   {
     label: <Link to="/profile">Profile</Link>,
-    key: 'profile',
+    key: "profile",
     // disabled: true,
   },
   {
     label: <Link to="/settings">Settings</Link>,
-    key: 'Settings',
+    key: "Settings",
     // disabled: true,
   },
-  
 ];
 
 function SideMenu() {
-
   const onClick = (e) => {
-    console.log('click ', e);
+    console.log("click ", e);
   };
 
   return (
     <SideMenuContainer>
-      <div className='menudiv'>
-      <Menu
-        onClick={onClick}
-        style={{ width: 256 }}
-        defaultSelectedKeys={['1']}
-        defaultOpenKeys={['sub1']}
-        mode="inline"
-        items={items}
-      />
+      <div className="menudiv">
+        <Menu
+          onClick={onClick}
+          style={{ width: 256 }}
+          defaultSelectedKeys={["1"]}
+          defaultOpenKeys={["sub1"]}
+          mode="inline"
+          items={items}
+        />
       </div>
     </SideMenuContainer>
   );

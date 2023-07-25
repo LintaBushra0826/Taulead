@@ -1,7 +1,7 @@
 import React from "react";
 import { Input, Form, Button, Row, Col } from "antd";
 import { FormHeading, FormWrapper, ButtonContainer} from "./index.styled";
-
+import { Link } from "react-router-dom";
 
 //import profilepic from '../../assets/images/profile.png';
 function HumanresourceForm() {
@@ -176,9 +176,11 @@ function HumanresourceForm() {
               Add Employee
             </Button>
             <br></br>
-            <Button>
+            <Link to="/viewhumanresource">
+              <Button>
               View Employee
             </Button>
+            </Link>
             </ButtonContainer>
         </Form.Item>
       </Form>

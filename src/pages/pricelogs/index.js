@@ -4,7 +4,7 @@ import SideMenu from "../../layout/sideMenu";
 import { BodyWrapper, TableWrapper } from "../../styles/global.styled";
 import { Table, Typography } from "antd";
 
-function ViewRawMaterial() {
+function ViewPriceLogs() {
   const data = [
     {
       key: "1",
@@ -172,4 +172,4 @@ function ViewRawMaterial() {
   );
 }
 
-export default ViewRawMaterial;
+export default ViewPriceLogs;
