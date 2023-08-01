@@ -212,7 +212,7 @@ function SignupForm() {
 
           <Footer className="footer">
             <label className="SignUplabel">Already have account?</label>
-            <a className="signuplink" href="/Signup">
+            <a className="signuplink" href="/login">
               Log in
             </a>
           </Footer>
