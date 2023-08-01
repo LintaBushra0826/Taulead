@@ -1,101 +1,49 @@
 import styled from "styled-components";
 
 export const FormWrapper = styled.div`
-  width: 600px;
-  .logintext{
-    font-size: 22px;
-    color: Black;
-    flex-direction: column;
-    gap: 30px;
-  }
-
-  .loginDesc{
-    font-size: 12px;
-    color: grey;
-    font-weight: normal;
-    margin-left: left;
-    flex-direction: column;
-    gap: 10px;
-    margin-top: 5px;
-    margin-bottom: 40px;
-    text-align: justify;
-  }
-  Form.Item .Input{
-    display: inline;
-  }
-
-  .loginlabel{
+  width: 500px;
+  align-self: center;
+  .loginlabel {
     width: fit-content;
     font-weight: bold;
+    padding-bottom: 10px;
   }
-
-  .ant-input{
-    display:flex;
-    width: 50%;
-    float:right;
+  .loginDesc{
+    padding-bottom: 20px;
   }
-
-  .ant-form{
-    width: 80%;
-    align-items: center;
-    align-self: center;
+  .ant-input {
+    display: flex;
+    width: 60%;
+    float: right;
+  }
+  .login-form-forgot {
     position: relative;
-    margin-left: 50px; 
-    }
-
-    .formheader{
-    width: 80%;
-    align-items: center;
-    align-self: center;
+    float: right;
+    padding-bottom: 10px;
+    color: #660066;
+  }
+  .signuplink {
     position: relative;
-    margin-left: 50px;
-    }
-
-    .login-form-forgot{
-      position:relative;
-      float: right;
-      margin-bottom:10px;
-    }
-    .ant-form .label{
-      display:inline;
-      margin-left: auto;
-    }
-
-    .ant-form .checkbox{
-      display:flex;
-    }
-
-    .ant-btn-primary{
-      display:flex;
-      margin-left: 330px;
-      width: fit-content;
-      background-color: #660066;
-    }
-    .SignUplabel{
-      margin-left: 100px;
-      margin-right: 10px;
-    }
-    a{
-      position:relative;
-      text-decoration: underline;
-      color: #660066; 
-    }
-    .termslink{
-      text-decoration: underline;
-      color: #660066;
-      position:relative;
-      display:flex;
-      justify-content: flex-start;
-      flex-direction: row;
-      gap:10px;
-
-      }
+    float: right;
+    padding-bottom: 10px;
+    color: #660066;
+  }
 `;
+export const FormHeader = styled.div`
+  width: 500px;
+  align-self: center;
 
-export const LoginContainer = styled.div`
-  margin-top: auto;
-  margin-left: auto;
-  margin-bottom: auto;
-  margin-right: auto;
-
+  .logintext {
+    font-size: 22px;
+    color: Black;
+    font-weight: bold;
+    padding-bottom: 10px;
+  }
+  .loginDesc {
+    font-size: 12px;
+    font-weight: normal;
+    color: grey;
+    padding-bottom: 40px;
+    text-align: justify;
+  }
 `;

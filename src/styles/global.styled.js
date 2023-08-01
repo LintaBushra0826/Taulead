@@ -1,7 +1,5 @@
 import styled from "styled-components";
 
-export const FormWrapper=styled.div`
-`;
 
 export const BodyWrapper = styled.div`
   display: flex;
@@ -25,19 +23,44 @@ export const FormHeading = styled.div`
 
 export const TableWrapper = styled.div`
   padding: 15px;
-  width:100%;
+  width: 100%;
 `;
 
 export const ChartWrapper = styled.div`
   padding: 15px;
-  width:100%;
+  width: 100%;
 `;
 
 export const ButtonContainer = styled.div`
-  position: absolute;
-  /* left:70%; */
-  /* justify-content: flex-end; */
-  align-items: flex-end;
-  top:22%;
-  right:12%;
+  position: relative;
+  display: flex;
+  justify-content: flex-end;
+`;
+export const FormHeader = styled.div`
+  width: 500px;
+  align-self: center;
+
+  .logintext {
+    font-size: 22px;
+    color: Black;
+  }
+  .loginDesc {
+    font-size: 12px;
+    font-weight: normal;
+    color: grey;
+    padding-bottom: 40px;
+    text-align: justify;
+  }
+`;
+export const Container = styled.div`
+  display: flex;
+  justify-content: space-between;
+  padding-bottom:20px;
+`;
+
+export const Footer = styled.div`
+  position: relative;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
 `;

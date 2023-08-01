@@ -1,73 +1,166 @@
-import React from "react";
-import { Input, Form, Button, Checkbox, Divider} from "antd";
-import { FormWrapper } from "./index.styled";
-import Home from "../../../pages/home";
-import { ButtonContainer } from "../../humanresource/components/humanResourceForm/index.styled";
-import { Link } from "react-router-dom/dist";
+import React, { useState, message } from "react";
+//mport { Input, Form, Button, Checkbox, Divider } from "antd";
+import { FormWrapper, FormHeader } from "./index.styled";
+// import { Footer } from "../../../styles/global.styled";
+// import { Container } from "../../../styles/global.styled";
 
 function SignupForm() {
+  const [formData, setFormData] = useState({
+    username: "",
+    email: "",
+    password: "",
+    confirmpassword: "",
+    businessname: "",
+  });
+
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const onFinish = (e) => {
+    console.log(e);
+  };
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    console.log("1");
+    try {
+      const response = await fetch("http://localhost:3003/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        message.success(data.message); // Show success message
+        setFormData({
+          username: "",
+          email: "",
+          password: "",
+          confirmpassword: "",
+          businessname: "",
+        });
+      } else {
+        const errorData = await response.json();
+        message.error(errorData.message); // Show error message
+      }
+    } catch (error) {
+      console.error("Error during signup:", error);
+      message.error("Signup failed. Please try again later."); // Show error message
+    }
+  };
+
   return (
     <>
-    <FormWrapper>
-      <div className='formheader'>
-        <div className='logintext'>Create account</div>
-        <div className='loginDesc'>Get access to exclusive features by creating account</div>
-      </div>
-        <Form
-      name="normal_login"
-      className="login-form"
-    >
-      <div className='formdiv'>
-      <Form.Item
-        name="username"
-        rules={[{ required: true, message: 'Please input your Username!' }]}
-      >
-        <label className='loginlabel'>User name</label><Input placeholder="Username" />
-      </Form.Item>
-      <Form.Item
-        name="email"
-        rules={[{ required: true, message: 'Please input your email!' }]}
-      >
-        <label className='loginlabel'>Email Id</label><Input placeholder="email" />
-      </Form.Item>
+      <FormWrapper>
+        <FormHeader>
+          <div className="logintext">Create account</div>
+          <div className="loginDesc">
+            Get access to exclusive features by creating account
+          </div>
+        </FormHeader>
 
-      <Form.Item
-        name="password"
-        rules={[{ required: true, message: 'Please input your Password!' }]}
-      >
-        <label className='loginlabel'>Password</label><Input
+        <form onSubmit={handleSubmit}>
+        <input
+          label = "User Name"
+          type="username"
+          name="username"
+          placeholder="Username"
+          value={formData.username}
+          onChange={handleChange}
+        />
+        <input
+        label="Email"
+          type="email"
+          name="email"
+          placeholder="Email"
+          value={formData.email}
+          onChange={handleChange}
+        />
+        <input
+        label="Password"
+          type="password"
+          name="password"
           placeholder="Password"
+          value={formData.password}
+          onChange={handleChange}
         />
-      </Form.Item>
-      <Form.Item
-        name="confrmpassword"
-        rules={[{ required: true, message: 'Please input your confirm password!' }]}
-      >
-        <label className='loginlabel'>Confirm Password</label><Input
-          placeholder="cnfrmPassword"
+         <input
+         label="Confirm Password"
+          type="confirmpassword"
+          name="password"
+          placeholder="Password"
+          value={formData.password}
+          onChange={handleChange}
         />
-      </Form.Item>
-      <Form.Item
-        name="businessname"
-        rules={[{ required: true, message: 'Please input your business name!' }]}
-      >
-        <label className='loginlabel'>Business Name</label><Input
-          placeholder="businessname"
+         <input
+         label="Business Name"
+          type="password"
+          name="password"
+          placeholder="Password"
+          value={formData.password}
+          onChange={handleChange}
         />
-      </Form.Item>
-        </div>
-        <Divider />
-        <ButtonContainer>
-        <Form.Item name="remember" valuePropName="checked">
-          <Checkbox className="checkbox">I've read and accept the</Checkbox>
-            <Link to="/Home"><Button type="primary" htmlType="submit" className="login-form-button" onClick={Home}>
-           create my account
-          </Button></Link>
-          <label className='SignUplabel'>Already have an account?</label><a className='signuplink' href='/Login'>Sign in</a>
-      </Form.Item>
-      </ButtonContainer>
-    </Form>
-    </FormWrapper>
+        <button type="submit">Sign Up</button>
+      </form>
+        {/* <Form
+          name="normal_login"
+          className="login-form"
+          onSubmit={handleSubmit}
+        >
+          <Form.Item label="User name" name="username">
+            <Input placeholder="Username" value={formData.username} required />
+          </Form.Item>
+          <Form.Item label="Email" name="email">
+            <Input placeholder="Email" value={formData.email} required />
+          </Form.Item>
+          <Form.Item label="Password" name="password">
+            <Input placeholder="Password" value={formData.password} required />
+          </Form.Item>
+          <Form.Item label="Confirm Password" name="confirmpassword">
+            <Input
+              placeholder="Confirm Password"
+              value={formData.confirmpassword}
+              required
+            />
+          </Form.Item>
+          <Form.Item label="Business Name" name="businessname">
+            <Input
+              placeholder="Business Name"
+              value={formData.businessname}
+              required
+            />
+          </Form.Item>
+
+          <Divider />
+
+          <Form.Item>
+            <Button
+              type="primary"
+              htmlType="submit"
+              className="login-form-button"
+            >
+              create my account
+            </Button>
+          </Form.Item>
+
+          <Form.Item name="remember" valuePropName="checked">
+            <Checkbox className="checkbox">I've read and accept the</Checkbox>
+          </Form.Item>
+
+          <Form.Item>
+            <Footer>
+              <label className="SignUplabel">Already have an account?</label>
+              <a className="signuplink" href="/Login">
+                Sign in
+              </a>
+            </Footer>
+          </Form.Item>
+        </Form> */}
+      </FormWrapper>
     </>
   );
 }

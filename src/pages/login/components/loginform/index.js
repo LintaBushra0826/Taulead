@@ -1,8 +1,10 @@
 import React from "react";
-import { Input, Form, Button, Checkbox, Divider } from "antd";
-import { FormHeader, FormWrapper } from "./index.styled";
-import { ButtonContainer } from "../../../../styles/global.styled";
+import { Input, Form, Button, Divider } from "antd";
+import { FormWrapper } from "./index.styled";
 import { Link } from "react-router-dom/dist";
+import { Checkbox } from "antd/es";
+import { Footer } from "../../../../styles/global.styled";
+import { Container, FormHeader} from "../../../../styles/global.styled";
 
 function LoginForm() {
   return (
@@ -15,50 +17,58 @@ function LoginForm() {
         </h2>
       </FormHeader>
 
-      <Form name="normal_login" className="login-form">
-          <Form.Item
-            name="email"
-            rules={[{ required: true, message: "Please input your email!" }]}
-          >
-            <label className="loginlabel">Email</label>
-            <Input placeholder="email" />
-          </Form.Item>
-          <Form.Item
-            name="password"
-            rules={[{ required: true, message: "Please input your Password!" }]}
-          >
-            <label className="loginlabel">Password</label>
-            <Input placeholder="Password" />
-          </Form.Item>
-          <Form.Item>
-            <a className="login-form-forgot" href="/Login">
-              Forgot password?
-            </a>
-          </Form.Item>
+      <Form name="normal_login" className="login-form" layout="vertical">
+        <Form.Item
+          name="email"
+          rules={[{ required: true, message: "Please input your email!" }]}
+        >
+          <label className="loginlabel">Email</label>
+          <Input placeholder="email" />
+        </Form.Item>
+
+        <Form.Item
+          name="password"
+          rules={[{ required: true, message: "Please input your Password!" }]}
+        >
+          <label className="loginlabel">Password</label>
+          <Input placeholder="Password" />
+        </Form.Item>
+
+        <Form.Item>
+          <a className="login-form-forgot" href="/Login">
+            Forgot password?
+          </a>
+        </Form.Item>
 
         <Divider />
 
-          <Form.Item name="remember" valuePropName="checked">
-            <Checkbox className="checkbox">Remember me</Checkbox>
-            <ButtonContainer>
-            <Link to="/Home"><Button
-              type="primary"
-              htmlType="submit"
-              className="login-form-button"
-             
+        <Form.Item name="remember" valuePropName="checked">
+          <Container>
+            <Checkbox
+              className="checkbox"
+              style={{ display: "flex", alignSelf: "flex-start" }}
             >
-              Log in
-            </Button>
+              Remember me
+            </Checkbox>
+
+            <Link to="/Home">
+              <Button
+                type="primary"
+                htmlType="submit"
+                className="login-form-button"
+              >
+                Log in
+              </Button>
             </Link>
-            </ButtonContainer>
-            
-            <div className="footer">
+          </Container>
+
+          <Footer className="footer">
             <label className="SignUplabel">Don't have account?</label>
             <a className="signuplink" href="/Signup">
               Sign Up
             </a>
-            </div>
-          </Form.Item>
+          </Footer>
+        </Form.Item>
       </Form>
     </FormWrapper>
   );
