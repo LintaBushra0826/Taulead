@@ -1,5 +1,5 @@
-import React, { useState, message } from "react";
-import { Input, Form, Button, Checkbox, Divider } from "antd";
+import React, { useState } from "react";
+import { Input, Form, Button, Checkbox, Divider, message } from "antd";
 import { FormWrapper, FormHeader } from "./index.styled";
 import { Footer } from "../../../styles/global.styled";
 import { Container } from "../../../styles/global.styled";
