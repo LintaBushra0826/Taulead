@@ -1,8 +1,9 @@
 import React, { useState, message } from "react";
-//mport { Input, Form, Button, Checkbox, Divider } from "antd";
+import { Input, Form, Button, Checkbox, Divider } from "antd";
 import { FormWrapper, FormHeader } from "./index.styled";
-// import { Footer } from "../../../styles/global.styled";
-// import { Container } from "../../../styles/global.styled";
+import { Footer } from "../../../styles/global.styled";
+import { Container } from "../../../styles/global.styled";
+import { Link } from "react-router-dom";
 
 function SignupForm() {
   const [formData, setFormData] = useState({
@@ -13,10 +14,10 @@ function SignupForm() {
     businessname: "",
   });
 
-  const handleChange = (event) => {
-    const { name, value } = event.target;
-    setFormData({ ...formData, [name]: value });
-  };
+  // const handleChange = (event) => {
+  //   const { name, value } = event.target;
+  //   setFormData({ ...formData, [name]: value });
+  // };
 
   // const onFinish = (e) => {
   //   console.log(e);
@@ -63,7 +64,7 @@ function SignupForm() {
           </div>
         </FormHeader>
 
-        <form onSubmit={handleSubmit}>
+        {/* <form onSubmit={handleSubmit}>
         <input
           label = "User Name"
           type="username"
@@ -105,7 +106,7 @@ function SignupForm() {
           onChange={handleChange}
         />
         <button type="submit">Sign Up</button>
-      </form>
+      </form> */}
         {/* <Form
           name="normal_login"
           className="login-form"
@@ -137,18 +138,17 @@ function SignupForm() {
 
           <Divider />
 
-          <Form.Item>
-            <Button
-              type="primary"
-              htmlType="submit"
-              className="login-form-button"
-            >
-              create my account
-            </Button>
-          </Form.Item>
-
           <Form.Item name="remember" valuePropName="checked">
             <Checkbox className="checkbox">I've read and accept the</Checkbox>
+            <Container>
+              <Button
+                type="primary"
+                htmlType="submit"
+                className="login-form-button"
+              >
+                create my account
+              </Button>
+            </Container>
           </Form.Item>
 
           <Form.Item>
@@ -160,6 +160,73 @@ function SignupForm() {
             </Footer>
           </Form.Item>
         </Form> */}
+        <Form name="normal_login" className="login-form" layout="vertical" onSubmit={handleSubmit}>
+        <Form.Item
+          name="username"
+        >
+          <label className="loginlabel">User Name</label>
+          <Input placeholder="username" />
+        </Form.Item>
+
+        <Form.Item
+          name="email"
+        >
+          <label className="loginlabel">Email</label>
+          <Input placeholder="email" />
+        </Form.Item>
+
+        <Form.Item
+          name="password"
+        >
+          <label className="loginlabel">Password</label>
+          <Input placeholder="Password" />
+        </Form.Item>
+
+        <Form.Item
+          name="cnfrmpass"
+        >
+          <label className="loginlabel">Confirm Password</label>
+          <Input placeholder="cnfrmPassword" />
+        </Form.Item>
+
+        <Form.Item
+          name="businessname"
+        >
+          <label className="loginlabel">Business Name</label>
+          <Input placeholder="businessname" />
+        </Form.Item>
+
+
+        <Divider />
+
+        <Form.Item name="remember" valuePropName="checked">
+          <Container>
+            <Checkbox
+              className="checkbox"
+              style={{ display: "flex", alignSelf: "flex-start" }}
+            >
+              I have agree the terms and conditions
+            </Checkbox>
+
+            <Link to="/Home">
+              <Button
+                type="primary"
+                htmlType="submit"
+                className="login-form-button"
+              >
+               create account
+              </Button>
+            </Link>
+          </Container>
+
+          <Footer className="footer">
+            <label className="SignUplabel">Already have account?</label>
+            <a className="signuplink" href="/Signup">
+              Log in
+            </a>
+          </Footer>
+        </Form.Item>
+      </Form>
       </FormWrapper>
     </>
   );
