@@ -13,15 +13,6 @@ function SignupForm() {
     confirmpassword: "",
     businessname: "",
   });
-
-  // const handleChange = (event) => {
-  //   const { name, value } = event.target;
-  //   setFormData({ ...formData, [name]: value });
-  // };
-
-  // const onFinish = (e) => {
-  //   console.log(e);
-  // };
   const handleSubmit = async (event) => {
     event.preventDefault();
     console.log("1");
