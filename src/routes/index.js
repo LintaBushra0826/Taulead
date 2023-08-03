@@ -16,6 +16,7 @@ import ViewPriceLogs from "../pages/pricelogs";
 import ViewHumanResource from "../pages/viewhumanresource";
 import RawMaterialStats from "../pages/rawmaterialstats";
 import HumanResourceStats from "../pages/humanresourcestats";
+// import ProtectedRoute  from "./protected";
 
 const router = createBrowserRouter([
   {
@@ -90,6 +91,12 @@ const router = createBrowserRouter([
     path: "/humanresourcestats",
     element: <HumanResourceStats />,
   },
+  // {
+  //   path: "/dashboard",
+  //   element: (
+  //     <ProtectedRoute exact path="/dashboard" component={Dashboard} />
+  //   ),
+  // }
 ]);
 
 const Routes = () => {

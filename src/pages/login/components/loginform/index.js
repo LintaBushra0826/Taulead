@@ -1,12 +1,34 @@
-import React from "react";
-import { Input, Form, Button, Divider } from "antd";
+import React, { useState } from "react";
+// import { Input, Form, Button, Divider } from "antd";
+import axios from "axios";
 import { FormWrapper } from "./index.styled";
-import { Link } from "react-router-dom/dist";
-import { Checkbox } from "antd/es";
-import { Footer } from "../../../../styles/global.styled";
-import { Container, FormHeader} from "../../../../styles/global.styled";
+// import { Link } from "react-router-dom/dist";
+// import { Checkbox } from "antd/es";
+// import { Footer } from "../../../../styles/global.styled";
+import { FormHeader} from "../../../../styles/global.styled";
 
 function LoginForm() {
+
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
+
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    try {
+      const response = await axios.post("http://localhost:3003/login", formData);
+      alert(response.data.message);
+    } catch (error) {
+      console.error("Error during login:", error);
+      alert("Login failed. Please try again later.");
+    }
+  };
   return (
     <FormWrapper>
       <FormHeader className="formheader">
@@ -17,7 +39,25 @@ function LoginForm() {
         </h2>
       </FormHeader>
 
-      <Form name="normal_login" className="login-form" layout="vertical">
+      <form onSubmit={handleSubmit}>
+        <input
+          type="email"
+          name="email"
+          placeholder="Email"
+          value={formData.email}
+          onChange={handleChange}
+        />
+        <input
+          type="password"
+          name="password"
+          placeholder="Password"
+          value={formData.password}
+          onChange={handleChange}
+        />
+        <button type="submit">Login</button>
+      </form>
+
+      {/* <Form name="normal_login" className="login-form" layout="vertical">
         <Form.Item
           name="email"
           rules={[{ required: true, message: "Please input your email!" }]}
@@ -69,7 +109,7 @@ function LoginForm() {
             </a>
           </Footer>
         </Form.Item>
-      </Form>
+      </Form> */}
     </FormWrapper>
   );
 }

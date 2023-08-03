@@ -19,7 +19,7 @@ function Home() {
           </Link>
           <br></br>
           <Link to="/signup">
-            <Button type="primary">Sign Up</Button>
+            <Button >Sign Up</Button>
           </Link>
         </ButtonContainer>
       </BodyWrapper>
