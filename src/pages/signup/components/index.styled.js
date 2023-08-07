@@ -6,7 +6,6 @@ export const FormWrapper = styled.div`
   .loginlabel {
     width: fit-content;
     font-weight: bold;
-    padding-bottom: 10px;
   }
   .loginDesc{
     padding-bottom: 20px;
@@ -28,6 +27,13 @@ export const FormWrapper = styled.div`
     padding-bottom: 10px;
     color: #660066;
   }
+  .ant-form-item{
+    padding: auto;
+  }
+  .ant-form-item-label{
+    padding-bottom:-40px;
+    display:flex;
+  }
 `;
 export const FormHeader = styled.div`
   width: 500px;
@@ -46,4 +52,16 @@ export const FormHeader = styled.div`
     padding-bottom: 40px;
     text-align: justify;
   }
+`;
+
+export const Container = styled.div`
+  display: flex;
+  justify-content: space-between;
+  padding-bottom:20px;
+`;
+export const Footer = styled.div`
+  position: relative;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
 `;

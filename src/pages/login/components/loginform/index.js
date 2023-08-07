@@ -1,13 +1,13 @@
 import React, { useState } from "react";
-// import { Input, Form, Button, Divider } from "antd";
+import { Input, Form, Button, Divider } from "antd";
 import axios from "axios";
 import { FormWrapper } from "./index.styled";
-// import { Link } from "react-router-dom/dist";
-// import { Checkbox } from "antd/es";
-// import { Footer } from "../../../../styles/global.styled";
-import { FormHeader} from "../../../../styles/global.styled";
+import { FormHeader } from "../../../../styles/global.styled";
+import { useNavigate } from "react-router-dom";
 
 function LoginForm() {
+  const [isLoggingIn, setIsLoggingIn] = useState(false); // Track login status
+  const navigate = useNavigate(); // Updated to use useNavigate
 
   const [formData, setFormData] = useState({
     email: "",
@@ -21,14 +21,33 @@ function LoginForm() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+
+    // Prevent multiple login requests while one is in progress
+    if (isLoggingIn) {
+      return;
+    }
+
+    console.log("Login button clicked");
+    setIsLoggingIn(true);
+
     try {
-      const response = await axios.post("http://localhost:3003/login", formData);
+      const response = await axios.post(
+        "http://localhost:3003/login",
+        formData
+      );
+      console.log("Login response:", response.data); // Log the response data
       alert(response.data.message);
+
+      // Redirect to home page after successful login
+      navigate("/home");
     } catch (error) {
       console.error("Error during login:", error);
       alert("Login failed. Please try again later.");
+    } finally {
+      setIsLoggingIn(false);
     }
   };
+
   return (
     <FormWrapper>
       <FormHeader className="formheader">
@@ -39,77 +58,39 @@ function LoginForm() {
         </h2>
       </FormHeader>
 
-      <form onSubmit={handleSubmit}>
-        <input
-          type="email"
-          name="email"
-          placeholder="Email"
-          value={formData.email}
-          onChange={handleChange}
-        />
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          value={formData.password}
-          onChange={handleChange}
-        />
-        <button type="submit">Login</button>
-      </form>
-
-      {/* <Form name="normal_login" className="login-form" layout="vertical">
-        <Form.Item
-          name="email"
-          rules={[{ required: true, message: "Please input your email!" }]}
-        >
-          <label className="loginlabel">Email</label>
-          <Input placeholder="email" />
+      <Form name="normal_login" className="login-form" layout="vertical">
+        <Form.Item label="Email" name="email">
+          <Input
+            placeholder="email"
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
+          />
         </Form.Item>
 
-        <Form.Item
-          name="password"
-          rules={[{ required: true, message: "Please input your Password!" }]}
-        >
-          <label className="loginlabel">Password</label>
-          <Input placeholder="Password" />
-        </Form.Item>
-
-        <Form.Item>
-          <a className="login-form-forgot" href="/Login">
-            Forgot password?
-          </a>
+        <Form.Item label="Password" name="password">
+          <Input
+            placeholder="password"
+            name="password"
+            value={formData.password}
+            onChange={handleChange}
+          />
         </Form.Item>
 
         <Divider />
 
-        <Form.Item name="remember" valuePropName="checked">
-          <Container>
-            <Checkbox
-              className="checkbox"
-              style={{ display: "flex", alignSelf: "flex-start" }}
-            >
-              Remember me
-            </Checkbox>
-
-            <Link to="/Home">
-              <Button
-                type="primary"
-                htmlType="submit"
-                className="login-form-button"
-              >
-                Log in
-              </Button>
-            </Link>
-          </Container>
-
-          <Footer className="footer">
-            <label className="SignUplabel">Don't have account?</label>
-            <a className="signuplink" href="/Signup">
-              Sign Up
-            </a>
-          </Footer>
+        <Form.Item>
+          <Button
+            type="primary"
+            htmlType="submit"
+            className="login-form-button"
+            onClick={handleSubmit}
+            disabled={isLoggingIn} // Disable the button while login is in progress
+          >
+            {isLoggingIn ? "Logging In..." : "Log In"}
+          </Button>
         </Form.Item>
-      </Form> */}
+      </Form>
     </FormWrapper>
   );
 }

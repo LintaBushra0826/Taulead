@@ -1,52 +1,55 @@
-import React, { useState } from "react";
+import React, { useState , useEffect } from "react";
 import Header from "../../layout/header";
 import SideMenu from "../../layout/sideMenu";
 import { BodyWrapper, TableWrapper } from "../../styles/global.styled";
 import { Table, Typography } from "antd";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 function ViewRawMaterial() {
-  const data = [
-    {
-      key: "1",
-      name: "Milk",
-      desc: "Milk is made by tetrapack",
-      unit: "kg",
-      quan: 1000,
-      status: "available",
-      price: 150,
-      totprice: 115000,
-    },
-    {
-      key: "1",
-      name: "Milk",
-      desc: "Milk is made by tetrapack",
-      unit: "kg",
-      quan: 1000,
-      status: "available",
-      price: 150,
-      totprice: 115000,
-    },
-    {
-      key: "1",
-      name: "Milk",
-      desc: "Milk is made by tetrapack",
-      unit: "kg",
-      quan: 1000,
-      status: "available",
-      price: 150,
-      totprice: 115000,
-    },
-    {
-      key: "1",
-      name: "Milk",
-      desc: "Milk is made by tetrapack",
-      unit: "kg",
-      quan: 200,
-      status: "available",
-      price: 150,
-      totprice: 115000,
-    },
-  ];
+  const navigate = useNavigate(); // Updated to use useNavigate
+  // const data = [
+  //   {
+  //     key: "1",
+  //     name: "Milk",
+  //     desc: "Milk is made by tetrapack",
+  //     unit: "kg",
+  //     quan: 1000,
+  //     status: "available",
+  //     price: 150,
+  //     totprice: 115000,
+  //   },
+  //   {
+  //     key: "1",
+  //     name: "Milk",
+  //     desc: "Milk is made by tetrapack",
+  //     unit: "kg",
+  //     quan: 1000,
+  //     status: "available",
+  //     price: 150,
+  //     totprice: 115000,
+  //   },
+  //   {
+  //     key: "1",
+  //     name: "Milk",
+  //     desc: "Milk is made by tetrapack",
+  //     unit: "kg",
+  //     quan: 1000,
+  //     status: "available",
+  //     price: 150,
+  //     totprice: 115000,
+  //   },
+  //   {
+  //     key: "1",
+  //     name: "Milk",
+  //     desc: "Milk is made by tetrapack",
+  //     unit: "kg",
+  //     quan: 200,
+  //     status: "available",
+  //     price: 150,
+  //     totprice: 115000,
+  //   },
+  // ];
   const [editingKey, setEditingKey] = useState("");
   // const isEditing = (record) => record.key === editingKey;
   const edit = (record) => {
@@ -158,6 +161,28 @@ function ViewRawMaterial() {
       },
     },
   ];
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchRawMaterials();
+  }, []);
+
+  const fetchRawMaterials = async () => {
+    try {
+      const response = await axios.post(
+        "http://localhost:3003/rawMaterial"
+      );
+
+      // Redirect to view raw material page after successful login
+      navigate("/viewrawmaterial");
+      setData(response.data.data);
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching raw materials:", error);
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="divform">
@@ -165,7 +190,7 @@ function ViewRawMaterial() {
       <BodyWrapper>
         <SideMenu />
         <TableWrapper>
-          <Table columns={columns} dataSource={data} />
+          <Table columns={columns} dataSource={data} loading={loading}/>
         </TableWrapper>
       </BodyWrapper>
     </div>

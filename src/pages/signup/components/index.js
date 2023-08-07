@@ -1,6 +1,9 @@
 import React, { useState } from "react";
-import { message } from "antd";
-import { FormWrapper, FormHeader } from "./index.styled";
+import { Checkbox, message } from "antd";
+import { FormWrapper, FormHeader, Container } from "./index.styled";
+// import { Checkbox } from "antd/es";
+// import { Footer } from "../../../../styles/global.styled";
+import { Input, Form, Button, Divider } from "antd";
 
 function SignupForm() {
   const [formData, setFormData] = useState({
@@ -18,6 +21,7 @@ function SignupForm() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    console.log("ON SUBMIT FUNCTION CALLED");
     try {
       const response = await fetch("http://localhost:3003/signup", {
         method: "POST",
@@ -29,7 +33,7 @@ function SignupForm() {
 
       if (response.ok) {
         const data = await response.json();
-        console.log('Registration successful');
+        console.log("Registration successful");
         message.success(data.message);
         setFormData({
           username: "",
@@ -58,7 +62,7 @@ function SignupForm() {
           </div>
         </FormHeader>
 
-        <form onSubmit={handleSubmit}>
+        {/* <form onSubmit={handleSubmit}>
           <input
             label="User Name"
             type="text"
@@ -100,10 +104,76 @@ function SignupForm() {
             onChange={handleChange} // Add onChange event handler
           />
           <button type="submit">Sign Up</button>
-        </form>
+        </form> */}
+
+        <Form
+          name="normal_login"
+          className="login-form"
+          layout="vertical"
+        >
+          <Form.Item label="Username" name="username">
+            <Input
+              placeholder="username"
+              name="username" // Add 'name' attribute to associate with Form.Item
+              value={formData.username}
+              onChange={handleChange}
+            />
+          </Form.Item>
+
+          <Form.Item label="Email" name="email">
+            <Input
+              placeholder="email"
+              name="email" // Add 'name' attribute to associate with Form.Item
+              value={formData.email}
+              onChange={handleChange}
+            />
+          </Form.Item>
+
+          <Form.Item label="Password" name="password">
+            <Input
+              placeholder="password"
+              name="password" // Add 'name' attribute to associate with Form.Item
+              value={formData.password}
+              onChange={handleChange}
+            />
+          </Form.Item>
+
+          <Form.Item label="Confirm Password" name="confirmpassword">
+            <Input
+              placeholder="confirm password"
+              name="confirmpassword" // Add 'name' attribute to associate with Form.Item
+              value={formData.confirmpassword}
+              onChange={handleChange}
+            />
+          </Form.Item>
+
+          <Form.Item label="Business Name" name="businessname">
+            <Input
+              placeholder="business name"
+              name="businessname" // Add 'name' attribute to associate with Form.Item
+              value={formData.businessname}
+              onChange={handleChange}
+            />
+          </Form.Item>
+
+          <Divider />
+
+          <Form.Item>
+            <Container>
+              <Checkbox> </Checkbox>
+            </Container>
+            <Button
+              type="primary"
+              htmlType="submit"
+              className="login-form-button"
+              onClick={handleSubmit}
+            >
+              create my account
+            </Button>
+          </Form.Item>
+        </Form>
       </FormWrapper>
     </>
   );
 }
-
 export default SignupForm;
