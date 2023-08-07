@@ -4,6 +4,7 @@ import { FormWrapper, FormHeader, Container } from "./index.styled";
 // import { Checkbox } from "antd/es";
 // import { Footer } from "../../../../styles/global.styled";
 import { Input, Form, Button, Divider } from "antd";
+import { Footer } from "../../../styles/global.styled";
 
 function SignupForm() {
   const [formData, setFormData] = useState({
@@ -160,8 +161,7 @@ function SignupForm() {
 
           <Form.Item>
             <Container>
-              <Checkbox> </Checkbox>
-            </Container>
+              <Checkbox> I have agree with terms and conditions </Checkbox>
             <Button
               type="primary"
               htmlType="submit"
@@ -170,6 +170,11 @@ function SignupForm() {
             >
               create my account
             </Button>
+            </Container>
+
+            <Footer>
+            <label>Already have an account?</label><a href="/home"> Sign In</a>
+            </Footer>
           </Form.Item>
         </Form>
       </FormWrapper>

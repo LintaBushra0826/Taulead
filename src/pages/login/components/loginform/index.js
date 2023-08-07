@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { Input, Form, Button, Divider } from "antd";
+import { Input, Form, Button, Divider, Checkbox } from "antd";
 import axios from "axios";
 import { FormWrapper } from "./index.styled";
-import { FormHeader } from "../../../../styles/global.styled";
+import { Container, Footer, FormHeader } from "../../../../styles/global.styled";
 import { useNavigate } from "react-router-dom";
 
 function LoginForm() {
@@ -77,9 +77,15 @@ function LoginForm() {
           />
         </Form.Item>
 
+        <div className="login-form-forgot">
+          <a href="/home"> Forgot Password </a>
+        </div>
+
         <Divider />
 
         <Form.Item>
+          <Container>
+            <Checkbox> Remember me </Checkbox>
           <Button
             type="primary"
             htmlType="submit"
@@ -89,6 +95,11 @@ function LoginForm() {
           >
             {isLoggingIn ? "Logging In..." : "Log In"}
           </Button>
+          </Container>
+
+          <Footer>
+          <label>Dont have account?</label><a href="/home"> Sign up</a>
+          </Footer>
         </Form.Item>
       </Form>
     </FormWrapper>

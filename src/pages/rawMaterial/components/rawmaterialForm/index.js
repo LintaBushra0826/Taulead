@@ -1,13 +1,15 @@
 import React, { useState } from "react";
 import { Input, Form, Button, Row, Col } from "antd";
-import { Link } from "react-router-dom";
 import {
   ButtonContainer,
   FormHeading,
 } from "../../../humanresource/components/humanResourceForm/index.styled";
 import axios from "axios";
+import { Link, useLocation } from "react-router-dom";
+
 
 function rawMaterialForm() {
+  const location = useLocation(); // Import the useLocation hook
   const API_BASE_URL = "http://localhost:3003"; 
   const [formData, setFormData] = useState({});
 
@@ -23,6 +25,13 @@ function rawMaterialForm() {
       alert("Raw material item added successfully!");
     } catch (error) {
       alert("Error adding raw material item");
+    }
+  };
+  const handleViewItems = () => {
+    // Use the useLocation hook to navigate
+    const viewItemsPath = "/viewrawmaterial";
+    if (location.pathname !== viewItemsPath) {
+      window.location.href = viewItemsPath;
     }
   };
 
@@ -85,7 +94,8 @@ function rawMaterialForm() {
               Add Item
             </Button>
             <br></br>
-              <Button>View Item</Button>
+            <Button onClick={handleViewItems}>View Item</Button>
+            
           </ButtonContainer>
         </Form.Item>
       </Form>

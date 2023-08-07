@@ -52,6 +52,10 @@ export const FormHeader = styled.div`
     padding-bottom: 40px;
     text-align: justify;
   }
+  /* .ant-form-item-label{
+    display:flex;
+    justify-content: space-between;
+  } */
 `;
 
 export const Container = styled.div`
