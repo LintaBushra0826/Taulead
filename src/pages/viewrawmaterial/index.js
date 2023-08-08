@@ -8,36 +8,62 @@ import axios from "axios";
 function ViewRawMaterial() {
   const API_BASE_URL = "http://localhost:3003";
   const [formData, setFormData] = useState({});
-
+  const [selectedItem, setSelectedItem] = useState({});
+  const [editingKey] = useState("");
+  const [open, setOpen] = useState(false);
+  const [confirmLoading, setConfirmLoading] = useState(false);
+  const [setModalText] = useState("Content of the modal");
+  const [data, setData] = useState(null); // Initialize data as null instead of an empty array
+  const [loading, setLoading] = useState(true);
+  
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setFormData({ ...formData, [name]: value });
   };
-  const [editingKey, setEditingKey] = useState("");
-  const edit = (record) => {
-    setEditingKey(record.key);
-  };
-  const [open, setOpen] = useState(false);
-  const [confirmLoading, setConfirmLoading] = useState(false);
-  const [modelText, setModalText] = useState("Content of the modal");
 
-  const showModal = async (record) => {
-    console.log("Clicked on Update. Record:", record);
-
-    setOpen(true);
+  const showModal = async (id) => {
+    console.log(id);
     try {
-      const response = await axios.get(
-        `${API_BASE_URL}/rawMaterial/${record._id}` // Use record._id instead of record.key
-      );
-      const itemData = response.data["Item Recieved"];
-      setFormData(itemData); // Set the fetched data to the form data state
+      setOpen(true);
+      const selectedItem = data.find((item) => item._id === id);
+      setSelectedItem(selectedItem);
     } catch (error) {
       console.error("Error fetching item data:", error);
-      // Handle error as needed
     }
   };
 
-  const handleOk = () => {
+  const handleDeleteItem = async (itemId) => {
+    console.log(itemId);
+    try {
+      await axios.delete(`${API_BASE_URL}/rawMaterial/${itemId}`);
+      alert("Item deteted successfully");
+      // Reload the current route
+      window.location.reload();
+    } catch (error) {
+      // Handle error
+      alert("Item could not be deteted");
+    }
+  };
+
+  const handleOk = async () => {
+    try {
+      const updateData = {
+        Name: formData.Name,
+        Desc: formData.Desc,
+        unit: formData.unit,
+        quan: formData.quan,
+        expdate: formData.expdate,
+        price: formData.price,
+        totcost: formData.totcost,
+      };
+  
+      await axios.put(`${API_BASE_URL}/rawMaterial/${selectedItem._id}`, updateData);
+      alert("Item Updated");
+      setOpen(false);
+    } catch (error) {
+      // Handle error
+      console.error("Error updating item:", error);
+    }
     setModalText("Updating");
     setConfirmLoading(true);
     setTimeout(() => {
@@ -99,14 +125,14 @@ function ViewRawMaterial() {
           <>
             <Typography.Link
               disabled={editingKey !== ""}
-              onClick={() => showModal(record)}
+              onClick={() => showModal(record._id)}
               style={{ padding: "10%" }}
             >
               Update
             </Typography.Link>
             <Typography.Link
               disabled={editingKey !== ""}
-              onClick={() => edit(record)}
+              onClick={() => handleDeleteItem(record._id)}
               style={{ padding: "10%" }}
             >
               Delete
@@ -116,8 +142,6 @@ function ViewRawMaterial() {
       },
     },
   ];
-  const [data, setData] = useState(null); // Initialize data as null instead of an empty array
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetchRawMaterials();
@@ -152,112 +176,89 @@ function ViewRawMaterial() {
         </TableWrapper>
       </BodyWrapper>
       <Modal
-        title="Item Details"
+        title="Update Item Details"
         open={open}
         onOk={handleOk}
         confirmLoading={confirmLoading}
         onCancel={handleCancel}
       >
-        <Form
-          name="basic"
-          layout="vertical"
-          labelCol={{
-            span: 8,
-          }}
-          wrapperCol={{
-            span: 16,
-          }}
-          style={{
-            maxWidth: 600,
-          }}
-          initialValues={{
-            remember: true,
-          }}
-          autoComplete="off"
-        >
-          <Form.Item label="Item Name" name="Name">
-            <Input
-              name="Name"
-              value={formData.Name}
-              onChange={handleInputChange}
-            />
-          </Form.Item>
+        {selectedItem && (
+          <Form
+            name="basic"
+            initialValues={{
+              Name: selectedItem.Name,
+              Desc: selectedItem.Desc,
+              unit: selectedItem.unit,
+              quan: selectedItem.quan,
+              expdate: selectedItem.expdate,
+              price: selectedItem.price,
+              totcost: selectedItem.totcost,
+            }}
+            onFinish={handleOk}
+            layout="vertical"
+            labelCol={{
+              span: 8,
+            }}
+            wrapperCol={{
+              span: 16,
+            }}
+            style={{
+              maxWidth: 600,
+            }}
+            autoComplete="off"
+          >
+            <Form.Item label="Item Name" name="Name">
+              <Input
+                name="Name"
+                value={formData.Name}
+                onChange={handleInputChange}
+              />
+            </Form.Item>
 
-          <Form.Item label="Item Description" name="Desc">
-            <Input
-              name="Desc"
-              value={formData.Desc}
-              onChange={handleInputChange}
-            />
-          </Form.Item>
+            <Form.Item label="Item Description" name="Desc">
+              <Input
+                name="Desc"
+                value={formData.Desc}
+                onChange={handleInputChange}
+              />
+            </Form.Item>
 
-          <Form.Item label="Item Unit" name="unit">
-            <Input
-              name="unit"
-              value={formData.unit}
-              onChange={handleInputChange}
-            />
-          </Form.Item>
+            <Form.Item label="Item Unit" name="unit">
+              <Input
+                name="unit"
+                value={formData.unit}
+                onChange={handleInputChange}
+              />
+            </Form.Item>
 
-          <Form.Item label="Item Quantity" name="quan">
-            <Input
-              name="quan"
-              value={formData.quan}
-              onChange={handleInputChange}
-            />
-          </Form.Item>
+            <Form.Item label="Item Quantity" name="quan">
+              <Input
+                name="quan"
+                value={formData.quan}
+                onChange={handleInputChange}
+              />
+            </Form.Item>
 
-          <Form.Item label="Item Expiry Date" name="expdate">
-            <Input
-              name="expdate"
-              value={formData.expdate}
-              onChange={handleInputChange}
-            />
-          </Form.Item>
+            <Form.Item label="Item Expiry Date" name="expdate">
+              <Input
+                name="expdate"
+                value={formData.expdate}
+                onChange={handleInputChange}
+              />
+            </Form.Item>
 
-          <Form.Item label="Item Price" name="price">
-            <Input
-              name="price"
-              value={formData.price}
-              onChange={handleInputChange}
-            />
-          </Form.Item>
-        </Form>
+            <Form.Item label="Item Price" name="price">
+              <Input
+                name="price"
+                value={formData.price}
+                onChange={handleInputChange}
+              />
+            </Form.Item>
+          </Form>
+        )}
       </Modal>
     </div>
   );
 }
 
 export default ViewRawMaterial;
-
-// const [filteredInfo, setFilteredInfo] = useState({});
-// const [sortedInfo, setSortedInfo] = useState({});
-// const handleChange = (pagination, filters, sorter) => {
-//   console.log("Various parameters", pagination, filters, sorter);
-//   setFilteredInfo(filters);
-//   setSortedInfo(sorter);
-// };
-// const clearFilters = () => {
-//   setFilteredInfo({});
-// };
-// const clearAll = () => {
-//   setFilteredInfo({});
-//   setSortedInfo({});
-// };
-// const setAgeSort = () => {
-//   setSortedInfo({
-//     order: "descend",
-//     columnKey: "age",
-//   });
-// };
-
-// sorter: (a, b) => a.age - b.age,
-// sortOrder: sortedInfo.columnKey === "age" ? sortedInfo.order : null,
-// ellipsis: true,
-
-// {
-//   title: "Status",
-//   dataIndex: "status",
-//   width: "fit-content",
-//   editable: true,
-// },

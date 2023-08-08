@@ -1,135 +1,139 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Header from "../../layout/header";
 import SideMenu from "../../layout/sideMenu";
 import { BodyWrapper, TableWrapper } from "../../styles/global.styled";
-import { Table, Typography } from "antd";
+import { Table, Typography, Modal, Input, Form } from "antd";
+import axios from "axios";
 
 function ViewHumanResource() {
-  const data = [
-    {
-      key: "1",
-      name: "Milk",
-      desc: "Milk is made by tetrapack",
-      unit: "kg",
-      quan: 1000,
-      status: "available",
-      price: 150,
-      totprice: 115000,
-    },
-    {
-      key: "1",
-      name: "Milk",
-      desc: "Milk is made by tetrapack",
-      unit: "kg",
-      quan: 1000,
-      status: "available",
-      price: 150,
-      totprice: 115000,
-    },
-    {
-      key: "1",
-      name: "Milk",
-      desc: "Milk is made by tetrapack",
-      unit: "kg",
-      quan: 1000,
-      status: "available",
-      price: 150,
-      totprice: 115000,
-    },
-    {
-      key: "1",
-      name: "Milk",
-      desc: "Milk is made by tetrapack",
-      unit: "kg",
-      quan: 200,
-      status: "available",
-      price: 150,
-      totprice: 115000,
-    },
-  ];
-  const [editingKey, setEditingKey] = useState("");
-  // const isEditing = (record) => record.key === editingKey;
-  const edit = (record) => {
-    setEditingKey(record.key);
+  const API_BASE_URL = "http://localhost:3003";
+  const [formData, setFormData] = useState({});
+  const [selectedHR, setSelectedHR] = useState({});
+  const [editingKey] = useState("");
+  const [open, setOpen] = useState(false);
+  const [confirmLoading, setConfirmLoading] = useState(false);
+
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setFormData({ ...formData, [name]: value });
   };
-  // const [filteredInfo, setFilteredInfo] = useState({});
-  // const [sortedInfo, setSortedInfo] = useState({});
-  // const handleChange = (pagination, filters, sorter) => {
-  //   console.log("Various parameters", pagination, filters, sorter);
-  //   setFilteredInfo(filters);
-  //   setSortedInfo(sorter);
-  // };
-  // const clearFilters = () => {
-  //   setFilteredInfo({});
-  // };
-  // const clearAll = () => {
-  //   setFilteredInfo({});
-  //   setSortedInfo({});
-  // };
-  // const setAgeSort = () => {
-  //   setSortedInfo({
-  //     order: "descend",
-  //     columnKey: "age",
-  //   });
-  // };
+
+  const showModal = async (id) => {
+    console.log(id);
+    try {
+      setOpen(true);
+      const selectedHR = data.find((item) => item._id === id);
+      console.log("It is issuing here");
+      setSelectedHR(selectedHR);
+    } catch (error) {
+      console.error("Error fetching employee data:", error);
+    }
+  };
+
+  const handleDeleteItem = async (hrId) => {
+    console.log(hrId);
+    try {
+      await axios.delete(`${API_BASE_URL}/humanresource/${hrId}`);
+      alert("Employee data deleted successfully");
+
+      // Reload the current route
+      window.location.reload();
+    } catch (error) {
+      alert("Employee data deleted");
+    }
+  };
+
+  const handleOk = async () => {
+    console.log("Calling this function");
+    try {
+      const updateData = {
+        name: formData.name,
+        phoneNumber: formData.phoneNumber,
+        address: formData.address,
+        email: formData.email,
+        salary: formData.salary,
+        hired: formData.hired,
+        desgn: formData.desgn,
+        desgnesc: formData.desgnesc,
+        skills: formData.skills,
+      };
+
+      await axios.put(
+        `${API_BASE_URL}/humanresource/${selectedHR._id}`,
+        updateData
+      );
+      alert("Employee data Updated");
+
+      // Handle success or navigate to a different page
+      setOpen(false);
+      window.location.reload();
+    } catch (error) {
+      console.error("Error updating employee data:", error);
+    }
+    setConfirmLoading(true);
+    setTimeout(() => {
+      setOpen(false);
+      setConfirmLoading(false);
+    }, 2000);
+  };
+
+  const handleCancel = () => {
+    console.log("Clicked cancel button");
+    setOpen(false);
+  };
+
   const columns = [
     {
       title: "Name",
       dataIndex: "name",
-      key: "name",
       width: "fit-content",
-      // filters: [                                    //filteration code...
-      //   {
-      //     text: "Joe",
-      //     value: "Joe",
-      //   },
-      //   {
-      //     text: "Jim",
-      //     value: "Jim",
-      //   },
-      // ],
-      // filteredValue: filteredInfo.name || null,
-      // onFilter: (value, record) => record.name.includes(value),
-      // sorter: (a, b) => a.name.length - b.name.length,
-      // sortOrder: sortedInfo.columnKey === "name" ? sortedInfo.order : null,
-      // ellipsis: true,
     },
     {
-      title: "Description",
-      dataIndex: "desc",
-      width: "fit-content",
-      editable: true,
-      // sorter: (a, b) => a.age - b.age,
-      // sortOrder: sortedInfo.columnKey === "age" ? sortedInfo.order : null,
-      // ellipsis: true,
-    },
-    {
-      title: "Unit",
-      dataIndex: "unit",
+      title: "Phone Number",
+      dataIndex: "phoneNumber",
       width: "fit-content",
       editable: true,
     },
     {
-      title: "Quantity",
-      dataIndex: "quan",
+      title: "Address",
+      dataIndex: "address",
       width: "fit-content",
       editable: true,
     },
     {
-      title: "Status",
-      dataIndex: "status",
+      title: "Email",
+      dataIndex: "email",
       width: "fit-content",
       editable: true,
     },
     {
-      title: "Price",
-      dataIndex: "price",
+      title: "Salary",
+      dataIndex: "salary",
+      width: "fit-content",
+      editable: true,
+      render: (text) => `Rs.${text}`,
+    },
+    {
+      title: "Hired On",
+      dataIndex: "hired",
       width: "fit-content",
       editable: true,
     },
     {
-      title: "Total Price",
-      dataIndex: "totprice",
+      title: "Designation",
+      dataIndex: "desgn",
+      width: "fit-content",
+      editable: true,
+    },
+    {
+      title: "Job Description",
+      dataIndex: "desgnesc",
+      width: "fit-content",
+      editable: true,
+    },
+    {
+      title: "Skills",
+      dataIndex: "skills",
       width: "fit-content",
       editable: true,
     },
@@ -142,13 +146,14 @@ function ViewHumanResource() {
           <>
             <Typography.Link
               disabled={editingKey !== ""}
-              onClick={() => edit(record)}
+              onClick={() => showModal(record._id)}
+              style={{ padding: "10%" }}
             >
               Update
             </Typography.Link>
             <Typography.Link
               disabled={editingKey !== ""}
-              onClick={() => edit(record)}
+              onClick={() => handleDeleteItem(record._id)}
               style={{ padding: "10%" }}
             >
               Delete
@@ -158,16 +163,149 @@ function ViewHumanResource() {
       },
     },
   ];
+  const [data, setData] = useState(null); // Initialize data as null instead of an empty array
+  const [loading, setLoading] = useState(true);
 
+  useEffect(() => {
+    fetchHumanResource();
+  }, []);
+
+  const fetchHumanResource = async () => {
+    try {
+      const response = await axios.get("http://localhost:3003/humanresource");
+      const rawData = response.data.data;
+
+      // Ensure data is an array
+      const dataArray = Array.isArray(rawData) ? rawData : [];
+
+      setData(dataArray);
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching human resource:", error);
+      setLoading(false);
+    }
+  };
   return (
     <div className="divform">
       <Header />
       <BodyWrapper>
         <SideMenu />
         <TableWrapper>
-          <Table columns={columns} dataSource={data} />
+          {!loading && data.length > 0 ? (
+            <Table columns={columns} dataSource={data} loading={loading} />
+          ) : (
+            <p>Loading..</p>
+          )}
         </TableWrapper>
       </BodyWrapper>
+      <Modal
+        title="Employees Details"
+        open={open}
+        onOk={handleOk}
+        confirmLoading={confirmLoading}
+        onCancel={handleCancel}
+      >
+        {selectedHR && (
+          <Form
+            name="basic"
+            initialValues={{
+              name: selectedHR.name,
+              phoneNumber: selectedHR.phoneNumber,
+              address: selectedHR.address,
+              email: selectedHR.email,
+              salary: selectedHR.salary,
+              hired: selectedHR.hired,
+              desgn: selectedHR.desgn,
+              desgnesc: selectedHR.desgnesc,
+              skills: selectedHR.skills,
+            }}
+            onFinish={handleOk}
+            layout="vertical"
+            labelCol={{
+              span: 8,
+            }}
+            wrapperCol={{
+              span: 16,
+            }}
+            style={{
+              maxWidth: 600,
+            }}
+            autoComplete="off"
+          >
+            <Form.Item label="Name" name="name">
+              <Input
+                name="name"
+                value={formData.name}
+                onChange={handleInputChange}
+              />
+            </Form.Item>
+
+            <Form.Item label="Phone Number" name="phoneNumber">
+              <Input
+                name="phoneNumber"
+                value={formData.phoneNumber}
+                onChange={handleInputChange}
+              />
+            </Form.Item>
+
+            <Form.Item label="Address" name="address">
+              <Input
+                name="address"
+                value={formData.address}
+                onChange={handleInputChange}
+              />
+            </Form.Item>
+
+            <Form.Item label="Email" name="email">
+              <Input
+                name="email"
+                value={formData.email}
+                onChange={handleInputChange}
+              />
+            </Form.Item>
+
+            <Form.Item label="Salary" name="salary">
+              <Input
+                name="salary"
+                value={formData.salary}
+                onChange={handleInputChange}
+              />
+            </Form.Item>
+
+            <Form.Item label="Hired On" name="hired">
+              <Input
+                name="hired"
+                value={formData.hired}
+                onChange={handleInputChange}
+              />
+            </Form.Item>
+
+            <Form.Item label="Designation" name="desgn">
+              <Input
+                name="desgn"
+                value={formData.desgn}
+                onChange={handleInputChange}
+              />
+            </Form.Item>
+
+            <Form.Item label="Job Description" name="desgnesc">
+              <Input
+                name="desgnesc"
+                value={formData.desgnesc}
+                onChange={handleInputChange}
+              />
+            </Form.Item>
+
+            <Form.Item label="Skills" name="skills">
+              <Input
+                name="skills"
+                value={formData.skills}
+                onChange={handleInputChange}
+              />
+            </Form.Item>
+          </Form>
+        )}
+      </Modal>
     </div>
   );
 }

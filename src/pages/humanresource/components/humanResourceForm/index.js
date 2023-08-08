@@ -1,15 +1,42 @@
-import React from "react";
+import React , { useState } from "react";
 import { Input, Form, Button, Row, Col } from "antd";
-import { FormHeading, FormWrapper, ButtonContainer} from "./index.styled";
-import { Link } from "react-router-dom";
+import { FormHeading, FormWrapper, ButtonContainer } from "./index.styled";
+import axios from "axios";
+import { useLocation } from "react-router-dom";
+
 
 //import profilepic from '../../assets/images/profile.png';
 function HumanresourceForm() {
+  const location = useLocation(); // Import the useLocation hook
+  const API_BASE_URL = "http://localhost:3003"; 
+  const [formData, setFormData] = useState({});
+
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const handleSubmit = async () => {
+    try {
+      await axios.post(`${API_BASE_URL}/humanresource`, formData);
+      // Assuming your backend is running on the same host and port as the frontend
+      alert("Employee added successfully!");
+    } catch (error) {
+      alert("Error adding employee");
+    }
+  };
+  const handleViewItems = () => {
+    // Use the useLocation hook to navigate
+    const viewItemsPath = "/viewhumanresource";
+    if (location.pathname !== viewItemsPath) {
+      window.location.href = viewItemsPath;
+    }
+  };
   return (
     <FormWrapper>
       <FormHeading className="HeaderHeading">
-          Human Resource Inventory
-        </FormHeading>
+        Human Resource Inventory
+      </FormHeading>
       <Form
         name="basic"
         layout="vertical"
@@ -18,170 +45,67 @@ function HumanresourceForm() {
         }}
         autoComplete="off"
       >
-
         <Row gutter={20}>
           <Col span={8}>
-            <Form.Item
-              label="ID"
-              name="id"
-              rules={[
-                {
-                  required: true,
-                  message: "Please input employee id!",
-                },
-              ]}
-            >
-              <Input />
+            <Form.Item label="Name" name="name">
+              <Input name="name" value={formData.name} onChange={handleInputChange} />
             </Form.Item>
           </Col>
           <Col span={8}>
-            <Form.Item
-              label="Name"
-              name="name"
-              rules={[
-                {
-                  required: true,
-                  message: "Please input employee name!",
-                },
-              ]}
-            >
-              <Input />
+            <Form.Item label="Phone Number" name="phoneNumber">
+              <Input name="phoneNumber" value={formData.phoneNumber} onChange={handleInputChange} />
             </Form.Item>
           </Col>
+
           <Col span={8}>
-          <Form.Item
-            label="Phone Number"
-            name="phoneNumber"
-            rules={[
-              {
-                required: true,
-                message: "Please input phone number",
-              },
-            ]}
-          >
-            <Input />
-          </Form.Item>
+            <Form.Item label="Address" name="address">
+              <Input name="address" value={formData.address} onChange={handleInputChange} />
+            </Form.Item>
           </Col>
 
           <Col span={8}>
-          <Form.Item
-            label="Address"
-            name="address"
-            rules={[
-              {
-                required: true,
-                message: "Please input address!",
-              },
-            ]}
-          >
-            <Input />
-          </Form.Item>
+            <Form.Item label="Email" name="email">
+              <Input name="email" value={formData.email} onChange={handleInputChange} />
+            </Form.Item>
           </Col>
 
           <Col span={8}>
-          <Form.Item
-            label="Email"
-            name="email"
-            rules={[
-              {
-                required: true,
-                message: "Please input email!",
-              },
-            ]}
-          >
-            <Input />
-          </Form.Item>
+            <Form.Item label="Salary" name="salary">
+              <Input name="salary" value={formData.salary} onChange={handleInputChange} />
+            </Form.Item>
           </Col>
 
           <Col span={8}>
-          <Form.Item
-            label="Salary"
-            name="salary"
-            rules={[
-              {
-                required: true,
-                message: "Please input salary!",
-              },
-            ]}
-          >
-            <Input />
-          </Form.Item>
+            <Form.Item label="Hired On" name="hired">
+              <Input name="hired" value={formData.hired} onChange={handleInputChange} />
+            </Form.Item>
           </Col>
 
           <Col span={8}>
-          <Form.Item
-            label="Hired On"
-            name="hired"
-            rules={[
-              {
-                required: true,
-                message: "Please input hire date!",
-              },
-            ]}
-          >
-            <Input />
-          </Form.Item>
+            <Form.Item label="Designation" name="desgn">
+              <Input name="desgn" value={formData.desgn} onChange={handleInputChange} />
+            </Form.Item>
           </Col>
 
           <Col span={8}>
-          <Form.Item
-            label="Designation"
-            name="desgn"
-            rules={[
-              {
-                required: true,
-                message: "Please input designation!",
-              },
-            ]}
-          >
-            <Input />
-          </Form.Item>
+            <Form.Item label="Job Description" name="desgnesc">
+              <Input name="desgnesc" value={formData.desgnesc} onChange={handleInputChange} />
+            </Form.Item>
           </Col>
 
           <Col span={8}>
-          <Form.Item
-            label="Job Description"
-            name="Desc"
-            rules={[
-              {
-                required: true,
-                message: "Please input job description!",
-              },
-            ]}
-          >
-            <Input />
-          </Form.Item>
+            <Form.Item label="Skills" name="skills">
+              <Input name="skills" value={formData.skills} onChange={handleInputChange} />
+            </Form.Item>
           </Col>
-
-          <Col span={8}>
-          <Form.Item
-            label="Skills"
-            name="skills"
-            rules={[
-              {
-                required: true,
-                message: "Please input skills!",
-              },
-            ]}
-          >
-            <Input />
-          </Form.Item>
-          </Col>
-
         </Row>
-        
+
         <Form.Item>
           <ButtonContainer>
-            <Button type="primary">
-              Add Employee
-            </Button>
+            <Button type="primary" onClick={handleSubmit}>Add Employee</Button>
             <br></br>
-            <Link to="/viewhumanresource">
-              <Button>
-              View Employee
-            </Button>
-            </Link>
-            </ButtonContainer>
+            <Button onClick={handleViewItems}>View Employee</Button>
+          </ButtonContainer>
         </Form.Item>
       </Form>
     </FormWrapper>

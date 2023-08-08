@@ -1,19 +1,16 @@
 import React, { useState } from "react";
 import Header from "../../layout/header";
 import SideMenu from "../../layout/sideMenu";
-import { BodyWrapper } from "../../styles/global.styled";
+import { BodyWrapper, Container } from "../../styles/global.styled";
 import ProcessChart from "./components/processchart";
 import { Modal } from "antd";
-import { Button, Steps } from "antd";
-import {
-  ButtonContainer,
-  FormHeading,
-} from "../humanresource/components/humanResourceForm/index.styled";
+import { Button, Steps, Checkbox } from "antd";
 import { StepsFormDiv } from "../createprocess/components/processform/index.styled";
 import CreateProcessForm from "./components/createprocessform";
 import RawMaterialForm from "./components/rawmaterialform";
 import HumanResourceForm from "./components/humanresourceform";
 import { ButtonWrapper, ChartWrapper } from "./index.styled";
+import Footer from "./index.styled";
 
 function Process() {
   const [setShowMaterialform] = useState(false);
@@ -33,20 +30,9 @@ function Process() {
     return <HumanResourceForm />;
   };
 
-  const description = "Details";
-
   const items = [
     {
       title: "Create Process",
-      description,
-    },
-    {
-      title: "Raw Material",
-      description,
-    },
-    {
-      title: "Human Resource",
-      description,
     },
   ];
 
@@ -66,6 +52,9 @@ function Process() {
   const handleProcessForm = (formData) => {
     setShowProcessform(true);
   };
+  const onChange = (e) => {
+    console.log(`checked = ${e.target.checked}`);
+  };
   return (
     <>
       <Header />
@@ -83,51 +72,55 @@ function Process() {
 
         <Modal
           open={open}
-          onCancel={()=> setOpen(false)}
+          onCancel={() => setOpen(false)}
           //destroyOnClose={true}
           //close={close}
           centered
           footer={null}
           width={1000}
         >
-          <FormHeading className="HeaderHeading">Process Creation</FormHeading>
-
           <Steps
             current={current}
-            // percent={60}
             labelPlacement="vertical"
             items={items}
             onChange={(c) => {
-              setCurrent(c);
+              setCurrent(0);
             }}
           />
           <br />
 
           <StepsFormDiv>
-            {current === 0 && <Processform formData={handleProcessForm} />}
-            {current === 1 && !showProcessform && (
+            <Processform formData={handleProcessForm} />
+            {/* {current === 1 && !showProcessform && (
               <Materialform formData={handleMaterialForm} />
             )}
             {current === 2 && !showProcessform && (
               <Hrform formData={handleHrForm} />
-            )}
+            )} */}
           </StepsFormDiv>
 
-          <ButtonContainer>
-            {current < items.length - 1 && (
+            {/* {current < items.length - 1 && (
               <Button type="primary" onClick={() => next()}>
                 Next
               </Button>
-            )}
-            {current === items.length - 1 && (
+            )} */}
+            {/* {current === items.length - 1 && (
               <Button type="primary" onClick={() => setOpen(false)}>
                 Submit
               </Button>
-            )}
-            {current > 0 && current === 1 && (
+            )} */}
+            {/* {current > 0 && current === 1 && (
               <Button onClick={() => prev()}>Previous</Button>
-            )}
-          </ButtonContainer>
+            )} */}
+
+            <Container>
+            <Checkbox onChange={onChange}>create subprocess</Checkbox>
+
+            <Button type="primary" onClick={() => setOpen(false)}>
+              Submit
+            </Button>
+            </Container>
+
         </Modal>
       </BodyWrapper>
     </>

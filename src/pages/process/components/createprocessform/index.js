@@ -22,11 +22,6 @@ function CreateProcessForm() {
             <Form.Item
               label="Process Name"
               name="processname"
-              rules={[
-                {
-                  required: true,
-                },
-              ]}
             >
               <Input />
             </Form.Item>
@@ -35,11 +30,6 @@ function CreateProcessForm() {
             <Form.Item
               label="Process Description"
               name="processdesc"
-              rules={[
-                {
-                  required: true,
-                },
-              ]}
             >
               <Input />
             </Form.Item>
@@ -50,11 +40,6 @@ function CreateProcessForm() {
             <Form.Item
               label="Process Start Date"
               name="processstart"
-              rules={[
-                {
-                  required: true,
-                },
-              ]}
             >
               <DatePicker onChange={onChange} style={{ margin: "0px" }} />
             </Form.Item>
@@ -63,11 +48,6 @@ function CreateProcessForm() {
             <Form.Item
               label="Process End Date"
               name="processend"
-              rules={[
-                {
-                  required: true,
-                },
-              ]}
             >
               <DatePicker onChange={onChange} />
             </Form.Item>
@@ -79,11 +59,11 @@ function CreateProcessForm() {
             <Form.Item
               label="Process Duration"
               name="processduration"
-              rules={[
-                {
-                  required: true,
-                },
-              ]}
+              // rules={[
+              //   {
+              //     required: true,
+              //   },
+              // ]}
             >
               <Input />
             </Form.Item>
