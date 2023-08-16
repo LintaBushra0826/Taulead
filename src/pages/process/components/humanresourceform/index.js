@@ -1,18 +1,62 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Space, Select, Table } from "antd";
-import { FormWrapper } from "../createprocessform/index.styled";
-import { FormHeader } from "../rawmaterialform/index.styled";
+import { FormWrapper } from "../createprocessmodal/index.styled";
+import { FormHeader } from "../../index.styled";
+import axios from "axios";
+import { useSetAtom } from "jotai";
+import { UpdateHumanResourceAtom } from "../../process.atom";
+
+const generateOptions = (humanresource) => {
+  const options = [];
+  humanresource.forEach((emp) => {
+    options.push({
+      label: emp.name,
+      value: emp._id,
+    });
+  });
+  return options;
+};
 
 function HumanResourceForm() {
-  const options = [];
-  for (let i = 10; i < 36; i++) {
-    const value = i.toString(36) + i;
-    options.push({
-      label: `Long Label: ${value}`,
-      value,
-    });
-  }
-  const [value, setValue] = useState(["a10", "c12", "h17", "j19", "k20"]);
+  const [value, setValue] = useState([]);
+  const [options, setOptions] = useState([]);
+  const [humanresource, setHumanResource] = useState([]);
+  const setProcess = useSetAtom(UpdateHumanResourceAtom);
+
+  useEffect(() => {
+    fetchHumanResource();
+  }, []);
+
+  const fetchHumanResource = async () => {
+    try {
+      const response = await axios.get("http://localhost:3003/humanresource");
+      const rawData = response.data.data;
+      const dataArray = Array.isArray(rawData) ? rawData : [];
+      setHumanResource(dataArray);
+    } catch (error) {
+      console.error("Error fetching human resources:", error);
+    }
+  };
+
+  useEffect(() => {
+    getOptions();
+  }, [humanresource]); // Run when humanresource changes
+
+  const getOptions = async () => {
+    try {
+      const newOptions = generateOptions(humanresource);
+      setOptions(newOptions);
+    } catch (error) {
+      console.error("Error fetching options:", error);
+    }
+  };
+
+  const onChange = (newValue) => {
+    setProcess(newValue);
+    setValue(newValue);
+    //setSelectedHumanResource(newValue); // Update selected employees in parent component
+  };
+
   const selectProps = {
     mode: "multiple",
     style: {
@@ -20,51 +64,33 @@ function HumanResourceForm() {
     },
     value,
     options,
-    onChange: (newValue) => {
-      setValue(newValue);
-    },
-    placeholder: "Select Employees...",
+    onChange, // Use the onChange function defined above
+    placeholder: "Select employee...",
     maxTagCount: "responsive",
   };
-  const dataSource = [
-    {
-      key: "1",
-      empid: 32,
-      empname: "Mice",
-      empdesc: "10 Downing Street",
-      empskills: "Chief",
-    },
-    {
-      key: "2",
-      empid: 32,
-      empname: "Mice",
-      empdesc: "10 Downing Street",
-      empskills: "Chief",
-    },
-    
-  ];
+
+  const selectedHumanResource = humanresource.filter((employee) =>
+    value.includes(employee._id)
+  );
+
   const columns = [
     {
-      title: "Employee Id",
-      dataIndex: "empid",
-      key: "empid",
-    },
-    {
       title: "Employee Name",
-      dataIndex: "empname",
-      key: "empname",
+      dataIndex: "name",
+      key: "name",
     },
     {
       title: "Employee Designation",
-      dataIndex: "empdesc",
-      key: "empdesc",
+      dataIndex: "desgn",
+      key: "desgn",
     },
     {
       title: "Employee Skills",
-      dataIndex: "empskills",
-      key: "empskills",
+      dataIndex: "skills",
+      key: "skills",
     },
   ];
+
   return (
     <FormWrapper>
       <FormHeader>Select Employees:</FormHeader>
@@ -75,7 +101,7 @@ function HumanResourceForm() {
         <Select {...selectProps} />
       </Space>
 
-      <Table dataSource={dataSource} columns={columns} />
+      <Table dataSource={selectedHumanResource} columns={columns} />
     </FormWrapper>
   );
 }

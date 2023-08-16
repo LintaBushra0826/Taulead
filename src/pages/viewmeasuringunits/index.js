@@ -11,7 +11,7 @@ function ViewMeauringUnit() {
   const [selectedUnit, setSelectedUnit] = useState({});
   const [editingKey] = useState("");
   const [open, setOpen] = useState(false);
-  const [confirmLoading, setConfirmLoading] = useState(false);
+  const [confirmLoading] = useState(false);
   const [data, setData] = useState(null); // Initialize data as null instead of an empty array
   const [loading, setLoading] = useState(true);
 
@@ -30,7 +30,7 @@ function ViewMeauringUnit() {
       const selectedUnit = data.find((item) => item._id === id);
       setSelectedUnit(selectedUnit);
     } catch (error) {
-      console.error("Error fetching unit data:", error);
+      console.error("Error fetching item data:", error);
     }
   };
 
@@ -56,22 +56,20 @@ function ViewMeauringUnit() {
         scale: selectedUnit.scale,
       };
 
-      await axios.put(
-        `${API_BASE_URL}/MeasuringUnit/${selectedUnit._id}`,
-        updateData
-      );
-      alert("Unit Updated Successfully");
+      console.log("Update Data:", updateData);
+      // const response = await axios.put(
+      //   `${API_BASE_URL}/MeasuringUnit/${selectedUnit._id}`,
+      //   updateData
+      // );
+      alert("Unit Updated");
       setOpen(false);
+      window.location.reload();
     } catch (error) {
       // Handle error
       console.error("Error updating unit:", error);
     }
-    setConfirmLoading(true);
-    setTimeout(() => {
-      setOpen(false);
-      setConfirmLoading(false);
-    }, 2000);
   };
+
   const handleCancel = () => {
     console.log("Clicked cancel button");
     setOpen(false);
@@ -161,6 +159,7 @@ function ViewMeauringUnit() {
           )}
         </TableWrapper>
       </BodyWrapper>
+
       <Modal
         title="Update Unit Details"
         open={open}
@@ -177,7 +176,7 @@ function ViewMeauringUnit() {
               type: selectedUnit.type,
               scale: selectedUnit.scale,
             }}
-            onFinish={handleOk}
+            // onFinish={handleOk}
             layout="vertical"
             labelCol={{
               span: 8,

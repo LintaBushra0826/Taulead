@@ -2,7 +2,11 @@ import React, { useState } from "react";
 import { Input, Form, Button, Divider, Checkbox } from "antd";
 import axios from "axios";
 import { FormWrapper } from "./index.styled";
-import { Container, Footer, FormHeader } from "../../../../styles/global.styled";
+import {
+  Container,
+  Footer,
+  FormHeader,
+} from "../../../../styles/global.styled";
 import { useNavigate } from "react-router-dom";
 
 function LoginForm() {
@@ -59,7 +63,10 @@ function LoginForm() {
       </FormHeader>
 
       <Form name="normal_login" className="login-form" layout="vertical">
-        <Form.Item label="Email" name="email">
+        <Form.Item className="login-label">
+          <label className="Email" name="email">
+            Email
+          </label>
           <Input
             placeholder="email"
             name="email"
@@ -68,7 +75,10 @@ function LoginForm() {
           />
         </Form.Item>
 
-        <Form.Item label="Password" name="password">
+        <Form.Item>
+          <label className="Password" name="password">
+            Password
+          </label>
           <Input
             placeholder="password"
             name="password"
@@ -86,19 +96,20 @@ function LoginForm() {
         <Form.Item>
           <Container>
             <Checkbox> Remember me </Checkbox>
-          <Button
-            type="primary"
-            htmlType="submit"
-            className="login-form-button"
-            onClick={handleSubmit}
-            disabled={isLoggingIn} // Disable the button while login is in progress
-          >
-            {isLoggingIn ? "Logging In..." : "Log In"}
-          </Button>
+            <Button
+              type="primary"
+              htmlType="submit"
+              className="login-form-button"
+              onClick={handleSubmit}
+              disabled={isLoggingIn} // Disable the button while login is in progress
+            >
+              {isLoggingIn ? "Logging In..." : "Log In"}
+            </Button>
           </Container>
 
           <Footer>
-          <label>Dont have account?</label><a href="/home"> Sign up</a>
+            <label>Dont have account?</label>
+            <a href="/home"> Sign up</a>
           </Footer>
         </Form.Item>
       </Form>

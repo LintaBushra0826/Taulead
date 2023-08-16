@@ -20,12 +20,13 @@ function ProcessChart() {
       <Gantt
         tasks={tasks}
         fontSize={14}
-        viewMode={"Year"}
+        viewMode={"Month"}
         onDateChange={"onDateChange"}
         onTaskDelete={"onTaskDelete"}
         onProgressChange={"onProgressChange"}
         onDoubleClick={"onDblClick"}
         onClick={"Onclick"}
+        
       />
     </>
   );

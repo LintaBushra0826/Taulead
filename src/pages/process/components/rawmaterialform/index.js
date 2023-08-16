@@ -1,22 +1,49 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { Table, InputNumber } from "antd";
-import { FormWrapper } from "../createprocessform/index.styled";
+import { FormWrapper } from "../createprocessmodal/index.styled";
 import { Select, Space } from "antd";
 import { FormHeader } from "./index.styled";
+import axios from "axios";
+import { useSetAtom } from "jotai";
+import { UpdateRawMaterialAtom } from "../../process.atom";
 
 function RawMaterialForm() {
-  const onChange = (value) => {
-    console.log("changed", value);
+  const updateRawMaterial = useSetAtom(UpdateRawMaterialAtom);
+  const [value, setValue] = useState([]);
+  const [rawMaterial, setRawMaterial] = useState([]);
+
+  const onChange = (newValue) => {
+    setValue(newValue);
   };
-  const options = [];
-  for (let i = 10; i < 36; i++) {
-    const value = i.toString(36) + i;
-    options.push({
-      label: `Long Label: ${value}`,
-      value,
-    });
-  }
-  const [value, setValue] = useState(["a10", "c12", "h17", "j19", "k20"]);
+
+  useEffect(() => {
+    updateRawMaterial([]);
+  }, []);
+
+  useEffect(() => {
+    fetchRawMaterials();
+  }, []);
+
+  const options = useMemo(
+    () =>
+      rawMaterial.map((material) => ({
+        label: material.Name,
+        value: material._id,
+      })),
+    [rawMaterial]
+  );
+
+  const fetchRawMaterials = async () => {
+    try {
+      const response = await axios.get("http://localhost:3003/rawMaterial");
+      const rawData = response.data.data;
+      const dataArray = Array.isArray(rawData) ? rawData : [];
+      setRawMaterial(dataArray);
+    } catch (error) {
+      console.error("Error fetching raw materials:", error);
+    }
+  };
+
   const selectProps = {
     mode: "multiple",
     style: {
@@ -24,45 +51,47 @@ function RawMaterialForm() {
     },
     value,
     options,
-    onChange: (newValue) => {
-      setValue(newValue);
-    },
+    onChange: onChange,
     placeholder: "Select Item...",
     maxTagCount: "responsive",
   };
-  const dataSource = [
-    {
-      key: "1",
-      name: "Rice",
-      age: 32,
-      address: "10 Downing Street",
-    },
-    {
-      key: "2",
-      name: "Milk",
-      age: 42,
-      address: "10 Downing Street",
-    },
-  ];
+
+  const handleInputChange = (value, id) => {
+    console.info(id, value);
+  };
+
+  const selectedMaterials = useMemo(() => {
+    return value.map((id) => {
+      const item = rawMaterial.find((_item) => id === _item._id);
+      return {
+        ...item,
+        quantity: 1,
+      };
+    });
+  }, [value, rawMaterial]);
+
   const columns = [
     {
       title: "Item Name",
-      dataIndex: "name",
-      key: "name",
+      dataIndex: "Name",
+      key: "Name",
     },
     {
       title: "Item Quantity",
       dataIndex: "quan",
       key: "quan",
-      render: () => (
-        <InputNumber
-          min={1}
-          max={10}
-          defaultValue={1}
-          onChange={onChange}
-          style={{ width: "50%", position: "relative" }}
-        />
-      ),
+      render: (record, item) => {
+        console.info(item);
+        return (
+          <InputNumber
+            min={1}
+            max={item.quan}
+            defaultValue={1}
+            onChange={(value) => handleInputChange(value, item._id)} // Adjusted to use the same onChange function
+            style={{ width: "50%", position: "relative" }}
+          />
+        );
+      },
     },
     {
       title: "Item Unit",
@@ -70,17 +99,18 @@ function RawMaterialForm() {
       key: "unit",
     },
   ];
+
   return (
     <FormWrapper>
       <FormHeader>Select Items:</FormHeader>
       <Space
         direction="vertical"
-        style={{ width: "50%", position: "relative", padding:'10px'}}
+        style={{ width: "50%", position: "relative", padding: "10px" }}
       >
         <Select {...selectProps} />
       </Space>
 
-      <Table dataSource={dataSource} columns={columns} />
+      <Table dataSource={selectedMaterials} columns={columns} />
     </FormWrapper>
   );
 }

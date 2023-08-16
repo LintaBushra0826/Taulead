@@ -107,51 +107,62 @@ function SignupForm() {
           <button type="submit">Sign Up</button>
         </form> */}
 
-        <Form
-          name="normal_login"
-          className="login-form"
-          layout="vertical"
-        >
-          <Form.Item label="Username" name="username">
+        <Form name="normal_login" className="login-form" layout="vertical">
+          <Form.Item>
+            <label className="Username" name="username">
+              Username
+            </label>
             <Input
               placeholder="username"
-              name="username" // Add 'name' attribute to associate with Form.Item
+              name="username"
               value={formData.username}
               onChange={handleChange}
             />
           </Form.Item>
 
-          <Form.Item label="Email" name="email">
+          <Form.Item>
+            <label className="Email" name="email">
+              Email
+            </label>
             <Input
               placeholder="email"
-              name="email" // Add 'name' attribute to associate with Form.Item
+              name="email"
               value={formData.email}
               onChange={handleChange}
             />
           </Form.Item>
 
-          <Form.Item label="Password" name="password">
+          <Form.Item>
+            <label label="password" name="password">
+              Password
+            </label>
             <Input
               placeholder="password"
-              name="password" // Add 'name' attribute to associate with Form.Item
+              name="password"
               value={formData.password}
               onChange={handleChange}
             />
           </Form.Item>
 
-          <Form.Item label="Confirm Password" name="confirmpassword">
+          <Form.Item>
+            <label className="Confirm Password" name="confirmpassword">
+              Confirm Password
+            </label>
             <Input
               placeholder="confirm password"
-              name="confirmpassword" // Add 'name' attribute to associate with Form.Item
+              name="confirmpassword"
               value={formData.confirmpassword}
               onChange={handleChange}
             />
           </Form.Item>
 
-          <Form.Item label="Business Name" name="businessname">
+          <Form.Item>
+            <label className="Business Name" name="businessname">
+              Business Name
+            </label>
             <Input
               placeholder="business name"
-              name="businessname" // Add 'name' attribute to associate with Form.Item
+              name="businessname"
               value={formData.businessname}
               onChange={handleChange}
             />
@@ -162,18 +173,19 @@ function SignupForm() {
           <Form.Item>
             <Container>
               <Checkbox> I have agree with terms and conditions </Checkbox>
-            <Button
-              type="primary"
-              htmlType="submit"
-              className="login-form-button"
-              onClick={handleSubmit}
-            >
-              create my account
-            </Button>
+              <Button
+                type="primary"
+                htmlType="submit"
+                className="login-form-button"
+                onClick={handleSubmit}
+              >
+                create my account
+              </Button>
             </Container>
 
             <Footer>
-            <label>Already have an account?</label><a href="/home"> Sign In</a>
+              <label>Already have an account?</label>
+              <a href="/home"> Sign In</a>
             </Footer>
           </Form.Item>
         </Form>

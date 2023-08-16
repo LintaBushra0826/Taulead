@@ -12,7 +12,6 @@ function ViewRawMaterial() {
   const [editingKey] = useState("");
   const [open, setOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
-  const [setModalText] = useState("Content of the modal");
   const [data, setData] = useState(null); // Initialize data as null instead of an empty array
   const [loading, setLoading] = useState(true);
   
@@ -64,7 +63,6 @@ function ViewRawMaterial() {
       // Handle error
       console.error("Error updating item:", error);
     }
-    setModalText("Updating");
     setConfirmLoading(true);
     setTimeout(() => {
       setOpen(false);
