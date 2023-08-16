@@ -52,11 +52,6 @@ function CreateProcessForm({ isVisible, onClose }) {
     }
   };
 
-  // const handleCheckboxChange = (e) => {
-  //   setCreateSubprocess(e.target.checked);
-  //   setSubprocessModalOpen(e.target.checked);
-  // };
-
   return (
     <FormWrapper>
       {/* <div>This is a process modal</div> */}

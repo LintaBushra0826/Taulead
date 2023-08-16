@@ -88,6 +88,9 @@ function HumanResourceForm() {
       title: "Employee Skills",
       dataIndex: "skills",
       key: "skills",
+      render: (item) => {
+        console.info(item);
+      }
     },
   ];
 

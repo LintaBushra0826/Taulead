@@ -11,14 +11,17 @@ function RawMaterialForm() {
   const updateRawMaterial = useSetAtom(UpdateRawMaterialAtom);
   const [value, setValue] = useState([]);
   const [rawMaterial, setRawMaterial] = useState([]);
+  const [selectedItems, setSelectedItems] = useState([]);
+
+  // console.info(selectedItems);
 
   const onChange = (newValue) => {
     setValue(newValue);
   };
-
   useEffect(() => {
-    updateRawMaterial([]);
-  }, []);
+    updateRawMaterial(selectedItems); // This will Update atom with selectedItem array
+    // console.log("selectedItems",selectedItems)
+  }, [selectedItems]);
 
   useEffect(() => {
     fetchRawMaterials();
@@ -56,8 +59,40 @@ function RawMaterialForm() {
     maxTagCount: "responsive",
   };
 
-  const handleInputChange = (value, id) => {
-    console.info(id, value);
+  const handleInputChange = (_value, id) => {
+    // setSelectedItems((_item) => {
+    //   const array = _item.map((item) => {
+    //     if (item._id === id) {
+    //       return {
+    //         id: id,
+    //         quantity: value,
+    //       };
+    //     }
+    //     return item;
+    //   });
+    //   console.info(array);
+    //   setSelectedItems(array);
+    // });
+
+    // const itemToUpdate = rawMaterial.find((_item) => id === _item._id);
+    // console.log('itemToUpdate', itemToUpdate);
+
+    // if (itemToUpdate) {
+    //  console.log("selectedItems", selectedItems);
+
+    //   const updatedSelectedItems = selectedItems.map((item) =>
+    //     item._id === id
+    //       ? {
+    //           ...item,
+    //           quan: value,
+    //           totcost: value * itemToUpdate.price
+    //         }
+    //       : item
+    //   );
+
+    //   console.log("updatedSelectedItems ", updatedSelectedItems);
+    //   setSelectedItems(updatedSelectedItems);
+    // }
   };
 
   const selectedMaterials = useMemo(() => {
@@ -81,7 +116,6 @@ function RawMaterialForm() {
       dataIndex: "quan",
       key: "quan",
       render: (record, item) => {
-        console.info(item);
         return (
           <InputNumber
             min={1}
