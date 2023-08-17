@@ -18,9 +18,10 @@ function RawMaterialForm() {
   const onChange = (newValue) => {
     setValue(newValue);
   };
+  
   useEffect(() => {
     updateRawMaterial(selectedItems); // This will Update atom with selectedItem array
-    // console.log("selectedItems",selectedItems)
+    console.log("selectedItems", selectedItems);
   }, [selectedItems]);
 
   useEffect(() => {
@@ -59,40 +60,21 @@ function RawMaterialForm() {
     maxTagCount: "responsive",
   };
 
-  const handleInputChange = (_value, id) => {
-    // setSelectedItems((_item) => {
-    //   const array = _item.map((item) => {
-    //     if (item._id === id) {
-    //       return {
-    //         id: id,
-    //         quantity: value,
-    //       };
-    //     }
-    //     return item;
-    //   });
-    //   console.info(array);
-    //   setSelectedItems(array);
-    // });
+  const handleInputChange = (value, id) => {
+    const itemToUpdate = rawMaterial.find((_item) => id === _item._id);
 
-    // const itemToUpdate = rawMaterial.find((_item) => id === _item._id);
-    // console.log('itemToUpdate', itemToUpdate);
-
-    // if (itemToUpdate) {
-    //  console.log("selectedItems", selectedItems);
-
-    //   const updatedSelectedItems = selectedItems.map((item) =>
-    //     item._id === id
-    //       ? {
-    //           ...item,
-    //           quan: value,
-    //           totcost: value * itemToUpdate.price
-    //         }
-    //       : item
-    //   );
-
-    //   console.log("updatedSelectedItems ", updatedSelectedItems);
-    //   setSelectedItems(updatedSelectedItems);
-    // }
+    if (itemToUpdate) {
+      const updatedSelectedItems = selectedMaterials.map((item) => {
+        if (id === item._id) {
+          return {
+            id: id,
+            quantity: value,
+          };
+        }
+        return item;
+      });
+      setSelectedItems(updatedSelectedItems);
+    }
   };
 
   const selectedMaterials = useMemo(() => {
@@ -100,7 +82,7 @@ function RawMaterialForm() {
       const item = rawMaterial.find((_item) => id === _item._id);
       return {
         ...item,
-        quantity: 1,
+        //quan: 1,
       };
     });
   }, [value, rawMaterial]);
@@ -121,7 +103,7 @@ function RawMaterialForm() {
             min={1}
             max={item.quan}
             defaultValue={1}
-            onChange={(value) => handleInputChange(value, item._id)} // Adjusted to use the same onChange function
+            onChange={(value) => handleInputChange(value, item._id)}
             style={{ width: "50%", position: "relative" }}
           />
         );
