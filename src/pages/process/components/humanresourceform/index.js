@@ -13,7 +13,7 @@ const generateOptions = (humanresource) => {
       label: emp.name,
       value: emp._id,
     });
-  });
+  });    
   return options;
 };
 
@@ -40,7 +40,7 @@ function HumanResourceForm() {
 
   useEffect(() => {
     getOptions();
-  }, [humanresource]); // Run when humanresource changes
+  }, [humanresource]);
 
   const getOptions = async () => {
     try {
@@ -53,8 +53,8 @@ function HumanResourceForm() {
 
   const onChange = (newValue) => {
     setProcess(newValue);
+    console.log("Human Resource atom updated", newValue);
     setValue(newValue);
-    //setSelectedHumanResource(newValue); // Update selected employees in parent component
   };
 
   const selectProps = {
@@ -64,7 +64,7 @@ function HumanResourceForm() {
     },
     value,
     options,
-    onChange, // Use the onChange function defined above
+    onChange,
     placeholder: "Select employee...",
     maxTagCount: "responsive",
   };
@@ -88,9 +88,6 @@ function HumanResourceForm() {
       title: "Employee Skills",
       dataIndex: "skills",
       key: "skills",
-      render: (item) => {
-        console.info(item);
-      }
     },
   ];
 

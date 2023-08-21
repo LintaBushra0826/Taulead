@@ -7,11 +7,17 @@ import ProcessForm from "../processform";
 import RawMaterialForm from "../rawmaterialform";
 import HumanResourceForm from "../humanresourceform";
 import { useAtomValue } from "jotai";
-import { ProcessAtom } from "../../process.atom";
+import {
+  ProcessAtom,
+  // UpdateRawMaterialAtom,
+  // UpdateHumanResourceAtom,
+} from "../../process.atom";
 
 function CreateProcessForm({ isVisible, onClose }) {
+  const [formData, setFormData] = useState({});
   const process = useAtomValue(ProcessAtom);
-  const [formData] = useState({});
+  // const [updateRawMaterial] = useAtom(UpdateRawMaterialAtom);
+  // const [updateHumanResource] = useAtom(UpdateHumanResourceAtom);
   const API_BASE_URL = "http://localhost:3003";
   const [current, setCurrent] = useState(1);
 
@@ -40,14 +46,25 @@ function CreateProcessForm({ isVisible, onClose }) {
 
   const handleSubmit = async () => {
     try {
-      await axios.post(`${API_BASE_URL}/process`, formData, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      alert("Process added successfully!");
+      console.log("process", process);
+
+      const combinedData = {
+        // ...formData,
+        // rawMaterial: updateRawMaterial,
+        // humanResource: updateHumanResource,
+        ...process,
+      };
+
+      const response = await axios.post(
+        `${API_BASE_URL}/process`,
+        combinedData
+      );
+      if (response.status === 200) {
+        alert("process added successfully!");
+      } else {
+        alert("Error adding process");
+      }
     } catch (error) {
-      console.error("Error adding process:", error);
       alert("Error adding process");
     }
   };
@@ -76,7 +93,7 @@ function CreateProcessForm({ isVisible, onClose }) {
             }}
           />
           <br />
-          <ProcessForm />
+          <ProcessForm formData={formData} setFormData={setFormData} />
 
           <Divider />
 

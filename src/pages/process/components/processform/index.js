@@ -1,8 +1,10 @@
 import { Col, DatePicker, Form, Input, Row } from "antd";
-import React, { useState } from "react";
+import { useAtom, useAtomValue } from "jotai";
+import React from "react";
+import { ProcessAtom } from "../../process.atom";
 
-function ProcessForm() {
-  const [formData, setFormData] = useState({});
+function ProcessForm({ formData, setFormData }) {
+  const [process, setProcess] = useAtom(ProcessAtom);
 
   const onChange = (value, dateString) => {
     console.log("Selected Time: ", value);
@@ -11,18 +13,15 @@ function ProcessForm() {
     // Convert the js object to a JavaScript Date object
     const startDate = value ? value.toDate() : null;
 
-    setFormData({ ...formData, start: startDate });
-  };
-
-  const onOk = (value) => {
-    console.log("onOk: ", value);
+    setFormData((prevData) => ({ ...prevData, start: startDate }));
+    setProcess((prevProcess) => ({ ...prevProcess, start: startDate }));
   };
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
-    setFormData({ ...formData, [name]: value });
+    setFormData((prevData) => ({ ...prevData, [name]: value }));
+    setProcess((prevProcess) => ({ ...prevProcess, [name]: value }));
   };
-
 
   return (
     <Form
@@ -56,16 +55,10 @@ function ProcessForm() {
       <Row gutter={20} justify="start">
         <Col span={8}>
           <Form.Item label="Process Start Date" name="start">
-            <DatePicker
-              showTime
-              onChange={onChange}
-              onOk={onOk}
-              value={formData.start}
-            />
+            <DatePicker showTime onChange={onChange} />
           </Form.Item>
         </Col>
       </Row>
-
       <Row gutter={8}>
         <Col padding="0px" span={8}>
           <Form.Item label="Process Duration" name="duration">

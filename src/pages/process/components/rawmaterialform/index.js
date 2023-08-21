@@ -12,15 +12,13 @@ function RawMaterialForm() {
   const [value, setValue] = useState([]);
   const [rawMaterial, setRawMaterial] = useState([]);
   const [selectedItems, setSelectedItems] = useState([]);
-
-  // console.info(selectedItems);
-
+  
   const onChange = (newValue) => {
     setValue(newValue);
   };
-  
+
   useEffect(() => {
-    updateRawMaterial(selectedItems); // This will Update atom with selectedItem array
+    updateRawMaterial(selectedItems);
     console.log("selectedItems", selectedItems);
   }, [selectedItems]);
 
@@ -69,6 +67,7 @@ function RawMaterialForm() {
           return {
             id: id,
             quantity: value,
+            unit: item.unit,
           };
         }
         return item;

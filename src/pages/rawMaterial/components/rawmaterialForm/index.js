@@ -14,7 +14,6 @@ function rawMaterialForm() {
   const [formData, setFormData] = useState({});
   const [searchValue] = useState("");
   const [options, setOptions] = useState([]);
-  const [setInputValue] = useState("");
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -56,7 +55,7 @@ function rawMaterialForm() {
   ];
 
   const handleSearch = (value) => {
-    setInputValue(value);
+    // setInputValue(value);
     setOptions(
       universalUnits.filter((unit) =>
         unit.toLowerCase().includes(value.toLowerCase())
