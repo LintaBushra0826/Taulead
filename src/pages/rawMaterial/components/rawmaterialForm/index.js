@@ -108,14 +108,6 @@ function rawMaterialForm() {
                 onSearch={handleSearch}
                 style={{ width: 200 }}
               >
-                {/* <Dropdown menu={menuProps}>
-                  <Button>
-                    <Space>
-                      Select Unit
-                      <DownOutlined />
-                    </Space>
-                  </Button>
-                </Dropdown> */}
                 <Input
                   name="unit"
                   value={formData.unit}

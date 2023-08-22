@@ -1,30 +1,22 @@
 import styled from "styled-components";
 
 export const FormWrapper = styled.div`
+ padding: 10px;
 `;
 
 export const CreateProcessCon = styled.div`
   display: flex;
   justify-content: space-between;
   padding-top: 20px;
-  .ant-checkbox + span {
-    padding-top: 5px;
-  }
-`;
-
-export const SubProcessHeader = styled.div`
-  display: flex;
-  justify-content: space-between;
-  padding-top: 20px;
-  padding-left: 20px;
-  padding-right: 20px;
+  padding-bottom: 10px;
   .ant-checkbox + span {
     padding-top: 5px;
   }
 `;
 
 export const FormLabel = styled.div`
-  /* right: 35px; */
+  bottom: 20px;
+  right: 35px;
   font-size: 17px;
 `;
 

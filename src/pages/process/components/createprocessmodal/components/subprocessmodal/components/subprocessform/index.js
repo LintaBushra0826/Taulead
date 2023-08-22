@@ -1,22 +1,10 @@
-import {
-  Col,
-  DatePicker,
-  Form,
-  Input,
-  Row,
-  Dropdown,
-  message,
-  Space,
-  Typography,
-  Button,
-} from "antd";
-import { DownOutlined, UserOutlined } from "@ant-design/icons";
-import { useSetAtom } from "jotai";
+import { Col, DatePicker, Form, Input, Row } from "antd";
+import { useAtom } from "jotai";
 import React from "react";
-import { ProcessAtom } from "../../process.atom";
+import { ProcessAtom } from "../../../../../../process.atom";
 
-function ProcessForm({ formData, setFormData }) {
-  const setProcess = useSetAtom(ProcessAtom);
+function SubProcessForm({ formData, setFormData }) {
+  const [setProcess] = useAtom(ProcessAtom);
 
   const onChange = (value, dateString) => {
     console.log("Selected Time: ", value);
@@ -35,23 +23,6 @@ function ProcessForm({ formData, setFormData }) {
     setProcess((prevProcess) => ({ ...prevProcess, [name]: value }));
   };
 
-  const handleMenuClick = (e) => {
-    message.info("Click on menu item.");
-    console.log("click", e);
-  };
-
-  const items = [
-    {
-      label: "process",
-      key: "3",
-    },
-  ];
-
-  const menuProps = {
-    items,
-    onClick: handleMenuClick,
-  };
-
   return (
     <Form
       name="basic"
@@ -63,19 +34,19 @@ function ProcessForm({ formData, setFormData }) {
     >
       <Row gutter={20}>
         <Col span={8}>
-          <Form.Item label="Process Name" name="name">
+          <Form.Item label="Subprocess Name" name="subname">
             <Input
-              name="name"
-              value={formData.name}
+              name="subname"
+              value={formData.subname}
               onChange={handleInputChange}
             />
           </Form.Item>
         </Col>
         <Col span={16}>
-          <Form.Item label="Process Description" name="desc">
+          <Form.Item label="Subprocess Description" name="subdesc">
             <Input
-              name="desc"
-              value={formData.desc}
+              name="subdesc"
+              value={formData.subdesc}
               onChange={handleInputChange}
             />
           </Form.Item>
@@ -83,41 +54,33 @@ function ProcessForm({ formData, setFormData }) {
       </Row>
       <Row gutter={20} justify="start">
         <Col span={8}>
-          <Form.Item label="Process Start Date" name="start">
+          <Form.Item label="Subprocess Start Date" name="substart">
             <DatePicker showTime onChange={onChange} />
           </Form.Item>
         </Col>
         <Col padding="0px" span={8}>
-          <Form.Item label="Process Duration" name="duration">
+          <Form.Item label="Subprocess Duration" name="subduration">
             <Input
-              name="duration"
-              value={formData.duration}
+              name="subduration"
+              value={formData.subduration}
               onChange={handleInputChange}
             />
           </Form.Item>
         </Col>
       </Row>
-      {/* <Row gutter={8}>
-        <Col span={20}>
+      <Row gutter={8}>
+        <Col padding="0px" span={8}>
           <Form.Item label="Link to" name="sublink">
             <Input
               name=""
               value={formData.subduration}
               onChange={handleInputChange}
             />
-            <Dropdown menu={menuProps}>
-              <Button>
-                <Space>
-                  select process
-                  <DownOutlined />
-                </Space>
-              </Button>
-            </Dropdown>
           </Form.Item>
         </Col>
-      </Row> */}
+      </Row>
     </Form>
   );
 }
 
-export default ProcessForm;
+export default SubProcessForm;

@@ -5,22 +5,9 @@ import { BodyWrapper } from "../../styles/global.styled";
 import ProcessChart from "./components/processchart";
 import { Button } from "antd";
 import { ButtonWrapper, ChartWrapper } from "./index.styled";
-// import RawMaterialForm from "./components/rawmaterialform";
-// import HumanResourceForm from "./components/humanresourceform";
-// import axios from "axios";
 import CreateProcessModal from "./components/createprocessmodal";
 
 function Process() {
-  // const [formData] = useState({});
-  // const API_BASE_URL = "http://localhost:3003";
-  // const [setShowMaterialform] = useState(false);
-  // const [setShowHrform] = useState(null);
-  // const [setCurrent] = useState(1);
-  // const [setOpen] = useState(false);
-  // const [setSubprocessModalOpen] = useState(false);
-  // const [setCreateSubprocess] = useState(false);
-  // const [selectedHumanResource, setSelectedHumanResource] = useState([]);
-  // const [setShowProcessform] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   const handleOpenModal = () => {

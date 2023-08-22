@@ -2,23 +2,19 @@ import React, { useState } from "react";
 import { Modal, Steps, Checkbox, Button, Divider } from "antd";
 import { FormWrapper } from "./index.styled";
 import axios from "axios";
-import {
-  CreateProcessCon,
-  FormLabel,
-  StepsFormDiv,
-  SubProcessHeader,
-} from "./index.styled";
+import { CreateProcessCon, FormLabel, StepsFormDiv } from "./index.styled";
 import ProcessForm from "../processform";
 import RawMaterialForm from "../rawmaterialform";
 import HumanResourceForm from "../humanresourceform";
 import { useAtomValue } from "jotai";
 import { ProcessAtom } from "../../process.atom";
-import SubProcessForm from "../createprocessmodal/components/subprocessmodal/components/subprocessform";
-import SubRawMaterialForm from "../createprocessmodal/components/subprocessmodal/components/subprocessrawmaterial";
-import SubHumanResourceForm from "../createprocessmodal/components/subprocessmodal/components/subprocesshumanresource";
-import { SubProcessAtom } from "../../../../atoms/subprocess.atom";
+import SubProcessModal from "../subprocessmodal";
+import SubProcessForm from "../subprocessmodal/components/subprocessform";
+import SubRawMaterialForm from "../subprocessmodal/components/subprocessrawmaterial";
+import SubHumanResourceForm from "../subprocessmodal/components/subprocesshumanresource";
+import { SubProcessAtom } from "../../../../../../atoms/subprocess.atom";
 
-function CreateProcessModal({ isVisible, onClose }) {
+function SubProcessModal({ isVisible, onClose }) {
   const [formData, setFormData] = useState({});
   const process = useAtomValue(ProcessAtom);
   const subprocess = useAtomValue(SubProcessAtom);
@@ -44,31 +40,17 @@ function CreateProcessModal({ isVisible, onClose }) {
 
   const items = [
     {
-      title: "Create Process",
-    },
-  ];
-  const materialitems = [
-    {
-      title: "Raw Material",
-    },
-  ];
-  const hritems = [
-    {
-      title: "Human Resource",
-    },
-  ];
-
-  const subitems = [
-    {
       title: "Create Subprocess",
     },
   ];
-  const submaterialitems = [
+
+  const materialitems = [
     {
-      title: "Subprcoess Raw Material",
+      title: "Subprocess Raw Material",
     },
   ];
-  const subhritems = [
+
+  const hritems = [
     {
       title: "Subprocess Human Resource",
     },
@@ -104,7 +86,7 @@ function CreateProcessModal({ isVisible, onClose }) {
 
   const handleSubSubmit = async () => {
     try {
-      console.log("process", subprocess);
+      console.log("subprocess", subprocess);
 
       const combinedData = {
         ...subprocess,
@@ -129,16 +111,15 @@ function CreateProcessModal({ isVisible, onClose }) {
   return (
     <FormWrapper>
       <Modal
-        open={isVisible}
-        onCancel={onClose}
+        open={isSubModalVisible}
+        onCancel={handleCloseModal}
         centered
         footer={null}
         width={1000}
-        onOk={handleSubmit}
+        onOk={handleSubSubmit}
       >
-        <SubProcessHeader>
-          <FormLabel>Process Creation</FormLabel>
-        </SubProcessHeader>
+        <FormLabel>Process Name: {process.name}</FormLabel>
+        <FormLabel>Subprocess Number: {subprocessCount + 1}</FormLabel>
         <br />
 
         <StepsFormDiv>
@@ -151,7 +132,8 @@ function CreateProcessModal({ isVisible, onClose }) {
             }}
           />
           <br />
-          <ProcessForm formData={formData} setFormData={setFormData} />
+          <SubProcessForm formData={formData} setFormData={setFormData} />
+
           <Divider />
 
           <Steps
@@ -160,8 +142,9 @@ function CreateProcessModal({ isVisible, onClose }) {
             onChange={onChangeValue}
             items={materialitems}
           />
+          <br />
 
-          <RawMaterialForm />
+          <SubRawMaterialForm />
 
           <Divider />
 
@@ -171,89 +154,20 @@ function CreateProcessModal({ isVisible, onClose }) {
             onChange={onChangeValue}
             items={hritems}
           />
+          <br />
 
-          <HumanResourceForm />
+          <SubHumanResourceForm />
         </StepsFormDiv>
 
         <CreateProcessCon>
           <Checkbox onChange={handleCheckboxChange}>Create Subprocess</Checkbox>
-          <Button type="primary" onClick={handleSubmit}>
-            Submit Process
+          <Button type="primary" onClick={handleOpenModal}>
+            Submit Subprocess
           </Button>
         </CreateProcessCon>
-
-        {isSubModalVisible && (
-          <Modal
-            open={isSubModalVisible}
-            onCancel={handleCloseModal}
-            centered
-            footer={null}
-            width={1000}
-            onOk={handleSubSubmit}
-          >
-            <SubProcessHeader>
-              <FormLabel>Subprocess: {subprocessCount + 1}</FormLabel>
-              <FormLabel>Process Name: {process.name}</FormLabel>
-            </SubProcessHeader>
-            <br />
-
-            {showSubprocessContent && (
-              <>
-                <StepsFormDiv>
-                  <Steps
-                    current={current}
-                    labelPlacement="Horizontal"
-                    items={subitems}
-                    onChange={(c) => {
-                      setCurrent(0);
-                    }}
-                  />
-                  <br />
-                  <SubProcessForm
-                    formData={formData}
-                    setFormData={setFormData}
-                  />
-
-                  <Divider />
-
-                  <Steps
-                    current={current}
-                    labelPlacement="Horizontal"
-                    onChange={onChangeValue}
-                    items={submaterialitems}
-                  />
-                  <br />
-
-                  <SubRawMaterialForm />
-
-                  <Divider />
-
-                  <Steps
-                    current={current}
-                    labelPlacement="Horizontal"
-                    onChange={onChangeValue}
-                    items={subhritems}
-                  />
-                  <br />
-
-                  <SubHumanResourceForm />
-                </StepsFormDiv>
-              </>
-            )}
-
-            <CreateProcessCon>
-              <Checkbox onChange={handleCheckboxChange}>
-                Create Subprocess
-              </Checkbox>
-              <Button type="primary" onClick={handleOpenModal}>
-                Submit Subprocess
-              </Button>
-            </CreateProcessCon>
-          </Modal>
-        )}
       </Modal>
     </FormWrapper>
   );
 }
 
-export default CreateProcessModal;
+export default SubProcessModal;

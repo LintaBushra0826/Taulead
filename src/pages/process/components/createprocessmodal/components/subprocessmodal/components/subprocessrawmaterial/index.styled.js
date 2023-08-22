@@ -8,5 +8,4 @@ export const FormHeader = styled.div`
   display: inline-flex;
   width: fit-content;
   padding-bottom: 15px;
-  padding-top: 0px;
 `;
