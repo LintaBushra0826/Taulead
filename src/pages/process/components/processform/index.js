@@ -4,13 +4,13 @@ import {
   Form,
   Input,
   Row,
-  Dropdown,
-  message,
-  Space,
-  Typography,
-  Button,
+  //message,
+  // Dropdown,
+  // Space,
+  // Typography,
+  // Button,
 } from "antd";
-import { DownOutlined, UserOutlined } from "@ant-design/icons";
+// import { DownOutlined, UserOutlined } from "@ant-design/icons";
 import { useSetAtom } from "jotai";
 import React from "react";
 import { ProcessAtom } from "../../process.atom";
@@ -35,22 +35,22 @@ function ProcessForm({ formData, setFormData }) {
     setProcess((prevProcess) => ({ ...prevProcess, [name]: value }));
   };
 
-  const handleMenuClick = (e) => {
-    message.info("Click on menu item.");
-    console.log("click", e);
-  };
+  // const handleMenuClick = (e) => {
+  //   message.info("Click on menu item.");
+  //   console.log("click", e);
+  // };
 
-  const items = [
-    {
-      label: "process",
-      key: "3",
-    },
-  ];
+  // const items = [
+  //   {
+  //     label: "process",
+  //     key: "3",
+  //   },
+  // ];
 
-  const menuProps = {
-    items,
-    onClick: handleMenuClick,
-  };
+  // const menuProps = {
+  //   items,
+  //   onClick: handleMenuClick,
+  // };
 
   return (
     <Form

@@ -29,8 +29,7 @@ function CreateProcessModal({ isVisible, onClose }) {
   const [subprocessCount, setSubprocessCount] = useState(0);
 
   const handleOpenModal = () => {
-    console.log("Subprocess Modal should open");
-    setSubIsModalVisible(true);
+    setShowSubprocessContent(true);
   };
 
   const handleCloseModal = () => {
@@ -75,25 +74,30 @@ function CreateProcessModal({ isVisible, onClose }) {
   ];
 
   const handleCheckboxChange = (e) => {
-    setSubIsModalVisible(e.target.checked);
+    //setSubIsModalVisible(e.target.checked);
     setShowSubprocessContent(true);
   };
 
   const handleSubmit = async () => {
     try {
-      console.log("process", process);
-
       const combinedData = {
         ...process,
       };
-
+  
       const response = await axios.post(
         `${API_BASE_URL}/process`,
         combinedData
       );
+  
       if (response.status === 200) {
         alert("Process added successfully!");
-        //setSubprocessModalVisible(true); // Show the subprocess modal
+        setFormData(response.data); // Assuming response contains updated data
+        // setShowSubprocessContent(true); // Show the subprocess checkbox
+  
+        // Check if the checkbox is checked before opening the subprocess modal
+        if (showSubprocessContent) {
+          setSubIsModalVisible(true);
+        }
       } else {
         alert("Error adding process");
       }
@@ -101,7 +105,7 @@ function CreateProcessModal({ isVisible, onClose }) {
       alert("Error adding process");
     }
   };
-
+  
   const handleSubSubmit = async () => {
     try {
       console.log("process", subprocess);
@@ -243,8 +247,9 @@ function CreateProcessModal({ isVisible, onClose }) {
 
             <CreateProcessCon>
               <Checkbox onChange={handleCheckboxChange}>
-                Create Subprocess
+                Create another Subprocess
               </Checkbox>
+              
               <Button type="primary" onClick={handleOpenModal}>
                 Submit Subprocess
               </Button>
