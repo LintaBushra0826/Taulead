@@ -13,7 +13,7 @@ import {
 // import { DownOutlined, UserOutlined } from "@ant-design/icons";
 import { useSetAtom } from "jotai";
 import React from "react";
-import { ProcessAtom } from "../../process.atom";
+import { ProcessAtom } from "../../../../atoms/process.atom";
 
 function ProcessForm({ formData, setFormData }) {
   const setProcess = useSetAtom(ProcessAtom);

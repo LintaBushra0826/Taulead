@@ -3,48 +3,31 @@ import { Table, InputNumber } from "antd";
 import { FormWrapper } from "../../../../../createprocessmodal/index.styled";
 import { Select, Space } from "antd";
 import { FormHeader } from "./index.styled";
-import axios from "axios";
-import { useSetAtom } from "jotai";
+import { useAtomValue, useSetAtom } from "jotai";
 import { UpdateSubRawMaterialAtom } from "../../../../../../../../atoms/subprocess.atom";
+import { ProcessAtom } from "../../../../../../../../atoms/process.atom";
 
 function SubRawMaterialForm() {
   const updateSubRawMaterialAtom = useSetAtom(UpdateSubRawMaterialAtom);
+  const process = useAtomValue(ProcessAtom);
   const [value, setValue] = useState([]);
-  const [rawMaterial, setRawMaterial] = useState([]);
   const [selectedItems, setSelectedItems] = useState([]);
 
   const onChange = (newValue) => {
     setValue(newValue);
   };
-
   useEffect(() => {
     updateSubRawMaterialAtom(selectedItems);
-    console.log("selectedItems", selectedItems);
   }, [selectedItems]);
 
-  useEffect(() => {
-    fetchRawMaterials();
-  }, []);
-
-  const options = useMemo(
-    () =>
-      rawMaterial.map((material) => ({
-        label: material.Name,
-        value: material._id,
-      })),
-    [rawMaterial]
-  );
-
-  const fetchRawMaterials = async () => {
-    try {
-      const response = await axios.get("http://localhost:3003/rawMaterial");
-      const rawData = response.data.data;
-      const dataArray = Array.isArray(rawData) ? rawData : [];
-      setRawMaterial(dataArray);
-    } catch (error) {
-      console.error("Error fetching raw materials:", error);
-    }
-  };
+  const options = useMemo(() => {
+    return process.rawMaterial.map((material) => ({
+      label: material.Name,
+      value: material.id,
+      quantity: material.quantity,
+      unit: material.unit,
+    }));
+  }, [process.rawMaterial]);
 
   const selectProps = {
     mode: "multiple",
@@ -59,32 +42,31 @@ function SubRawMaterialForm() {
   };
 
   const handleInputChange = (value, id) => {
-    const itemToUpdate = rawMaterial.find((_item) => id === _item._id);
-
-    if (itemToUpdate) {
-      const updatedSelectedItems = selectedMaterials.map((item) => {
-        if (id === item._id) {
-          return {
-            id: id,
-            quantity: value,
-            unit: item.unit,
-          };
-        }
-        return item;
-      });
-      setSelectedItems(updatedSelectedItems);
-    }
+    const updatedSelectedItems = selectedMaterials.map((item) => {
+      if (id === item.id) {
+        return {
+          id: id,
+          Name: item.Name,
+          quantity: value,
+          unit: item.unit,
+        };
+      }
+      return item;
+    });
+    setSelectedItems(updatedSelectedItems);
   };
 
   const selectedMaterials = useMemo(() => {
-    return value.map((id) => {
-      const item = rawMaterial.find((_item) => id === _item._id);
+    return value.map((item) => {
+      const rawMaterialItem = process.rawMaterial.find(
+        (_item) => item.id === _item._id
+      );
       return {
+        ...rawMaterialItem,
         ...item,
-        //quan: 1,
       };
     });
-  }, [value, rawMaterial]);
+  }, [value, process.rawMaterial]);
 
   const columns = [
     {
@@ -100,9 +82,9 @@ function SubRawMaterialForm() {
         return (
           <InputNumber
             min={1}
-            max={item.quan}
+            max={item.quantity}
             defaultValue={1}
-            onChange={(value) => handleInputChange(value, item._id)}
+            onChange={(value) => handleInputChange(value, item.id)}
             style={{ width: "50%", position: "relative" }}
           />
         );

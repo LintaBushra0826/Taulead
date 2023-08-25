@@ -1,14 +1,19 @@
 import React from "react";
 import { Gantt } from "gantt-task-react-pro";
 import "gantt-task-react-pro/dist/index.css";
+import { ProcessAtom } from "../../../../atoms/process.atom";
+import { useAtomValue } from "jotai";
 
 function ProcessChart() {
+  const process = useAtomValue(ProcessAtom);
+  // console.log("process data:", process);
+
   let tasks = [
     {
       start: new Date(2022, 1, 1),
       end: new Date(2024, 12, 1),
-      name: "Idea",
-      id: "Task 0",
+      name: process.name,
+      id: process._id,
       type: "task",
       progress: 45,
       isDisabled: true,
@@ -26,7 +31,6 @@ function ProcessChart() {
         onProgressChange={"onProgressChange"}
         onDoubleClick={"onDblClick"}
         onClick={"Onclick"}
-        
       />
     </>
   );

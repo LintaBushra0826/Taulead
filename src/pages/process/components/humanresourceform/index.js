@@ -1,27 +1,17 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { Space, Select, Table } from "antd";
 import { FormWrapper } from "../createprocessmodal/index.styled";
 import { FormHeader } from "../../index.styled";
 import axios from "axios";
 import { useSetAtom } from "jotai";
-import { UpdateHumanResourceAtom } from "../../process.atom";
-
-const generateOptions = (humanresource) => {
-  const options = [];
-  humanresource.forEach((emp) => {
-    options.push({
-      label: emp.name,
-      value: emp._id,
-    });
-  });    
-  return options;
-};
+import { UpdateHumanResourceAtom } from "../../../../atoms/process.atom";
+// import { ProcessAtom } from "../../../../atoms/process.atom";
 
 function HumanResourceForm() {
   const [value, setValue] = useState([]);
-  const [options, setOptions] = useState([]);
   const [humanresource, setHumanResource] = useState([]);
-  const setProcess = useSetAtom(UpdateHumanResourceAtom);
+  const UpdateHumanResource = useSetAtom(UpdateHumanResourceAtom);
+  // const process = useAtomValue(ProcessAtom);
 
   useEffect(() => {
     fetchHumanResource();
@@ -38,24 +28,18 @@ function HumanResourceForm() {
     }
   };
 
-  useEffect(() => {
-    getOptions();
-  }, [humanresource]);
-
-  const getOptions = async () => {
-    try {
-      const newOptions = generateOptions(humanresource);
-      setOptions(newOptions);
-    } catch (error) {
-      console.error("Error fetching options:", error);
-    }
+  const onChange = (id) => {
+    setValue(id);
   };
 
-  const onChange = (newValue) => {
-    setProcess(newValue);
-    console.log("Human Resource atom updated", newValue);
-    setValue(newValue);
-  };
+  const options = useMemo(
+    () =>
+      humanresource.map((emp) => ({
+        label: emp.name,
+        value: emp._id,
+      })),
+    [humanresource]
+  );
 
   const selectProps = {
     mode: "multiple",
@@ -69,9 +53,23 @@ function HumanResourceForm() {
     maxTagCount: "responsive",
   };
 
-  const selectedHumanResource = humanresource.filter((employee) =>
-    value.includes(employee._id)
-  );
+  const selectedHumanResource = useMemo(() => {
+    return value.map((id) => {
+      const emp = humanresource.find((_emp) => id.includes(_emp._id));
+      return {
+        id: emp._id,
+        name: emp.name,
+        desgn: emp.desgn,
+        skills: emp.skills,
+      };
+    });
+  }, [value, humanresource]);
+  
+
+  useEffect(() => {
+    UpdateHumanResource(selectedHumanResource);
+    console.log("UpdateHumanResource", selectedHumanResource);
+  }, [selectedHumanResource]);
 
   const columns = [
     {

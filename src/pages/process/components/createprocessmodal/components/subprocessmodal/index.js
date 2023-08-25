@@ -3,9 +3,6 @@
 // import { FormWrapper } from "./index.styled";
 // import axios from "axios";
 // import { CreateProcessCon, FormLabel, StepsFormDiv } from "./index.styled";
-// import ProcessForm from "../processform";
-// import RawMaterialForm from "../rawmaterialform";
-// import HumanResourceForm from "../humanresourceform";
 // import { useAtomValue } from "jotai";
 // import { ProcessAtom } from "../../process.atom";
 // import SubProcessModal from "../subprocessmodal";
@@ -59,29 +56,6 @@
 //   const handleCheckboxChange = (e) => {
 //     setSubIsModalVisible(e.target.checked);
 //     setShowSubprocessContent(true);
-//   };
-
-//   const handleSubmit = async () => {
-//     try {
-//       console.log("process", process);
-
-//       const combinedData = {
-//         ...process,
-//       };
-
-//       const response = await axios.post(
-//         `${API_BASE_URL}/process`,
-//         combinedData
-//       );
-//       if (response.status === 200) {
-//         alert("Process added successfully!");
-//         //setSubprocessModalVisible(true); // Show the subprocess modal
-//       } else {
-//         alert("Error adding process");
-//       }
-//     } catch (error) {
-//       alert("Error adding process");
-//     }
 //   };
 
 //   const handleSubSubmit = async () => {

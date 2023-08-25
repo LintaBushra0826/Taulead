@@ -1,6 +1,15 @@
 import styled from "styled-components";
 
 export const SideMenuContainer = styled.div`
+  .ant-menu-inline .ant-menu-item::before,
+  .ant-menu-inline .ant-menu-submenu-title::before {
+    display: none;
+  }
+
+  .ant-menu-item,
+  .ant-menu-submenu-title {
+    color: white !important; 
+  }
   color: white;
   background: linear-gradient(135deg, #3c1053, #ad5389);
   .menudiv ul {

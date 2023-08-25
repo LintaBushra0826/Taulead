@@ -5,14 +5,14 @@ import { Select, Space } from "antd";
 import { FormHeader } from "./index.styled";
 import axios from "axios";
 import { useSetAtom } from "jotai";
-import { UpdateRawMaterialAtom } from "../../process.atom";
+import { UpdateRawMaterialAtom } from "../../../../atoms/process.atom";
 
 function RawMaterialForm() {
   const updateRawMaterial = useSetAtom(UpdateRawMaterialAtom);
   const [value, setValue] = useState([]);
   const [rawMaterial, setRawMaterial] = useState([]);
   const [selectedItems, setSelectedItems] = useState([]);
-  
+
   const onChange = (newValue) => {
     setValue(newValue);
   };
@@ -60,12 +60,14 @@ function RawMaterialForm() {
 
   const handleInputChange = (value, id) => {
     const itemToUpdate = rawMaterial.find((_item) => id === _item._id);
-
+    console.log("id", id);
     if (itemToUpdate) {
       const updatedSelectedItems = selectedMaterials.map((item) => {
         if (id === item._id) {
+          console.log("item._id", id);
           return {
             id: id,
+            Name: item.Name,
             quantity: value,
             unit: item.unit,
           };
@@ -81,7 +83,7 @@ function RawMaterialForm() {
       const item = rawMaterial.find((_item) => id === _item._id);
       return {
         ...item,
-        //quan: 1,
+        // quan: 1,
       };
     });
   }, [value, rawMaterial]);

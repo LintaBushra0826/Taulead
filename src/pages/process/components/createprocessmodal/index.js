@@ -12,7 +12,7 @@ import ProcessForm from "../processform";
 import RawMaterialForm from "../rawmaterialform";
 import HumanResourceForm from "../humanresourceform";
 import { useAtomValue } from "jotai";
-import { ProcessAtom } from "../../process.atom";
+import { ProcessAtom } from "../../../../atoms/process.atom";
 import SubProcessForm from "../createprocessmodal/components/subprocessmodal/components/subprocessform";
 import SubRawMaterialForm from "../createprocessmodal/components/subprocessmodal/components/subprocessrawmaterial";
 import SubHumanResourceForm from "../createprocessmodal/components/subprocessmodal/components/subprocesshumanresource";
@@ -28,9 +28,9 @@ function CreateProcessModal({ isVisible, onClose }) {
   const [showSubprocessContent, setShowSubprocessContent] = useState(false);
   const [subprocessCount, setSubprocessCount] = useState(0);
 
-  const handleOpenModal = () => {
-    setShowSubprocessContent(true);
-  };
+  // const handleOpenModal = () => {
+  //   setShowSubprocessContent(true);
+  // };
 
   const handleCloseModal = () => {
     setSubIsModalVisible(false);
@@ -74,8 +74,8 @@ function CreateProcessModal({ isVisible, onClose }) {
   ];
 
   const handleCheckboxChange = (e) => {
-    //setSubIsModalVisible(e.target.checked);
     setShowSubprocessContent(true);
+    setSubIsModalVisible(true);
   };
 
   const handleSubmit = async () => {
@@ -83,21 +83,20 @@ function CreateProcessModal({ isVisible, onClose }) {
       const combinedData = {
         ...process,
       };
-  
+
       const response = await axios.post(
         `${API_BASE_URL}/process`,
         combinedData
       );
-  
+
       if (response.status === 200) {
         alert("Process added successfully!");
-        setFormData(response.data); // Assuming response contains updated data
-        // setShowSubprocessContent(true); // Show the subprocess checkbox
-  
-        // Check if the checkbox is checked before opening the subprocess modal
-        if (showSubprocessContent) {
-          setSubIsModalVisible(true);
-        }
+        setFormData(response.data);
+
+        // // Check if the checkbox is checked before opening the subprocess modal
+        // if (showSubprocessContent) {
+        //   setSubIsModalVisible(true);
+        // }
       } else {
         alert("Error adding process");
       }
@@ -105,28 +104,30 @@ function CreateProcessModal({ isVisible, onClose }) {
       alert("Error adding process");
     }
   };
-  
+
   const handleSubSubmit = async () => {
     try {
-      console.log("process", subprocess);
+      console.log("subprocess", subprocess);
 
       const combinedData = {
         ...subprocess,
       };
 
       const response = await axios.post(
-        `${API_BASE_URL}/process`,
+        `${API_BASE_URL}/subprocess`,
         combinedData
       );
       if (response.status === 200) {
         alert("Subprocess added successfully!");
         setSubprocessCount((prevCount) => prevCount + 1);
-        //setSubprocessModalVisible(true); // Show the subprocess modal
+
+        // Clear the form fields for the next subprocess
+        setFormData({});
       } else {
-        alert("Error adding process");
+        alert("Error adding subprocess");
       }
     } catch (error) {
-      alert("Error adding process");
+      alert("Error adding subprocess");
     }
   };
 
@@ -249,8 +250,8 @@ function CreateProcessModal({ isVisible, onClose }) {
               <Checkbox onChange={handleCheckboxChange}>
                 Create another Subprocess
               </Checkbox>
-              
-              <Button type="primary" onClick={handleOpenModal}>
+
+              <Button type="primary" onClick={handleSubSubmit}>
                 Submit Subprocess
               </Button>
             </CreateProcessCon>

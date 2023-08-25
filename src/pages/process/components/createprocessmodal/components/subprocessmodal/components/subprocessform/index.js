@@ -1,10 +1,10 @@
 import { Col, DatePicker, Form, Input, Row } from "antd";
-import { useAtom } from "jotai";
+import { useSetAtom } from "jotai";
 import React from "react";
-import { ProcessAtom } from "../../../../../../process.atom";
+import { SubProcessAtom } from "../../../../../../../../atoms/subprocess.atom";
 
 function SubProcessForm({ formData, setFormData }) {
-  const [setProcess] = useAtom(ProcessAtom);
+  const setSubProcess = useSetAtom(SubProcessAtom);
 
   const onChange = (value, dateString) => {
     console.log("Selected Time: ", value);
@@ -14,13 +14,13 @@ function SubProcessForm({ formData, setFormData }) {
     const startDate = value ? value.toDate() : null;
 
     setFormData((prevData) => ({ ...prevData, start: startDate }));
-    setProcess((prevProcess) => ({ ...prevProcess, start: startDate }));
+    setSubProcess((prevSubprocess) => ({ ...prevSubprocess, start: startDate }));
   };
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setFormData((prevData) => ({ ...prevData, [name]: value }));
-    setProcess((prevProcess) => ({ ...prevProcess, [name]: value }));
+    setSubProcess((prevSubprocess) => ({ ...prevSubprocess, [name]: value }));
   };
 
   return (
@@ -68,7 +68,7 @@ function SubProcessForm({ formData, setFormData }) {
           </Form.Item>
         </Col>
       </Row>
-      <Row gutter={8}>
+      {/* <Row gutter={8}>
         <Col padding="0px" span={8}>
           <Form.Item label="Link to" name="sublink">
             <Input
@@ -78,7 +78,7 @@ function SubProcessForm({ formData, setFormData }) {
             />
           </Form.Item>
         </Col>
-      </Row>
+      </Row> */}
     </Form>
   );
 }
