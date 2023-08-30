@@ -16,6 +16,7 @@ import ViewPriceLogs from "../pages/pricelogs";
 import ViewHumanResource from "../pages/viewhumanresource";
 import RawMaterialStats from "../pages/rawmaterialstats";
 import HumanResourceStats from "../pages/humanresourcestats";
+import ColorPlatte from "../layout/colorPlatte";
 // import ProtectedRoute  from "./protected";
 
 const router = createBrowserRouter([
@@ -91,6 +92,10 @@ const router = createBrowserRouter([
     path: "/humanresourcestats",
     element: <HumanResourceStats />,
   },
+  {
+    path:"colorPlatte",
+    element: <ColorPlatte />,
+  }
   // {
   //   path: "/dashboard",
   //   element: (

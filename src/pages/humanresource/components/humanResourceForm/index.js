@@ -4,10 +4,8 @@ import { FormHeading, FormWrapper, ButtonContainer } from "./index.styled";
 import axios from "axios";
 import { useLocation } from "react-router-dom";
 
-
-//import profilepic from '../../assets/images/profile.png';
 function HumanresourceForm() {
-  const location = useLocation(); // Import the useLocation hook
+  const location = useLocation();
   const API_BASE_URL = "http://localhost:3003"; 
   const [formData, setFormData] = useState({});
 
@@ -19,14 +17,12 @@ function HumanresourceForm() {
   const handleSubmit = async () => {
     try {
       await axios.post(`${API_BASE_URL}/humanresource`, formData);
-      // Assuming your backend is running on the same host and port as the frontend
       alert("Employee added successfully!");
     } catch (error) {
       alert("Error adding employee");
     }
   };
   const handleViewItems = () => {
-    // Use the useLocation hook to navigate
     const viewItemsPath = "/viewhumanresource";
     if (location.pathname !== viewItemsPath) {
       window.location.href = viewItemsPath;

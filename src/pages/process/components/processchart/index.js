@@ -23,6 +23,7 @@ function ProcessChart() {
   return (
     <>
       <Gantt
+        key={process._id}
         tasks={tasks}
         fontSize={14}
         viewMode={"Month"}

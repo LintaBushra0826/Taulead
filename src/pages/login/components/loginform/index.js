@@ -11,7 +11,7 @@ import { useNavigate } from "react-router-dom";
 
 function LoginForm() {
   const [isLoggingIn, setIsLoggingIn] = useState(false); // Track login status
-  const navigate = useNavigate(); // Updated to use useNavigate
+  const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
     email: "",
@@ -39,7 +39,7 @@ function LoginForm() {
         "http://localhost:3003/login",
         formData
       );
-      console.log("Login response:", response.data); // Log the response data
+      console.log("Login response:", response.data)
       alert(response.data.message);
 
       // Redirect to home page after successful login

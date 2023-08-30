@@ -1,4 +1,3 @@
-
 import React from "react";
 import { BodyWrapper } from "../../styles/global.styled";
 import { ButtonContainer } from "../humanresource/components/humanResourceForm/index.styled";
@@ -15,11 +14,11 @@ function Home() {
         <SideMenu />
         <ButtonContainer>
           <Link to="/login">
-            <Button >Log in</Button>
+            <Button>Log in</Button>
           </Link>
           <br></br>
           <Link to="/signup">
-            <Button >Sign Up</Button>
+            <Button>Sign Up</Button>
           </Link>
         </ButtonContainer>
       </BodyWrapper>

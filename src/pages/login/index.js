@@ -5,7 +5,6 @@ import LoginForm from "./components/loginform";
 import * as Transition from "./index.styled";
 
 function Login() {
-
   return (
     <div>
       <BodyWrapper>
@@ -23,5 +22,4 @@ function Login() {
     </div>
   );
 }
-/*const [signIn, toggle] = React.useState(true);*/
 export default Login;

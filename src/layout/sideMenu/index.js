@@ -100,6 +100,11 @@ const items = [
     name: "settings",
     key: "settings",
   },
+  {
+    label: <Link to="/colorPlatte">Color Platte</Link>,
+    name: "colorplatte",
+    key: "colorplatte",
+  },
 ];
 
 function SideMenu() {
@@ -109,16 +114,16 @@ function SideMenu() {
 
   return (
     <SideMenuContainer>
-      <div className="menudiv">
-        <Menu
-          onClick={onClick}
-          style={{ width: 256 }}
-          defaultSelectedKeys={["home"]}
-          mode="inline"
-          items={items} // Use the 'items' property here
-        />
-      </div>
-    </SideMenuContainer>
+    <div className="menudiv">
+      <Menu
+        onClick={onClick}
+        style={{ width: 256 }}
+        defaultSelectedKeys={["home"]}
+        mode="inline"
+        items={items}
+      />
+    </div>
+  </SideMenuContainer>
   );
 }
 
