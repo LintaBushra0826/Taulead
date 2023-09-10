@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Header from "../../layout/header";
+import Header from "../../layout/dashboardheader";
 import SideMenu from "../../layout/sideMenu";
 import { BodyWrapper } from "../../styles/global.styled";
 import ProcessChart from "./components/processchart";

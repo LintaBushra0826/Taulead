@@ -8,7 +8,7 @@ import axios from "axios";
 import { useLocation } from "react-router-dom";
 import { AutoComplete } from "antd";
 
-function rawMaterialForm() {
+function RawMaterialForm() {
   const location = useLocation();
   const API_BASE_URL = "http://localhost:3003";
   const [formData, setFormData] = useState({});
@@ -172,4 +172,4 @@ function rawMaterialForm() {
   );
 }
 
-export default rawMaterialForm;
+export default RawMaterialForm;

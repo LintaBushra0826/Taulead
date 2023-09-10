@@ -18,7 +18,7 @@ function SubRawMaterialForm() {
   };
   useEffect(() => {
     updateSubRawMaterialAtom(selectedItems);
-  }, [selectedItems]);
+  }, [selectedItems, updateSubRawMaterialAtom]);
 
   const options = useMemo(() => {
     return process.rawMaterial.map((material) => ({

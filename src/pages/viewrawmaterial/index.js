@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import Header from "../../layout/header";
+import Header from "../../layout/dashboardheader";
 import SideMenu from "../../layout/sideMenu";
 import { BodyWrapper, TableWrapper } from "../../styles/global.styled";
 import { Table, Typography, Modal, Input, Form } from "antd";

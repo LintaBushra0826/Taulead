@@ -69,7 +69,7 @@ function HumanResourceForm() {
   useEffect(() => {
     UpdateHumanResource(selectedHumanResource);
     console.log("UpdateHumanResource", selectedHumanResource);
-  }, [selectedHumanResource]);
+  }, [selectedHumanResource, UpdateHumanResource]);
 
   const columns = [
     {

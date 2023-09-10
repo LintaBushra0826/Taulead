@@ -1,0 +1,44 @@
+import React from "react";
+import logo from "../../assets/images/LogoHome.png";
+import profile from "../../assets/images/profile.png";
+import {
+  HeaderContainer,
+  Heading,
+  Logo,
+  LogoContainer,
+  ProfileDropdown,
+} from "./index.styled";
+import { Dropdown} from "antd";
+import { Link } from "react-router-dom";
+
+
+function DashboardHeader() {
+  const items = [
+    {
+      label: <Link to="/settings">Settings</Link>,
+      key: "0",
+    },
+    {
+      label: <Link to="/logout">Logout</Link>,
+      key: "logout",
+    },
+  ];
+
+
+  return (
+    <HeaderContainer>
+      <LogoContainer>
+        <Logo src={logo} alt="logo" className="logo" />
+        <Heading className="HeaderHeading">
+          Manufacturing Resource Pipeline
+        </Heading>
+      </LogoContainer>
+      <Dropdown trigger={["click"]} menu={{ items }}>
+        <ProfileDropdown src={profile} alt="profile" />
+      </Dropdown>
+    </HeaderContainer>
+    
+  );
+}
+
+export default DashboardHeader;

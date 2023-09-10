@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Input, Form, Button, Divider, Checkbox } from "antd";
-import axios from "axios";
 import { FormWrapper } from "./index.styled";
 import {
   Container,
@@ -10,7 +9,7 @@ import {
 import { useNavigate } from "react-router-dom";
 
 function LoginForm() {
-  const [isLoggingIn, setIsLoggingIn] = useState(false); // Track login status
+  const [isLoggingIn] = useState(false); // Track login status
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
@@ -24,32 +23,33 @@ function LoginForm() {
   };
 
   const handleSubmit = async (event) => {
-    event.preventDefault();
+    navigate("/rawMaterial");
+    // event.preventDefault();
 
-    // Prevent multiple login requests while one is in progress
-    if (isLoggingIn) {
-      return;
-    }
+    // // Prevent multiple login requests while one is in progress
+    // if (isLoggingIn) {
+    //   return;
+    // }
 
-    console.log("Login button clicked");
-    setIsLoggingIn(true);
+    // console.log("Login button clicked");
+    // setIsLoggingIn(true);
 
-    try {
-      const response = await axios.post(
-        "http://localhost:3003/login",
-        formData
-      );
-      console.log("Login response:", response.data)
-      alert(response.data.message);
+    // try {
+    //   const response = await axios.post(
+    //     "http://localhost:3003/login",
+    //     formData
+    //   );
+    //   console.log("Login response:", response.data)
+    //   alert(response.data.message);
 
-      // Redirect to home page after successful login
-      navigate("/home");
-    } catch (error) {
-      console.error("Error during login:", error);
-      alert("Login failed. Please try again later.");
-    } finally {
-      setIsLoggingIn(false);
-    }
+    //   // Redirect to home page after successful login
+    //   navigate("/home");
+    // } catch (error) {
+    //   console.error("Error during login:", error);
+    //   alert("Login failed. Please try again later.");
+    // } finally {
+    //   setIsLoggingIn(false);
+    // }
   };
 
   return (

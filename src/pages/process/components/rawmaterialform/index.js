@@ -20,7 +20,7 @@ function RawMaterialForm() {
   useEffect(() => {
     updateRawMaterial(selectedItems);
     console.log("selectedItems", selectedItems);
-  }, [selectedItems]);
+  }, [selectedItems, updateRawMaterial]);
 
   useEffect(() => {
     fetchRawMaterials();

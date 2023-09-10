@@ -12,5 +12,17 @@ code {
 
 .ant-btn-primary {
   width: fit-content;
-  background-color: #660066;
+  background: linear-gradient(135deg, #654ea3, #1D2B64 );
+  /* background-color:  #654ea3; */
+  color:white;
+  height: 40px;
+  border-color: none;
+}
+
+.ant-btn-default {
+  width: fit-content;
+  height: 40px;
+  background-color:  #fdffff;
+  border-color: #1D2B64;
+  color: #1D2B64;
 }

@@ -1,89 +1,86 @@
-import React, { useState, useEffect, useMemo } from "react";
-import { Space, Select, Table } from "antd";
-import { FormWrapper } from "../../../../../createprocessmodal/index.styled";
-import { FormHeader } from "../../../../../../index.styled";
-import { useSetAtom, useAtomValue } from "jotai";
-import { UpdateSubHumanResourceAtom } from "../../../../../../../../atoms/subprocess.atom";
-import { ProcessAtom } from "../../../../../../../../atoms/process.atom";
+import { Col, DatePicker, Form, Input, Row } from "antd";
+import { useSetAtom } from "jotai";
+import React from "react";
+import { SubProcessAtom } from "../../../../../../../../atoms/subprocess.atom";
 
-function SubHumanResourceForm() {
-  const [value, setValue] = useState([]);
-  const process = useAtomValue(ProcessAtom);
-  const UpdateSubHRAtom = useSetAtom(UpdateSubHumanResourceAtom);
+function SubProcessForm({ formData, setFormData }) {
+  const setSubProcess = useSetAtom(SubProcessAtom);
 
-  const options = useMemo(
-    () =>
-      process.humanResource.map((emp) => ({
-        label: emp.name,
-        value: emp.id,
-      })),
-    [process.humanResource]
-  );
+  const onChange = (value, dateString) => {
+    console.log("Selected Time: ", value);
+    console.log("Formatted Selected Time: ", dateString);
 
-  const onChange = (newValue) => {
-    setValue(newValue);
+    // Convert the js object to a JavaScript Date object
+    const startDate = value ? value.toDate() : null;
+
+    setFormData((prevData) => ({ ...prevData, start: startDate }));
+    setSubProcess((prevSubprocess) => ({ ...prevSubprocess, start: startDate }));
   };
 
-  const selectProps = {
-    mode: "multiple",
-    style: {
-      width: "100%",
-    },
-    value,
-    options,
-    onChange,
-    placeholder: "Select employee...",
-    maxTagCount: "responsive",
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setFormData((prevData) => ({ ...prevData, [name]: value }));
+    setSubProcess((prevSubprocess) => ({ ...prevSubprocess, [name]: value }));
   };
-
-  const selectedSubHumanResource = useMemo(() => {
-    return value.map((id) => {
-      const emp = process.humanResource.find((_emp) => id.includes(_emp.id));
-
-      return {
-        id: emp.id,
-        name: emp.name,
-        desgn: emp.desgn,
-        skills: emp.skills,
-      };
-    });
-  }, [value, process.humanResource]);
-
-  useEffect(() => {
-    UpdateSubHRAtom(selectedSubHumanResource);
-  }, [selectedSubHumanResource]);
-
-  const columns = [
-    {
-      title: "Employee Name",
-      dataIndex: "name",
-      key: "name",
-    },
-    {
-      title: "Employee Designation",
-      dataIndex: "desgn",
-      key: "desgn",
-    },
-    {
-      title: "Employee Skills",
-      dataIndex: "skills",
-      key: "skills",
-    },
-  ];
 
   return (
-    <FormWrapper>
-      <FormHeader>Select Employees:</FormHeader>
-      <Space
-        direction="vertical"
-        style={{ width: "50%", position: "relative", padding: "10px" }}
-      >
-        <Select {...selectProps} />
-      </Space>
-
-      <Table dataSource={selectedSubHumanResource} columns={columns} />
-    </FormWrapper>
+    <Form
+      name="basic"
+      layout="vertical"
+      initialValues={{
+        remember: true,
+      }}
+      autoComplete="off"
+    >
+      <Row gutter={20}>
+        <Col span={8}>
+          <Form.Item label="Subprocess Name" name="subname">
+            <Input
+              name="subname"
+              value={formData.subname}
+              onChange={handleInputChange}
+            />
+          </Form.Item>
+        </Col>
+        <Col span={16}>
+          <Form.Item label="Subprocess Description" name="subdesc">
+            <Input
+              name="subdesc"
+              value={formData.subdesc}
+              onChange={handleInputChange}
+            />
+          </Form.Item>
+        </Col>
+      </Row>
+      <Row gutter={20} justify="start">
+        <Col span={8}>
+          <Form.Item label="Subprocess Start Date" name="substart">
+            <DatePicker showTime onChange={onChange} />
+          </Form.Item>
+        </Col>
+        <Col padding="0px" span={8}>
+          <Form.Item label="Subprocess Duration" name="subduration">
+            <Input
+              name="subduration"
+              value={formData.subduration}
+              onChange={handleInputChange}
+            />
+          </Form.Item>
+        </Col>
+      </Row>
+      {/* <Row gutter={8}>
+        <Col padding="0px" span={8}>
+          <Form.Item label="Link to" name="sublink">
+            <Input
+              name=""
+              value={formData.subduration}
+              onChange={handleInputChange}
+            />
+          </Form.Item>
+        </Col>
+      </Row> */}
+    </Form>
   );
 }
 
-export default SubHumanResourceForm;
+export default SubProcessForm;
