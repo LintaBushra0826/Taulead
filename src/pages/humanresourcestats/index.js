@@ -1,58 +1,20 @@
-import React, { useState, useEffect } from "react";
-import { Line } from "@ant-design/plots";
-import Header from "../../layout/header";
-import { BodyWrapper, ChartWrapper } from "../../styles/global.styled";
+import React from "react";
+import HumanResourceChart from "./components/humanResourceChart";
+import Header from "../../layout/dashboardheader";
 import SideMenu from "../../layout/sideMenu";
-
-const HumanResourceChart = () => {
-  const [data, setData] = useState([]);
-
-  useEffect(() => {
-    asyncFetch();
-  }, []);
-
-  const asyncFetch = () => {
-    fetch(
-      "https://gw.alipayobjects.com/os/bmw-prod/e00d52f4-2fa6-47ee-a0d7-105dd95bde20.json"
-    )
-      .then((response) => response.json())
-      .then((json) => setData(json))
-      .catch((error) => {
-        console.log("fetch data failed", error);
-      });
-  };
-  const config = {
-    data,
-    xField: "year",
-    yField: "gdp",
-    seriesField: "name",
-    yAxis: {
-      label: {
-        formatter: (v) => `${(v / 10e8).toFixed(1)} B`,
-      },
-    },
-    legend: {
-      position: "top",
-    },
-    smooth: true,
-    animation: {
-      appear: {
-        animation: "path-in",
-        duration: 5000,
-      },
-    },
-  };
-  return (
-    <div className="divform">
-      <Header />
-      <BodyWrapper>
-        <SideMenu />
-        <ChartWrapper>
-          <Line {...config} />
-        </ChartWrapper>
-      </BodyWrapper>
-    </div>
+import { BodyWrapper, MainContainer } from "../../styles/global.styled";
+function rawMaterialstats() {
+  return(
+  <>
+    <Header />
+    <BodyWrapper>
+      <SideMenu />
+      <MainContainer>
+        <HumanResourceChart />
+      </MainContainer>
+    </BodyWrapper>
+  </>
   );
-};
+}
 
-export default HumanResourceChart;
+export default rawMaterialstats;

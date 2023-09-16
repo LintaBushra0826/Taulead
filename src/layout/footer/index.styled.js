@@ -4,7 +4,7 @@ export const FooterWrapper = styled.div`
   width: 100%;
   font-family: "Roboto", sans-serif;
   /* background: #654ea3; */
-  background-color: #2C2C54;
+  background-color: #060047;
   color: white;
   padding: 20px; /* Add padding as needed */
 
@@ -30,7 +30,6 @@ export const FooterWrapper = styled.div`
 
   .text-uppercase {
     position: relative;
-    left: 15px;
   }
 `;
 
@@ -44,4 +43,9 @@ export const ImageWapper = styled.img`
   text-decoration: none;
 `;
 
-export const FooterLogoHeader = styled.div``;
+export const footerLogo = styled.img`
+  display: flex;
+  position: absolute;
+  width: 110px;
+  height: 100px;
+`;

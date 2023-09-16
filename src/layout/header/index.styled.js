@@ -1,27 +1,35 @@
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 
-// export const HeaderWrapper = styled.div`
-//   border-bottom: 1px solid #210062;
-// `;
+const slideDown = keyframes`
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(0);
+  }
+`;
 
 export const HeaderContainer = styled.div`
+  position: absolute;
   width: 100%;
   height: 70px;
   background-color: transparent;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 50px 150px;
+  padding: 50px 90px;
+  animation: ${slideDown} 1.5s ease-out 0.5ms both;
 `;
 
 export const Logo = styled.img`
   position: relative;
-  top: 20px;
+  top: 10px;
   width: 110px;
-  height: 150px;
+  height: 100px;
   display: flex;
   color: white;
   text-decoration: none;
+  animation: ${slideDown} 2s ease-out 0.5ms both;
 `;
 
 export const LogoContainer = styled.div`
@@ -29,6 +37,7 @@ export const LogoContainer = styled.div`
   justify-content: space-between;
   align-items: center;
   gap: 5px;
+  animation: ${slideDown} 2s ease-out 0.5ms both;
 `;
 
 export const Heading = styled.h2`
@@ -37,12 +46,14 @@ export const Heading = styled.h2`
   font-family: "Times New Roman";
   display: flex;
   width: fit-content;
+  animation: ${slideDown} 2s ease-out 0.5ms both;
 `;
 
 export const Username = styled.div`
   display: flex;
   color: white;
   text-decoration: none;
+  animation: ${slideDown} 2s ease-out 0.5ms both;
 `;
 
 export const HeadButton = styled.div`
@@ -50,6 +61,7 @@ export const HeadButton = styled.div`
   background: none;
   border: none;
   color: blue;
+  animation: ${slideDown} 2s ease-out 0.5ms both;
 `;
 
 export const HeadMenu = styled.div`
@@ -64,11 +76,13 @@ export const HeadMenu = styled.div`
     background: transparent;
     padding-left: 50px;
     font-size: 12pt;
-    color: #210062;
+    /* color: #210062; */
+    color: #fff;
   }
   .ant-menu-horizontal {
     border-bottom: none;
   }
+  animation: ${slideDown} 2s ease-out 0.5ms both;
 `;
 
 // export const ButtonContainer = styled.div`
@@ -97,7 +111,9 @@ export const ButtonContainer = styled.div`
   padding-top: 3px;
 
   a {
-    color: #210062;
+    /* color: #210062; */
+    color: #fff;
     display: inline-block; /* Display the login link as an inline block */
   }
+  animation: ${slideDown} 2s ease-out 0.5ms both;
 `;

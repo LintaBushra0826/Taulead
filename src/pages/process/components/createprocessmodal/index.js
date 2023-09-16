@@ -28,9 +28,9 @@ function CreateProcessModal({ isVisible, onClose }) {
   const [showSubprocessContent, setShowSubprocessContent] = useState(false);
   const [subprocessCount, setSubprocessCount] = useState(0);
 
-  // const handleOpenModal = () => {
-  //   setShowSubprocessContent(true);
-  // };
+  const handleOpenModal = () => {
+    setShowSubprocessContent(true);
+  };
 
   const handleCloseModal = () => {
     setSubIsModalVisible(false);
@@ -93,10 +93,10 @@ function CreateProcessModal({ isVisible, onClose }) {
         alert("Process added successfully!");
         setFormData(response.data);
 
-        // // Check if the checkbox is checked before opening the subprocess modal
-        // if (showSubprocessContent) {
-        //   setSubIsModalVisible(true);
-        // }
+        // Check if the checkbox is checked before opening the subprocess modal
+        if (showSubprocessContent) {
+          setSubIsModalVisible(true);
+        }
       } else {
         alert("Error adding process");
       }

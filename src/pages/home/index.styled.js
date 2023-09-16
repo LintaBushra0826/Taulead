@@ -3,122 +3,12 @@ import styled, { keyframes } from "styled-components";
 export const BodyWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: center;
-  text-align: center;
-  background: linear-gradient(135deg, #ede4ff, #e8cbc0); //approved
-  /* background: linear-gradient(135deg, #636FA4,#ede4ff, #302b63); */
-  /* background: #e2e2e2; */
-  /* background: linear-gradient(135deg, #D3CCE3,#E9E4F0); */ //approved
-  /* background: linear-gradient(135deg, #ba90c6, #fdf4f5, #ba90c6); //latest */
-  /* background: linear-gradient(100deg, #654ea3, #E9E4F0, #654ea3); */
-  height: 100vh;
-  color: #2c2c54;
-`;
-export const BackgroundPic = styled.div`
-  position: relative;
+  align-items: left;
+  text-align: left;
+  background: linear-gradient(100deg, #2a0845, #2a0845, #061161 120%);
   width: 100%;
-  height: 100%;
-  background-size: cover;
-  background-position: center;
-
-  &::before {
-    content: "";
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    background-image: linear-gradient(120deg, #e8cbc0, #ddd6f3, #cbb4d4);
-    opacity: 0.95;
-    transition: opacity 1s ease, transform 1s ease; 
-  }
-`;
-
-export const Heading = styled.h1`
-  position: relative;
-  padding-top: 80px;
-  font-family: "Roboto", sans-serif;
-  font-size: 32pt;
-  font-weight: 500;
-  width: 800px;
-  color: linear-gradient(135deg, #654ea3, #1d2b64);
-
-`;
-
-export const Paragraph = styled.p`
-  position: relative;
-  font-family: "Roboto", sans-serif;
-  font-size: 12pt;
-  font-weight: normal;
-  width: 500px;
-  padding: 20px;
-  color: linear-gradient(135deg, #654ea3, #1d2b64);
-
-  /* 
-  &:before {
-    content: "Create your own manufacturing business and manage your tasks here easily with secure access";
-    position: absolute;
-    width: fit-content;
-    white-space: nowrap;
-    overflow: hidden;
-    left:10px;
-    animation: typing 8s steps(1000, end);
-  } */
-
-  /* @keyframes typing {
-    from {
-      width: 0;
-    }
-    to {
-      width: 100%;
-    }
-  } */
-`;
-
-const blink = keyframes`
-  0%, 100% {
-    opacity: 0;
-  }
-  50% {
-    opacity: 1;
-  }
-`;
-
-const typing = keyframes`
-  from {
-    width: 0;
-  }
-  to {
-    width: 100%;
-  }
-`;
-
-export const TypingText = styled.span`
-  overflow: hidden;
-  white-space: nowrap;
-  display: inline-block;
-  position: relative;
-
-  &:after {
-    content: "|"; /* Typing cursor */
-    display: inline-block;
-    width: 0;
-    animation: blink 0.7s infinite; /* Cursor blinking animation */
-  }
-`;
-export const ButtonWrapper = styled.button`
-  padding-top: 5px;
-  background-color: transparent;
-  border: none;
-`;
-
-export const CardWrapper = styled.div`
-  position: absolute;
-  top: 800px;
-  left: 150px;
-  width: 1200px;
-  height: 1000px;
-  box-shadow: 6px 6px 10px rgba(0, 0, 0, 0.1);
-  background-color: #ede4ff;
-  border-radius: 50px;
+  height: 100vh;
+  opacity: 1.05;
 `;
 
 const pulseAnimation = keyframes`
@@ -132,6 +22,207 @@ const pulseAnimation = keyframes`
     transform: scale(1);
   }
 `;
+const fadeIn = keyframes`
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+`;
+
+const scaleUp = keyframes`
+   0% {
+    transform: scale(0);
+  }
+  100% {
+    transform: scale(1);
+  }
+`;
+const slideDown = keyframes`
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(0);
+  }
+`;
+const slideUp = keyframes`
+  0% {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+`;
+const popUp = keyframes`
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  70% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+`;
+const slideInLeft = keyframes`
+   0% {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+`;
+const slideInRight = keyframes`
+  0% {
+    transform: translateX(100%); /* Initial state */
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0); /* Starting state of animation */
+    opacity: 1;
+  }
+`;
+export const moveUpDown = keyframes`
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+`;
+const moveDiagonal = keyframes`
+   0% {
+    transform: translate(0, 0);
+    opacity:1;
+  }
+  50% {
+    transform: translate(0.6%, 0.6%);
+    opacity:1;
+  }
+  100% {
+    transform: translate(0, 0);
+    opacity:1;
+  }
+`;
+
+export const Heading = styled.h1`
+  position: absolute;
+  padding-top: 220px;
+  font-family: "Titillium Web", Sans-serif;
+  font-size: 34pt;
+  font-weight: 400;
+  width: 400px;
+  height: 200px;
+  color: #fff;
+  left: 200px;
+  background: linear-gradient(135deg, #eaafc8, #d3cce3, #91eae4);
+  -webkit-background-clip: text; /* Apply gradient to text */
+  background-clip: text; /* Apply gradient to text */
+  /* -webkit-text-fill-color: transparent; Hide the text color */
+  animation: ${slideUp} 1s ease-out 0.9s both;
+
+  .headerSpan {
+    /* background: linear-gradient(135deg,#FF8235,#ff9966,#f7b733);
+    -webkit-background-clip: text;  //Apply gradient to text 
+     background-clip: text;  //Apply gradient to text 
+    -webkit-text-fill-color: transparent; */
+    color: #ffaf7b;
+  }
+`;
+
+export const Paragraph = styled.p`
+  position: relative;
+  font-family: "Roboto", sans-serif;
+  font-size: 14pt;
+  font-weight: normal;
+  width: 500px;
+  padding: 30px;
+  color: #fff;
+
+  animation: ${slideUp} 1s ease-out 0.9s both;
+`;
+
+export const BgImg = styled.img`
+  display: flex;
+  position: absolute;
+  width: 55%;
+  height: 85%;
+  opacity: 0;
+  top: 30px;
+  left: 600px;
+  border-radius: 180px;
+
+  animation: ${slideInRight} 1s ease-out 0.9s 1,
+    ${moveDiagonal} 2s ease-out 1.8s infinite;
+`;
+export const Gradient = styled.div`
+  top: 150px;
+  left: 800px;
+  background: linear-gradient(135deg, #be93c5 150%, #7bc6cc 150%);
+`;
+
+export const ButtonWrapper = styled.button`
+  display: flex;
+  position: absolute;
+  left: 200px;
+  top: 500px;
+  background-color: transparent;
+  border: none;
+  animation: ${popUp} 1.5s ease-out 1.1s both,
+    ${pulseAnimation} 4s ease-out 3s 1;
+  opacity: 0;
+`;
+
+export const Section2 = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+  text-align: left;
+  /* background: linear-gradient(100deg, #dbe6f6, #e6dada); */
+  width: 100%;
+  height: 60vh;
+`;
+
+export const Section3 = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+  text-align: left;
+  /* background: linear-gradient(100deg, #e6dada, #dbe6f6); */
+  width: 100%;
+  height: 100vh;
+`;
+
+export const Section4 = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+  text-align: left;
+  background: linear-gradient(100deg, #e6dada, #dbe6f6);
+  width: 100%;
+  height: 100vh;
+`;
+export const CardWrapper = styled.div`
+  position: absolute;
+  top: 800px;
+  left: 150px;
+  width: 1200px;
+  height: 1000px;
+  box-shadow: 6px 6px 10px rgba(0, 0, 0, 0.1);
+  background-color: #ede4ff;
+  border-radius: 50px;
+`;
 
 export const ImageWrap = styled.img`
   display: flex;
@@ -143,24 +234,6 @@ export const ImageWrap = styled.img`
   top: 80px;
   left: 10px;
   right: 10px;
-  /* 
-  @keyframes fadeIn {
-  0% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
-} */
-
-  /* @keyframes scaleUp {
-  0% {
-    transform: scale(0);
-  }
-  100% {
-    transform: scale(1);
-  }
-} */
 
   /* Add the animation properties here */
   animation-name: ${pulseAnimation};
@@ -197,27 +270,6 @@ export const FeartureHeading = styled.div`
   font-size: 22pt;
   width: 700px;
   padding-left: 550px;
-`;
-
-const fadeIn = keyframes`
-  0% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
- `;
-
-const moveUpDown = keyframes`
-  0% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-10px); /* Adjust the desired distance */
-  }
-  100% {
-    transform: translateY(0);
-  }
 `;
 
 export const StyledCircleContainer = styled.div`
@@ -288,4 +340,15 @@ export const StyledCircle3 = styled.div`
   height: 50px;
   border: 10px solid #9f91cc;
   border-radius: 100%;
+`;
+
+export const FeaturesWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  background: linear-gradient(100deg, #2a0845, #2a0845, #2a0845 120%);
+  width: 100%;
+  height: 100vh;
+  opacity: 1.05;
 `;

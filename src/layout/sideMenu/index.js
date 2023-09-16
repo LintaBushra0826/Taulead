@@ -11,6 +11,10 @@ const items = [
     key: "home",
   },
   {
+    label: <Link to="/dashboard">Dashboard</Link>,
+    key: "dashboard",
+  },
+  {
     label: "Inventory",
     name: "Inventory",
     key: "inventory",

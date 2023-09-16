@@ -12,17 +12,30 @@ code {
 
 .ant-btn-primary {
   width: fit-content;
-  background: linear-gradient(135deg, #654ea3, #1D2B64 );
-  /* background-color:  #654ea3; */
-  color:white;
+  background-color: #D3CCE3;
+  border-color:  #1D2B64;
+  color: #1D2B64;
   height: 40px;
   border-color: none;
+  font-weight: 500;
 }
 
+.ant-btn-primary:hover {
+  background-color:  #D3CCE3;
+  border-color: #660066;
+  color: #660066;
+}
 .ant-btn-default {
   width: fit-content;
   height: 40px;
-  background-color:  #fdffff;
-  border-color: #1D2B64;
-  color: #1D2B64;
+  background-color: transparent;
+  border-color: white;
+  color: white;
+  font-weight: 500;
+  transition: box-shadow 0.3s;
+}
+
+.ant-btn-default:hover {
+  background-color: transparent; 
+
 }

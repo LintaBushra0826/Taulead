@@ -17,12 +17,17 @@ import ViewHumanResource from "../pages/viewhumanresource";
 import RawMaterialStats from "../pages/rawmaterialstats";
 import HumanResourceStats from "../pages/humanresourcestats";
 import ColorPlatte from "../layout/colorPlatte";
+import Dashboard from "../pages/dashboard";
 // import ProtectedRoute  from "./protected";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <Home />,
+  },
+  {
+    path: "/dashboard",
+    element: <Dashboard />,
   },
   {
     path: "/home",

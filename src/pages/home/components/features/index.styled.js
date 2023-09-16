@@ -1,27 +1,68 @@
-import styled from "styled-components";
-export const Wrapper = styled.div`
-  margin-top: 110px;
-  margin-bottom: 100px;
-`;
-export const Box = styled.div`
-  background-color: #e0eafc;
-  margin: 0 auto;
-  padding: 20px 20px 20px 20px;
-  height: 580px;
-  border-radius: 35px;
+import styled, { keyframes } from "styled-components";
 
-  @media (min-width: 768px) {
-    heigth: 100%;
+const slideUp = keyframes`
+  0% {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
   }
 `;
-export const P = styled.p`
-  color: gray;
+
+export const Wrapper = styled.div`
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
-export const P1 = styled.p`
-  color: #6a3093;
-  font-weight: 600;
-  cursor: pointer;
-`;
-export const Div = styled.div`
-  margin-top: -490px;
+
+export const Box = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: absolute;
+  top: 165%;
+  transform: translateY(-50%);
+  border-radius: 35px;
+  color: #2a0845;
+  .h1 {
+    text-align: center;
+    font-size: 36px;
+  }
+  .Container {
+    display: flex;
+    position: absolute;
+    top: 100%;
+    right: 30%;
+  }
+  .card-container {
+    display: flex;
+    position: relative;
+    flex-direction: column;
+    margin-top: 20px;
+    max-width: 800px;
+  }
+  .card-row {
+    display: flex;
+    justify-content: space-between;
+    .card {
+      flex: 0 0 calc(50% - 10px); /* Adjust the width as needed with some spacing */
+      height: 12rem;
+      border-radius: 20px;
+      background: linear-gradient(100deg, #d3cce3, #e9e4f0);
+      box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
+      margin-top: 20px;
+      margin-right: 20px; /* Add spacing between the cards */
+      border-color: 2px solid transparent;
+
+      /* animation: ${slideUp} s ease-out 2s 1; */
+    }
+  }
+  .card:hover {
+  border-color: #2a0845; /* Change the border color on hover */
+}
 `;

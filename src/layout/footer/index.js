@@ -7,8 +7,11 @@ import {
   MDBIcon,
 } from "mdb-react-ui-kit";
 import "mdb-react-ui-kit/dist/css/mdb.min.css";
-import { FooterWrapper, ImageWapper, FooterLogoHeader } from "./index.styled";
-import logo from "../../assets/images/whitelogo_withoutBg.png";
+import { FooterWrapper } from "./index.styled";
+import logo from "../../assets/images/Logo white.png";
+import { Logo } from "../header/index.styled";
+import { CiLocationOn} from "react-icons/ci";
+import { AiOutlineInfoCircle } from "react-icons/ai";
 
 export default function App() {
   return (
@@ -22,7 +25,7 @@ export default function App() {
             className="me-5 d-none d-lg-block"
             style={{ display: "flex", justifyContent: "flex-start" }}
           >
-            <span>Get connected with us on social networks:</span>
+            <span>Get connected with us</span>
           </div>
 
           <div>
@@ -51,17 +54,12 @@ export default function App() {
           <MDBContainer className="text-center text-md-start mt-5">
             <MDBRow className="mt-3">
               <MDBCol md="3" lg="4" xl="3" className="mx-auto mb-4">
-                <ImageWapper src={logo} alt="image" />
+                <Logo src={logo} alt="image" />
 
               </MDBCol>
 
               <MDBCol md="2" lg="2" xl="2" className="mx-auto mb-4">
-                <h6 className="text-uppercase fw-bold mb-4">Products</h6>
-                <p>
-                  <a href="#!" className="text-reset">
-                    Angular
-                  </a>
-                </p>
+                <h6 className="text-uppercase fw-bold mb-4">Product</h6>
                 <p>
                   <a href="#!" className="text-reset">
                     React
@@ -69,7 +67,7 @@ export default function App() {
                 </p>
                 <p>
                   <a href="#!" className="text-reset">
-                    Vue
+                    JavaScript
                   </a>
                 </p>
                 <p>
@@ -80,20 +78,15 @@ export default function App() {
               </MDBCol>
 
               <MDBCol md="3" lg="2" xl="2" className="mx-auto mb-4">
-                <h6 className="text-uppercase fw-bold mb-4">Useful links</h6>
+                <h6 className="text-uppercase fw-bold mb-4">About Us</h6>
+                <p>
+                  <a href="#!" className="text-reset">
+                    Services
+                  </a>
+                </p>
                 <p>
                   <a href="#!" className="text-reset">
                     Pricing
-                  </a>
-                </p>
-                <p>
-                  <a href="#!" className="text-reset">
-                    Settings
-                  </a>
-                </p>
-                <p>
-                  <a href="#!" className="text-reset">
-                    Orders
                   </a>
                 </p>
                 <p>
@@ -104,22 +97,14 @@ export default function App() {
               </MDBCol>
 
               <MDBCol md="4" lg="3" xl="3" className="mx-auto mb-md-0 mb-4">
-                <h6 className="text-uppercase fw-bold mb-4">Contact</h6>
+                <h6 className="text-uppercase fw-bold mb-4">Contact Us</h6>
                 <p>
-                  <MDBIcon color="secondary" icon="home" className="me-2" />
-                  New York, NY 10012, US
+                  <MDBIcon color="secondary" icon="home" className="me-2" style={{display: 'flex', width: '100%'}}/>
+                  <CiLocationOn/> NASTP, Alpha Techno Square, Old Airport, Chaklala, Rawalpindi
                 </p>
                 <p>
-                  <MDBIcon color="secondary" icon="envelope" className="me-3" />
-                  info@example.com
-                </p>
-                <p>
-                  <MDBIcon color="secondary" icon="phone" className="me-3" /> +
-                  01 234 567 88
-                </p>
-                <p>
-                  <MDBIcon color="secondary" icon="print" className="me-3" /> +
-                  01 234 567 89
+                  <MDBIcon color="secondary" icon="envelope" className="me-3" style={{display: 'flex', width: '100%'}}/>
+                  <AiOutlineInfoCircle/> info@taulead.com
                 </p>
               </MDBCol>
             </MDBRow>
@@ -127,9 +112,9 @@ export default function App() {
         </section>
 
         <div className="text-center p-4">
-          © 2021 Copyright:
-          <a className="text-reset fw-bold" href="https://mdbootstrap.com/">
-            MDBootstrap.com
+          © 2021 Copyright: {"   "}
+          <a className="text-reset fw-bold" href="https://mdbootstrap.com/" >
+             Taulead.com
           </a>
         </div>
       </MDBFooter>

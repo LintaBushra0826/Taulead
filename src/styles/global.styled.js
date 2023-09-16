@@ -14,8 +14,6 @@ export const MainContainer = styled.div`
   block-size: auto;
 `;
 
-export const bodyheading = styled.div``;
-
 export const FormHeading = styled.div`
   font-size: 16pt;
   padding-bottom: 15px;
