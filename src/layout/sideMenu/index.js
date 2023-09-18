@@ -3,6 +3,12 @@ import { Menu } from "antd";
 import { SideMenuContainer } from "./index.styled";
 import "./index.styled";
 import { Link } from "react-router-dom";
+import logo from "../../assets/images/Logo white.png";
+import {
+  Logo,
+  LogoContainer,
+} from "./index.styled";
+
 
 const items = [
   {
@@ -104,11 +110,6 @@ const items = [
     name: "settings",
     key: "settings",
   },
-  {
-    label: <Link to="/colorPlatte">Color Platte</Link>,
-    name: "colorplatte",
-    key: "colorplatte",
-  },
 ];
 
 function SideMenu() {
@@ -118,11 +119,12 @@ function SideMenu() {
 
   return (
     <SideMenuContainer>
+      <LogoContainer>
+        <Logo src={logo} alt="logo" className="logo" />
+      </LogoContainer>
     <div className="menudiv">
       <Menu
-        onClick={onClick}
         style={{ width: 256 }}
-        defaultSelectedKeys={["home"]}
         mode="inline"
         items={items}
       />

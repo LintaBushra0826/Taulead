@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 export const BodyWrapper = styled.div`
   display: flex;
-  height: calc(100vh - 70px);
+  height: 100vh;
 `;
 
 export const MainContainer = styled.div`
@@ -11,7 +11,6 @@ export const MainContainer = styled.div`
   height: 100%;
   width: 100%;
   padding: 2.5rem;
-  block-size: auto;
 `;
 
 export const FormHeading = styled.div`

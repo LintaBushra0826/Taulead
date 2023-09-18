@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Header from "../../layout/justheader";
 import Sidemenu from "../../layout/sideMenu";
-import { Card, Progress, Button, Space } from "antd";
+import { Card, Progress, Button, Space, Divider } from "antd";
 import {
   Container,
   CardContainer,
@@ -53,9 +53,9 @@ function Dashboard() {
   };
   return (
     <>
-      <Header />
       <BodyWrapper>
         <Sidemenu />
+        {/* <Header /> */}
         <MainContainer>
           <Container>
             <CardContainer>
@@ -132,7 +132,7 @@ function Dashboard() {
               <Card
                 title="Process"
                 style={{
-                  width: "350px",
+                  width: "345px",
                   borderRadius: "20px",
                   boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
                 }}
@@ -164,15 +164,65 @@ function Dashboard() {
               </Card>
             </CardContainer>
           </Container>
-          
-          <DashboardchartWrapper>
-            <Paragraph>Prcoess Statistics</Paragraph>
-            <StatsChartWrapper>
-              <Line {...config} />
-            </StatsChartWrapper>
-          </DashboardchartWrapper>
+
+          <CardContainer>
+          <Card
+            title="Process Statistics"
+            style={{
+              width: "660px",
+              height: "400px",
+              borderRadius: "20px",
+              boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+              marginTop: "20px",
+            }}
+          >
+            <Line {...config}  style={{
+              width: "600px",
+              height: "300px",
+            }}/>
+            <Space
+                  direction="vertical"
+                  style={{
+                    width: "30%",
+                    display: "flex",
+                    flexDirection: "row",
+                  }}
+                />
+          </Card>
+          </CardContainer>
+          <CardContainer>
+          <Card
+            title="Completed Processes"
+            style={{
+              width: "400px",
+              height: "400px",
+              borderRadius: "20px",
+              boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+              float:"right",
+              marginTop:'-400px',
+              paddingBottom:"30px",
+            }}
+          >
+            <Line {...config} style={{
+              width: "350px",
+              height: "300px",
+            }}/>
+            <Space
+                  direction="vertical"
+                  style={{
+                    width: "30%",
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "flex-end",
+                    alignItems:"flex-start",
+                  }}
+               />
+          </Card>
+         </CardContainer>
         </MainContainer>
       </BodyWrapper>
+
+      
     </>
   );
 }

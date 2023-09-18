@@ -1,6 +1,7 @@
 import styled from "styled-components";
 
 export const SideMenuContainer = styled.div`
+height: 100vh;
   .ant-menu-inline .ant-menu-item::before,
   .ant-menu-inline .ant-menu-submenu-title::before {
     display: none;
@@ -11,7 +12,7 @@ export const SideMenuContainer = styled.div`
     color: white !important; 
   }
   color: white;
-  background: linear-gradient(135deg, #3c1053, #ad5389);
+  background: linear-gradient(100deg, #2a0845, #2a0845, #061161 150%);
   .menudiv ul {
     background-color: transparent;
     color: white;
@@ -25,4 +26,21 @@ export const SideMenuContainer = styled.div`
     flex-direction: column;
     height: 100%;
   }
+`;
+export const LogoContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  top:30px;
+  padding-bottom: 50px ;
+`;
+
+
+export const Logo = styled.img`
+  width: 100px;
+  height: 85px;
+  display: flex;
+  color: white;
+  text-decoration: none;
 `;

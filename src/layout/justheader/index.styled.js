@@ -2,16 +2,14 @@ import styled from "styled-components";
 
 export const HeaderContainer = styled.div`
   background: white;
-  width: 1295px;
+  width: 500%;
   height: 70px;
-  padding: 0px 15px;
-  box-shadow: 0 4px 7px 0 grey;
+  /* padding: 0px 15px; */
+  box-shadow: 0 1px 1px 0 lightgray;
   color: white;
-  display: flex;
+  /* display: flex;
   justify-content: space-between;
-  align-items: center;
-  position: relative;
-  left: 240px;
+  align-items: center; */
 `;
 
 export const ProfileDropdown = styled.img`
