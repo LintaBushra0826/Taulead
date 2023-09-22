@@ -6,16 +6,15 @@ import { Card, Space } from "antd";
 
 const PurpleBarChart = () => {
   const chartRef = useRef(null);
-  let chartInstance = null; // Store the chart instance
+  let chartInstance = null; 
 
   const destroyChart = () => {
     if (chartInstance) {
-      chartInstance.destroy(); // Destroy the existing chart
+      chartInstance.destroy(); 
     }
   };
 
   useEffect(() => {
-    // Data for the bar chart
     const data = {
       labels: [
         "Item 1",
@@ -26,26 +25,26 @@ const PurpleBarChart = () => {
         "Item 6",
         "Item 7",
         "Item 8",
-        // "Chicken",
-        // "Rice",
-        // "Mango",
-        // "Careem",
       ],
       datasets: [
         {
           label: "Process 1",
           data: [12, 19, 3, 5, 2, 30, 23, 14],
-          backgroundColor: "#F3904F",
+          backgroundColor: "#061161",
         },
         {
           label: "Process 2",
-          data: [12, 19, 3, 5, 2, 30, 23, 14],
-          backgroundColor: "#061161",
+          data: [10, 15, 3, 6, 2, 25, 23, 10],
+          backgroundColor: "#F3904F",
+        },
+        {
+          label: "Process 3",
+          data: [9, 19, 5, 5, 10, 30, 25, 14],
+          backgroundColor: "#2a0845",
         },
       ],
     };
 
-    // Chart configuration
     const options = {
       scales: {
         y: {
@@ -54,10 +53,8 @@ const PurpleBarChart = () => {
       },
     };
 
-    // Destroy the existing chart before creating a new one
     destroyChart();
-
-    // Create and render the new bar chart
+    
     const ctx = chartRef.current.getContext("2d");
     chartInstance = new Chart(ctx, {
       type: "bar",
