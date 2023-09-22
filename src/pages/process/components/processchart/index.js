@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { Gantt } from "gantt-task-react-pro";
 import "gantt-task-react-pro/dist/index.css";
-import { ProcessAtom } from "../../../../atoms/process.atom";
-import { useAtomValue } from "jotai";
 import axios from "axios";
-
+import { Menu, Modal, Radio } from "antd";
+import { FormWrapper } from "../createprocessmodal/index.styled";
 function ProcessChart() {
-  const API_BASE_URL = "http://localhost:3003";
-  const [data, setData] = useState(null); // Initialize data as null instead of an empty array
+  const [size, setSize] = useState("Month");
+  const [data, setData] = useState(null);
+  const [viewMode, setViewMode] = useState("Mins");
+  const [selectedTask, setSelectedTask] = useState(null);
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
   useEffect(() => {
     fetchProcessData();
@@ -18,69 +20,135 @@ function ProcessChart() {
       const response = await axios.get("http://localhost:3003/process");
       const rawData = response.data.data;
 
-      // Ensure data is an array
       const processedDataArray = rawData.map((item) => {
-        // Parse the start field as a Date object
         const startDate = new Date(item.start);
-  
-        // Extract date and time components
+        const endDate = new Date(item.end);
         const year = startDate.getFullYear();
         const month = startDate.getMonth();
         const day = startDate.getDate();
         const hours = startDate.getHours();
         const minutes = startDate.getMinutes();
-        const seconds = startDate.getSeconds();
-  
-        // Create new fields for date and time
-        const date = new Date(year, month, day);
-        const time = `${hours}:${minutes}:${seconds}`;
-  
-        // Return the modified item
+        const seconds = minutes * 60;
+        const endyear = endDate.getFullYear();
+        const endmonth = endDate.getMonth();
+        const endday = endDate.getDate();
+        const endhours = endDate.getHours();
+        const endminutes = endDate.getMinutes();
+        const endseconds = endminutes * 60;
+
+        const strtdate = new Date(year, month, day);
+        const enddate = new Date(endyear, endmonth, endday);
+        const starttime = `${hours}:${minutes}:${seconds}`;
+        const endtime = `${endhours}:${endminutes}:${endseconds}`;
+
         return {
           ...item,
-          date, // Date component
-          time, // Time component
+          strtdate,
+          enddate,
+          starttime,
+          endtime,
         };
       });
       setData(processedDataArray);
-      console.log("Process fetched data", data);
     } catch (error) {
       console.error("Error fetching process data:", error);
     }
   };
 
+  const onChange = (e) => {
+    setSize(e.target.value);
+    setViewMode(e.target.value === "Mins" ? "Minutes" : "Hours");
+  };
+
   const tasks = data
-    ? [
-        {
-          start: data[0].date,
-          end: new Date(2024, 12, 1),
-          name: data[0].name, // Assuming you want the first item's name
-          id: data[0]._id,
-          duration: data[0].duration,
-          type: "task",
-          progress: 45,
-          isDisabled: true,
-          styles: { progressColor: "#ffbb54", progressSelectedColor: "#ff9e0d" },
+    ? data.map((item) => ({
+        start: item.strtdate,
+        end: item.enddate,
+        name: item.name,
+        id: item._id,
+        time: item.starttime,
+        duration: item.duration,
+        type: "task",
+        progress: 45,
+        isDisabled: true,
+        styles: {
+          progressColor: "#ffbb54",
+          progressSelectedColor: "#ff9e0d",
         },
-      ]
-    : [fetchProcessData];
+      }))
+    : [];
+
+  const onTaskItemClick = (taskId) => {
+    const selectedTaskData = data.find((task) => task.id === taskId);
+
+    if (selectedTaskData) {
+      setSelectedTask(selectedTaskData);
+      setIsModalVisible(true);
+    }
+  };
+
+  const handleModalAction = (action) => {
+    if (action === "update") {
+      // Implement the update logic here
+      console.log("Update task with ID:", selectedTask.id);
+    } else if (action === "delete") {
+      // Implement the delete logic here
+      console.log("Delete task with ID:", selectedTask.id);
+    }
+
+    // Close the modal after performing the action
+    setIsModalVisible(false);
+  };
+
   return (
     <>
+      <Radio.Group
+        value={size}
+        onChange={onChange}
+        style={{
+          marginTop: "20px",
+          marginBottom: "20px",
+          marginLeft: "300px",
+        }}
+      >
+        <Radio.Button value="Hour">Hours</Radio.Button>
+        <Radio.Button value="Day">Day</Radio.Button>
+        <Radio.Button value="Week">Week</Radio.Button>
+        <Radio.Button value="Month">Month</Radio.Button>
+        <Radio.Button value="Year">Year</Radio.Button>
+      </Radio.Group>
+
       {data ? (
         <Gantt
           key={1}
           tasks={tasks}
           fontSize={14}
-          viewMode={"Month"}
+          viewMode={size}
           onDateChange={"onDateChange"}
           onTaskDelete={"onTaskDelete"}
           onProgressChange={"onProgressChange"}
-          onDoubleClick={"onDblClick"}
-          onClick={"Onclick"}
+          onDoubleClick={onTaskItemClick}
+          onClick={onTaskItemClick}
+          columnWidth={100}
+          listCellWidth={200}
         />
       ) : (
         <p>Loading data...</p>
       )}
+
+      <FormWrapper>
+      <Modal
+        title="Task Options"
+        open={isModalVisible}
+        onCancel={() => setIsModalVisible(false)}
+        footer={null}
+      >
+        <Menu onClick={(e) => handleModalAction(e.key)}>
+          <Menu.Item key="update">Update</Menu.Item>
+          <Menu.Item key="delete">Delete</Menu.Item>
+        </Menu>
+      </Modal>
+      </FormWrapper>
     </>
   );
 }

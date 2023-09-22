@@ -4,13 +4,7 @@ import {
   Form,
   Input,
   Row,
-  //message,
-  // Dropdown,
-  // Space,
-  // Typography,
-  // Button,
 } from "antd";
-// import { DownOutlined, UserOutlined } from "@ant-design/icons";
 import { useSetAtom } from "jotai";
 import React from "react";
 import { ProcessAtom } from "../../../../atoms/process.atom";
@@ -18,15 +12,38 @@ import { ProcessAtom } from "../../../../atoms/process.atom";
 function ProcessForm({ formData, setFormData }) {
   const setProcess = useSetAtom(ProcessAtom);
 
-  const onChange = (value, dateString) => {
-    console.log("Selected Time: ", value);
-    console.log("Formatted Selected Time: ", dateString);
+  const onStartChange = (value, dateString) => {
+    console.log("Selected Start Time: ", value);
+    console.log("Formatted Selected Start Time: ", dateString);
 
     // Convert the js object to a JavaScript Date object
     const startDate = value ? value.toDate() : null;
 
-    setFormData((prevData) => ({ ...prevData, start: startDate }));
-    setProcess((prevProcess) => ({ ...prevProcess, start: startDate }));
+    setFormData((prevData) => ({
+      ...prevData,
+      start: startDate,
+    }));
+    setProcess((prevProcess) => ({
+      ...prevProcess,
+      start: startDate,
+    }));
+  };
+
+  const onEndChange = (value, dateString) => {
+    console.log("Selected End Time: ", value);
+    console.log("Formatted Selected End Time: ", dateString);
+
+    // Convert the js object to a JavaScript Date object
+    const endDate = value ? value.toDate() : null;
+
+    setFormData((prevData) => ({
+      ...prevData,
+      end: endDate,
+    }));
+    setProcess((prevProcess) => ({
+      ...prevProcess,
+      end: endDate,
+    }));
   };
 
   const handleInputChange = (event) => {
@@ -59,9 +76,19 @@ function ProcessForm({ formData, setFormData }) {
       initialValues={{
         remember: true,
       }}
-      autoComplete="off"
+      autoComplete="on"
     >
       <Row gutter={20}>
+      <Col span={8}>
+          <Form.Item label="Process ID" name="pid">
+            <Input
+              name="pid"
+              value={formData.pid}
+              onChange={handleInputChange}
+              placeholder="PPP-1"
+            />
+          </Form.Item>
+        </Col>
         <Col span={8}>
           <Form.Item label="Process Name" name="name">
             <Input
@@ -83,17 +110,13 @@ function ProcessForm({ formData, setFormData }) {
       </Row>
       <Row gutter={20} justify="start">
         <Col span={8}>
-          <Form.Item label="Process Start Date" name="start">
-            <DatePicker showTime onChange={onChange} />
+          <Form.Item label="Process Start Date/Time" name="start">
+          <DatePicker showTime onChange={onStartChange} />
           </Form.Item>
         </Col>
         <Col padding="0px" span={8}>
-          <Form.Item label="Process Duration" name="duration">
-            <Input
-              name="duration"
-              value={formData.duration}
-              onChange={handleInputChange}
-            />
+          <Form.Item label="Process End Date/Time" name="end">
+          <DatePicker showTime onChange={onEndChange} />
           </Form.Item>
         </Col>
       </Row>

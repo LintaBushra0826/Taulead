@@ -77,7 +77,7 @@ function RawMaterialForm() {
       <FormHeading className="HeaderHeading">
         Raw Material Inventory
       </FormHeading>
-      <Form name="basic" layout="vertical" autoComplete="off">
+      <Form name="basic" layout="vertical" autoComplete="on">
         <Row gutter={20}>
           <Col span={8}>
             <Form.Item label="Item Name" name="Name">

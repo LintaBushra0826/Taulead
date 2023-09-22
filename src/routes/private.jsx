@@ -6,7 +6,7 @@ import { BodyWrapper, MainContainer } from "../styles/global.styled";
 function PrivateRoute({ children }) {
   return (
     <>
-      <Header />
+      {/* <Header /> */}
       <BodyWrapper>
         <SideMenu />
         <MainContainer>

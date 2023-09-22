@@ -55,7 +55,6 @@ function Dashboard() {
     <>
       <BodyWrapper>
         <Sidemenu />
-        {/* <Header /> */}
         <MainContainer>
           <Container>
             <CardContainer>
@@ -189,8 +188,6 @@ function Dashboard() {
                   }}
                 />
           </Card>
-          </CardContainer>
-          <CardContainer>
           <Card
             title="Completed Processes"
             style={{

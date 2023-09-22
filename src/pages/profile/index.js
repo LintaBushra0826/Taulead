@@ -8,7 +8,7 @@ import { FormWrapper } from "./index.styled";
 function Profile() {
   return (
     <div className='divform'>
-      <Header />
+      {/* <Header /> */}
       <BodyWrapper>
         <SideMenu />
         <FormWrapper>

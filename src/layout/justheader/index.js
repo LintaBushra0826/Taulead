@@ -29,24 +29,36 @@ function DashboardHeader() {
   const onSearch = (value, _e, info) => console.log(info?.source, value);
 
   return (
+    <>
     <HeaderContainer>
-      <Space direction="vertical"style={{
-            width: '100px',
-          }}>
-      <Search
+      <Space
+        direction="vertical"
+        // style={{
+        //   width: "100%",
+        //   height: "70px",
+        //   background: "white",
+        //   padding: "0px 15px",
+        //   boxShadow: "0 1px 1px 0 lightgray",
+        //   color: "white",
+        //   alignItems: "center",
+          
+        // }}
+      >
+        <Search
           placeholder="input search text"
           onSearch={onSearch}
           style={{
-            width: '350px',
-            marginLeft: '25%'
+            width: "350px",
+            marginTop: "5%",
+
           }}
         />
       </Space>
       <Dropdown trigger={["click"]} menu={{ items }}>
-        {/* <CgProfile/> */}
         <ProfileDropdown src={CgProfile} alt="profile" />
       </Dropdown>
-    </HeaderContainer>
+      </HeaderContainer>
+    </>
   );
 }
 

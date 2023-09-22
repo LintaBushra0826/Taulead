@@ -1,12 +1,14 @@
 import { atom } from "jotai";
 
 export const SubProcessAtom = atom({
+  pID: null,
+  pName: "", // Add process name
   rawMaterial: [],
   humanResource: [],
   subname: "",
   subdesc: "",
   substart: null,
-  subduration: 0,
+  subend: null,
 });
 
 export const UpdateSubHumanResourceAtom = atom(null, (get, set, update) => {

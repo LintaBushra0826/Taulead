@@ -161,7 +161,7 @@ function ViewPriceLogs() {
 
   return (
     <div className="divform">
-      <Header />
+      {/* <Header /> */}
       <BodyWrapper>
         <SideMenu />
         <TableWrapper>

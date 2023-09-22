@@ -19,11 +19,9 @@ function ViewHumanResource() {
   };
 
   const showModal = async (id) => {
-    console.log(id);
     try {
       setOpen(true);
       const selectedHR = data.find((item) => item._id === id);
-      console.log("It is issuing here");
       setSelectedHR(selectedHR);
     } catch (error) {
       console.error("Error fetching employee data:", error);
@@ -31,7 +29,6 @@ function ViewHumanResource() {
   };
 
   const handleDeleteItem = async (hrId) => {
-    console.log(hrId);
     try {
       await axios.delete(`${API_BASE_URL}/humanresource/${hrId}`);
       alert("Employee data deleted successfully");
@@ -44,7 +41,6 @@ function ViewHumanResource() {
   };
 
   const handleOk = async () => {
-    console.log("Calling this function");
     try {
       const updateData = {
         name: formData.name,
@@ -78,7 +74,6 @@ function ViewHumanResource() {
   };
 
   const handleCancel = () => {
-    console.log("Clicked cancel button");
     setOpen(false);
   };
 
@@ -187,7 +182,7 @@ function ViewHumanResource() {
   };
   return (
     <div className="divform">
-      <Header />
+      {/* <Header /> */}
       <BodyWrapper>
         <SideMenu />
         <TableWrapper>

@@ -19,7 +19,6 @@ function RawMaterialForm() {
 
   useEffect(() => {
     updateRawMaterial(selectedItems);
-    console.log("selectedItems", selectedItems);
   }, [selectedItems, updateRawMaterial]);
 
   useEffect(() => {
@@ -60,11 +59,9 @@ function RawMaterialForm() {
 
   const handleInputChange = (value, id) => {
     const itemToUpdate = rawMaterial.find((_item) => id === _item._id);
-    console.log("id", id);
     if (itemToUpdate) {
       const updatedSelectedItems = selectedMaterials.map((item) => {
         if (id === item._id) {
-          console.log("item._id", id);
           return {
             id: id,
             Name: item.Name,

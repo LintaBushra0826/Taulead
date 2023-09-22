@@ -161,7 +161,7 @@ function ViewProcessLogs() {
 
   return (
     <div className="divform">
-      <Header />
+      {/* <Header /> */}
       <BodyWrapper>
         <SideMenu />
         <TableWrapper>

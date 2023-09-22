@@ -14,10 +14,11 @@ import Home from "../pages/home";
 import ViewProcessLogs from "../pages/processlogs";
 import ViewPriceLogs from "../pages/pricelogs";
 import ViewHumanResource from "../pages/viewhumanresource";
-import RawMaterialStats from "../pages/rawmaterialstats";
-import HumanResourceStats from "../pages/humanresourcestats";
-import ColorPlatte from "../layout/colorPlatte";
 import Dashboard from "../pages/dashboard";
+import Statistics from "../pages/statistics";
+// import RawMaterialStats from "../pages/rawmaterialstats";
+// import HumanResourceStats from "../pages/humanresourcestats";
+// import ColorPlatte from "../layout/colorPlatte";
 // import ProtectedRoute  from "./protected";
 
 const router = createBrowserRouter([
@@ -90,17 +91,13 @@ const router = createBrowserRouter([
     element: <Process />,
   },
   {
-    path: "/rawmaterialstats",
-    element: <RawMaterialStats />,
+    path: "/statistics",
+    element: <Statistics />,
   },
-  {
-    path: "/humanresourcestats",
-    element: <HumanResourceStats />,
-  },
-  {
-    path:"colorPlatte",
-    element: <ColorPlatte />,
-  }
+  // {
+  //   path:"colorPlatte",
+  //   element: <ColorPlatte />,
+  // }
   // {
   //   path: "/dashboard",
   //   element: (

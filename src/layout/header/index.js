@@ -70,9 +70,6 @@ function Header() {
     <HeaderContainer>
       <LogoContainer>
         <Logo src={logo} alt="logo" className="logo" />
-        {/* <Heading className="HeaderHeading">
-          Manufacturing Resource Pipeline
-        </Heading> */}
       </LogoContainer>
       <HeadMenu>
         <Menu
@@ -88,7 +85,7 @@ function Header() {
             <a href="/login">Login</a>
           </Link>
           <br></br>
-          <Link to="/rawMaterial">
+          <Link to="/dashboard">
             <Button type="primary" className="signupbtn">
               Get Started
             </Button>

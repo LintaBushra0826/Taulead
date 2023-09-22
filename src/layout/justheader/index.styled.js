@@ -1,15 +1,16 @@
 import styled from "styled-components";
 
 export const HeaderContainer = styled.div`
+  display: flex;
   background: white;
-  width: 500%;
+  width: 100%;
   height: 70px;
-  /* padding: 0px 15px; */
+  padding: 5px 10px;
   box-shadow: 0 1px 1px 0 lightgray;
   color: white;
-  /* display: flex;
   justify-content: space-between;
-  align-items: center; */
+  align-items: center;
+  position: relative;
 `;
 
 export const ProfileDropdown = styled.img`
@@ -23,5 +24,3 @@ export const Username = styled.div`
   color: white;
   text-decoration: none;
 `;
-
-

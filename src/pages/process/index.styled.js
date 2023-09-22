@@ -3,6 +3,7 @@ import styled from "styled-components";
 export const ChartWrapper = styled.div`
   width: fit-content;
   overflow: scroll;
+  padding:20px;
 `;
 
 export const ButtonWrapper = styled.div`
@@ -10,8 +11,6 @@ export const ButtonWrapper = styled.div`
   bottom: 20px;
   right: 35px;
 `;
-
-export const SubprocessDiv = styled.div``;
 
 export const FormHeader = styled.div`
   font-size: 11pt;

@@ -67,21 +67,8 @@ const items = [
     ],
   },
   {
-    label: "Statistics",
-    name: "Statistics",
+    label: <Link to="/statistics">Statistics</Link>,
     key: "statistics",
-    children: [
-      {
-        type: "Raw Material Stats",
-        name: "Raw Material Stats",
-        label: <Link to="/rawmaterialstats">Raw Material Stats</Link>,
-      },
-      {
-        type: "Human Resource Stats",
-        name: "Human Resource Stats",
-        label: <Link to="/humanresourcestats">Human Resource Stats</Link>,
-      },
-    ],
   },
   {
     label: "Logs",

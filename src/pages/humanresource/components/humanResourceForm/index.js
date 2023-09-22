@@ -39,7 +39,7 @@ function HumanresourceForm() {
         initialValues={{
           remember: true,
         }}
-        autoComplete="off"
+        autoComplete="on"
       >
         <Row gutter={20}>
           <Col span={8}>

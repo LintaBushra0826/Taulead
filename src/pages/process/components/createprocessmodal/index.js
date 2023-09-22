@@ -28,10 +28,6 @@ function CreateProcessModal({ isVisible, onClose }) {
   const [showSubprocessContent, setShowSubprocessContent] = useState(false);
   const [subprocessCount, setSubprocessCount] = useState(0);
 
-  const handleOpenModal = () => {
-    setShowSubprocessContent(true);
-  };
-
   const handleCloseModal = () => {
     setSubIsModalVisible(false);
   };
@@ -74,8 +70,7 @@ function CreateProcessModal({ isVisible, onClose }) {
   ];
 
   const handleCheckboxChange = (e) => {
-    setShowSubprocessContent(true);
-    setSubIsModalVisible(true);
+    setShowSubprocessContent(e.target.checked);
   };
 
   const handleSubmit = async () => {
@@ -130,6 +125,9 @@ function CreateProcessModal({ isVisible, onClose }) {
       alert("Error adding subprocess");
     }
   };
+
+  const processName = `${process.name}`;
+  const pID = `${process._id}`;
 
   return (
     <FormWrapper>
@@ -198,7 +196,6 @@ function CreateProcessModal({ isVisible, onClose }) {
           >
             <SubProcessHeader>
               <FormLabel>Subprocess: {subprocessCount + 1}</FormLabel>
-              <FormLabel>Process Name: {process.name}</FormLabel>
             </SubProcessHeader>
             <br />
 
@@ -214,33 +211,30 @@ function CreateProcessModal({ isVisible, onClose }) {
                     }}
                   />
                   <br />
+
                   <SubProcessForm
                     formData={formData}
                     setFormData={setFormData}
+                    processName={processName}
+                    processID={pID}
                   />
 
                   <Divider />
-
                   <Steps
                     current={current}
                     labelPlacement="Horizontal"
                     onChange={onChangeValue}
                     items={submaterialitems}
                   />
-                  <br />
-
                   <SubRawMaterialForm />
 
                   <Divider />
-
                   <Steps
                     current={current}
                     labelPlacement="Horizontal"
                     onChange={onChangeValue}
                     items={subhritems}
                   />
-                  <br />
-
                   <SubHumanResourceForm />
                 </StepsFormDiv>
               </>

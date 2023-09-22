@@ -1,12 +1,13 @@
 import { atom } from "jotai";
 
 export const ProcessAtom = atom({
+  pid: "",
   rawMaterial: [],
   humanResource: [],
   name: "",
   desc: "",
   start: null,
-  duration: 0,
+  end: null,
 });
 
 export const UpdateHumanResourceAtom = atom(null, (get, set, update) => {

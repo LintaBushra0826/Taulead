@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Header from "../../layout/dashboardheader";
+import Header from "../../layout/justheader";
 import SideMenu from "../../layout/sideMenu";
 import { BodyWrapper } from "../../styles/global.styled";
 import ProcessChart from "./components/processchart";
@@ -11,7 +11,6 @@ function Process() {
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   const handleOpenModal = () => {
-    console.log("Modal should open");
     setIsModalVisible(true);
   };
 
@@ -21,18 +20,19 @@ function Process() {
 
   return (
     <>
-      <Header />
       <BodyWrapper>
         <SideMenu />
-        <ChartWrapper>
-          <ProcessChart />
-        </ChartWrapper>
+        {/* <Header /> */}
+         
+          <ChartWrapper>
+            <ProcessChart />
+          </ChartWrapper>
 
-        <ButtonWrapper>
-          <Button type="primary" onClick={handleOpenModal}>
-            Create Process
-          </Button>
-        </ButtonWrapper>
+          <ButtonWrapper>
+            <Button type="primary" onClick={handleOpenModal}>
+              Create Process
+            </Button>
+          </ButtonWrapper>
 
         <CreateProcessModal
           isVisible={isModalVisible}

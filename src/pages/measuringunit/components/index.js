@@ -50,7 +50,7 @@ function MeasuringUnitForm() {
         initialValues={{
           remember: true,
         }}
-        autoComplete="off"
+        autoComplete="on"
       >
         <div className="formdiv">
           <Form.Item label="Unit Name" name="name">

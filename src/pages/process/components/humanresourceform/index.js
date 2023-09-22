@@ -68,7 +68,6 @@ function HumanResourceForm() {
 
   useEffect(() => {
     UpdateHumanResource(selectedHumanResource);
-    console.log("UpdateHumanResource", selectedHumanResource);
   }, [selectedHumanResource, UpdateHumanResource]);
 
   const columns = [
