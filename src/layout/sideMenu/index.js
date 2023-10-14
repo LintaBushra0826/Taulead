@@ -67,7 +67,7 @@ const items = [
     ],
   },
   {
-    label: <Link to="/statistics">Statistics</Link>,
+    label: <Link to="/statisticspage">Statistics</Link>,
     key: "statistics",
   },
   {

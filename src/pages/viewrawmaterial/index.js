@@ -14,6 +14,8 @@ function ViewRawMaterial() {
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [data, setData] = useState(null); // Initialize data as null instead of an empty array
   const [loading, setLoading] = useState(true);
+
+ 
   
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -70,7 +72,6 @@ function ViewRawMaterial() {
     }, 2000);
   };
   const handleCancel = () => {
-    console.log("Clicked cancel button");
     setOpen(false);
   };
 
@@ -160,6 +161,7 @@ function ViewRawMaterial() {
       setLoading(false);
     }
   };
+
   return (
     <div className="divform">
       {/* <Header /> */}
@@ -167,7 +169,7 @@ function ViewRawMaterial() {
         <SideMenu />
         <TableWrapper>
           {!loading && data.length > 0 ? ( // Conditionally render the table when data is available and not loading
-            <Table columns={columns} dataSource={data} loading={loading} />
+            <Table columns={columns} dataSource={data} loading={loading} style={{width:"100"}}/>
           ) : (
             <p>Loading..</p>
           )}

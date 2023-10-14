@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 export const ChartWrapper = styled.div`
-  width: fit-content;
+  width: 100%;
   overflow: scroll;
   padding:20px;
 `;

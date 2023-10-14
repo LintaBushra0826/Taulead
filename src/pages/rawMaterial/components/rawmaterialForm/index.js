@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Input, Form, Button, Row, Col } from "antd";
 import {
   ButtonContainer,
@@ -11,9 +11,16 @@ import { AutoComplete } from "antd";
 function RawMaterialForm() {
   const location = useLocation();
   const API_BASE_URL = "http://localhost:3003";
-  const [formData, setFormData] = useState({});
+  const [formData, setFormData] = useState({
+    quan: "", // Provide initial values for quan and price
+    price: "",
+  });
   const [searchValue] = useState("");
   const [options, setOptions] = useState([]);
+
+  const [one, setOne] = useState("");
+  const [two, setTwo] = useState("");
+  const [total, setTotal] = useState(0);
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -72,6 +79,21 @@ function RawMaterialForm() {
     }
   };
 
+  useEffect(() => {
+    const numOne = one;
+    const numTwo = two;
+
+    if (!isNaN(numOne) && !isNaN(numTwo)) {
+      const result = numOne * numTwo;
+      setTotal(result);
+
+    } else {
+      setTotal(0);
+    }
+  }, [one, two]);
+
+  console.log("total", total);
+
   return (
     <>
       <FormHeading className="HeaderHeading">
@@ -122,7 +144,7 @@ function RawMaterialForm() {
               <Input
                 name="quan"
                 value={formData.quan}
-                onChange={handleInputChange}
+                onChange={(e) => setOne(e.target.value)}
               />
             </Form.Item>
           </Col>
@@ -133,6 +155,8 @@ function RawMaterialForm() {
                 name="expdate"
                 value={formData.expdate}
                 onChange={handleInputChange}
+                // placeholder="2025-10-13"
+                type="date"
               />
             </Form.Item>
           </Col>
@@ -142,18 +166,16 @@ function RawMaterialForm() {
               <Input
                 name="price"
                 value={formData.price}
-                onChange={handleInputChange}
+                onChange={(e) => setTwo(e.target.value)}
               />
             </Form.Item>
           </Col>
 
           <Col span={8}>
             <Form.Item label="Total Cost" name="totcost">
-              <Input
-                name="totcost"
-                value={formData.totcost}
-                onChange={handleInputChange}
-              />
+              <Input name="totcost" value={total} readOnly />
+              {/* console.log("total value", total) */}
+              {total}
             </Form.Item>
           </Col>
         </Row>

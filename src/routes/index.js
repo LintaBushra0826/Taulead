@@ -15,7 +15,7 @@ import ViewProcessLogs from "../pages/processlogs";
 import ViewPriceLogs from "../pages/pricelogs";
 import ViewHumanResource from "../pages/viewhumanresource";
 import Dashboard from "../pages/dashboard";
-import Statistics from "../pages/statistics";
+import Statistics from "../pages/statisticspage";
 // import RawMaterialStats from "../pages/rawmaterialstats";
 // import HumanResourceStats from "../pages/humanresourcestats";
 // import ColorPlatte from "../layout/colorPlatte";
@@ -91,7 +91,7 @@ const router = createBrowserRouter([
     element: <Process />,
   },
   {
-    path: "/statistics",
+    path: "/statisticspage",
     element: <Statistics />,
   },
   // {

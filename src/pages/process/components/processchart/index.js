@@ -1,15 +1,21 @@
 import React, { useState, useEffect } from "react";
-import { Gantt } from "gantt-task-react-pro";
-import "gantt-task-react-pro/dist/index.css";
 import axios from "axios";
-import { Menu, Modal, Radio } from "antd";
-import { FormWrapper } from "../createprocessmodal/index.styled";
+import { Radio } from "antd";
+import { Chart, Wrapper } from "./index.styled";
+
+import { Task, ViewMode, Gantt } from "gantt-task-react-pro";
+import ViewSwitcher from "./components/view-switcher";
+import { getStartEndDateForProject, initTasks } from "./components/helper";
+import "gantt-task-react/dist/index.css";
+import SidebarWrapper from "./components/processsidemenu";
+
 function ProcessChart() {
-  const [size, setSize] = useState("Month");
-  const [data, setData] = useState(null);
-  const [viewMode, setViewMode] = useState("Mins");
-  const [selectedTask, setSelectedTask] = useState(null);
-  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [size, setSize] = useState("Hour");
+  const [tasks, setTasks] = useState([]);
+  const [view, setView] = useState(ViewMode.Hour);
+  const [isChecked, setIsChecked] = useState(true);
+  const [selectedTaskData, setSelectedTaskData] = useState(null);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   useEffect(() => {
     fetchProcessData();
@@ -17,138 +23,168 @@ function ProcessChart() {
 
   const fetchProcessData = async () => {
     try {
-      const response = await axios.get("http://localhost:3003/process");
+      const [response, subprocessResponse] = await Promise.all([
+        axios.get("http://localhost:3003/process"),
+        axios.get("http://localhost:3003/subprocess"),
+      ]);
+
       const rawData = response.data.data;
+      const subprocess = subprocessResponse.data.data;
 
-      const processedDataArray = rawData.map((item) => {
-        const startDate = new Date(item.start);
-        const endDate = new Date(item.end);
-        const year = startDate.getFullYear();
-        const month = startDate.getMonth();
-        const day = startDate.getDate();
-        const hours = startDate.getHours();
-        const minutes = startDate.getMinutes();
-        const seconds = minutes * 60;
-        const endyear = endDate.getFullYear();
-        const endmonth = endDate.getMonth();
-        const endday = endDate.getDate();
-        const endhours = endDate.getHours();
-        const endminutes = endDate.getMinutes();
-        const endseconds = endminutes * 60;
+      const subTasks = subprocess.map((subitem, item) => ({
+        start: new Date(subitem.substart),
+        end: new Date(subitem.subend),
+        name: subitem.subname,
+        id: subitem._id,
+        progress: 25,
+        type: "project",
+        // dependencies: [subitem.pName],
+      }));
 
-        const strtdate = new Date(year, month, day);
-        const enddate = new Date(endyear, endmonth, endday);
-        const starttime = `${hours}:${minutes}:${seconds}`;
-        const endtime = `${endhours}:${endminutes}:${endseconds}`;
+      rawData.push(...subTasks);
 
-        return {
-          ...item,
-          strtdate,
-          enddate,
-          starttime,
-          endtime,
-        };
-      });
-      setData(processedDataArray);
+      const newTasks = rawData.map((item) => ({
+        start: new Date(item.start),
+        end: new Date(item.end),
+        name: item.name,
+        id: item._id,
+        progress: 25,
+        type: "project",
+        dependencies: [subTasks.id],
+      }));
+      setTasks(newTasks);
+
+      console.log("Process", newTasks);
     } catch (error) {
-      console.error("Error fetching process data:", error);
+      console.error("Error fetching data:", error);
     }
   };
 
   const onChange = (e) => {
     setSize(e.target.value);
-    setViewMode(e.target.value === "Mins" ? "Minutes" : "Hours");
   };
 
-  const tasks = data
-    ? data.map((item) => ({
-        start: item.strtdate,
-        end: item.enddate,
-        name: item.name,
-        id: item._id,
-        time: item.starttime,
-        duration: item.duration,
-        type: "task",
-        progress: 45,
-        isDisabled: true,
-        styles: {
-          progressColor: "#ffbb54",
-          progressSelectedColor: "#ff9e0d",
-        },
-      }))
-    : [];
+  let columnWidth = 65;
+  if (view === ViewMode.Hour) {
+    columnWidth = 50;
+  } else if (view === ViewMode.Day) {
+    columnWidth = 400;
+  } else if (view === ViewMode.Month) {
+    columnWidth = 500;
+  }
 
-  const onTaskItemClick = (taskId) => {
-    const selectedTaskData = data.find((task) => task.id === taskId);
+  const handleTaskChange = (task) => {
+    console.log("On date change Id:" + task.id);
+    let newTasks = tasks.map((t) => (t.id === task.id ? task : t));
+    if (task.project) {
+      const [start, end] = getStartEndDateForProject(newTasks, task.project);
+      const project =
+        newTasks[newTasks.findIndex((t) => t.id === task.project)];
+      if (
+        project.start.getTime() !== start.getTime() ||
+        project.end.getTime() !== end.getTime()
+      ) {
+        const changedProject = { ...project, start, end };
+        newTasks = newTasks.map((t) =>
+          t.id === task.project ? changedProject : t
+        );
+      }
+    }
+    setTasks(newTasks);
+  };
+
+  const handleTaskDelete = (task) => {
+    const conf = window.confirm("Are you sure about " + task.name + " ?");
+    if (conf) {
+      setTasks(tasks.filter((t) => t.id !== task.id));
+    }
+    return conf;
+  };
+
+  const handleProgressChange = async (task) => {
+    setTasks(tasks.map((t) => (t.id === task.id ? task : t)));
+    console.log("On progress change Id:" + task.id);
+  };
+
+  const handleDblClick = (taskId) => {
+    console.log("Clicked task ID:", taskId);
+
+    const selectedTaskData = tasks.find((task) => task.id === taskId._id);
+    console.log("Selected task data:", selectedTaskData);
 
     if (selectedTaskData) {
-      setSelectedTask(selectedTaskData);
-      setIsModalVisible(true);
+      setSelectedTaskData(selectedTaskData);
+      setIsSidebarOpen(true); // Open the sidebar
     }
   };
 
-  const handleModalAction = (action) => {
-    if (action === "update") {
-      // Implement the update logic here
-      console.log("Update task with ID:", selectedTask.id);
-    } else if (action === "delete") {
-      // Implement the delete logic here
-      console.log("Delete task with ID:", selectedTask.id);
-    }
+  const closeSidebar = () => {
+    setIsSidebarOpen(false); // Close the sidebar
+  };
 
-    // Close the modal after performing the action
-    setIsModalVisible(false);
+  const handleClick = (task) => {
+    console.log("On Click event Id:" + task.id);
+    console.log("Clicked task ID:", task);
+
+    const selectedTaskData = tasks.find((taskid) => taskid.id === task.id);
+    console.log("Selected task data:", selectedTaskData);
+
+    if (selectedTaskData) {
+      setSelectedTaskData(selectedTaskData);
+    }
+  };
+
+  const handleSelect = (task, isSelected) => {
+    console.log(task.name + " has " + (isSelected ? "selected" : "unselected"));
+  };
+
+  const handleExpanderClick = (task) => {
+    setTasks(tasks.map((t) => (t.id === task.id ? task : t)));
+    console.log("On expander click Id:" + task.id);
   };
 
   return (
     <>
-      <Radio.Group
-        value={size}
-        onChange={onChange}
-        style={{
-          marginTop: "20px",
-          marginBottom: "20px",
-          marginLeft: "300px",
-        }}
-      >
-        <Radio.Button value="Hour">Hours</Radio.Button>
-        <Radio.Button value="Day">Day</Radio.Button>
-        <Radio.Button value="Week">Week</Radio.Button>
-        <Radio.Button value="Month">Month</Radio.Button>
-        <Radio.Button value="Year">Year</Radio.Button>
-      </Radio.Group>
-
-      {data ? (
-        <Gantt
-          key={1}
-          tasks={tasks}
-          fontSize={14}
-          viewMode={size}
-          onDateChange={"onDateChange"}
-          onTaskDelete={"onTaskDelete"}
-          onProgressChange={"onProgressChange"}
-          onDoubleClick={onTaskItemClick}
-          onClick={onTaskItemClick}
-          columnWidth={100}
-          listCellWidth={200}
+      <Wrapper style={{ position: "relative", marginLeft: "410px" }}>
+        <ViewSwitcher
+          onViewModeChange={(viewMode) => setView(viewMode)}
+          onViewListChange={setIsChecked}
+          isChecked={isChecked}
+          defaultViewMode={ViewMode.Hour}
         />
+      </Wrapper>
+
+      <br />
+
+      {tasks.length > 0 ? (
+        <Chart>
+          <Gantt
+            tasks={tasks}
+            viewMode={view}
+            onDateChange={handleTaskChange}
+            onDelete={handleTaskDelete}
+            onProgressChange={handleProgressChange}
+            onDoubleClick={handleDblClick}
+            onClick={handleClick}
+            onSelect={handleSelect}
+            onExpanderClick={handleExpanderClick}
+            listCellWidth={isChecked ? "155px" : ""}
+            columnWidth={columnWidth}
+          />
+          <Wrapper
+            style={{
+              display: "flex",
+              position: "relative",
+              left: "350px",
+              width: "2500px",
+            }}
+          >
+            <SidebarWrapper selectedTaskData={selectedTaskData} />
+          </Wrapper>
+        </Chart>
       ) : (
         <p>Loading data...</p>
       )}
-
-      <FormWrapper>
-      <Modal
-        title="Task Options"
-        open={isModalVisible}
-        onCancel={() => setIsModalVisible(false)}
-        footer={null}
-      >
-        <Menu onClick={(e) => handleModalAction(e.key)}>
-          <Menu.Item key="update">Update</Menu.Item>
-          <Menu.Item key="delete">Delete</Menu.Item>
-        </Menu>
-      </Modal>
-      </FormWrapper>
     </>
   );
 }
