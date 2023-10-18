@@ -1,21 +1,22 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Radio } from "antd";
 import { Chart, Wrapper } from "./index.styled";
-
-import { Task, ViewMode, Gantt } from "gantt-task-react-pro";
+import { Modal } from "antd";
+import { ViewMode, Gantt } from "gantt-task-react-pro";
 import ViewSwitcher from "./components/view-switcher";
-import { getStartEndDateForProject, initTasks } from "./components/helper";
+import { getStartEndDateForProject } from "./components/helper";
 import "gantt-task-react/dist/index.css";
 import SidebarWrapper from "./components/processsidemenu";
 
 function ProcessChart() {
-  const [size, setSize] = useState("Hour");
   const [tasks, setTasks] = useState([]);
   const [view, setView] = useState(ViewMode.Hour);
   const [isChecked, setIsChecked] = useState(true);
   const [selectedTaskData, setSelectedTaskData] = useState(null);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [open, setOpen] = useState(false);
+
+  
 
   useEffect(() => {
     fetchProcessData();
@@ -28,47 +29,88 @@ function ProcessChart() {
         axios.get("http://localhost:3003/subprocess"),
       ]);
 
-      const rawData = response.data.data;
+      // let count = 1;
+
+      const process = response.data.data;
       const subprocess = subprocessResponse.data.data;
 
-      const subTasks = subprocess.map((subitem, item) => ({
-        start: new Date(subitem.substart),
-        end: new Date(subitem.subend),
-        name: subitem.subname,
-        id: subitem._id,
-        progress: 25,
-        type: "project",
-        // dependencies: [subitem.pName],
-      }));
+      // Iterate through the subprocess array
+      subprocess.forEach((sub) => {
+        // Find the corresponding process using the "pName" field
+        const correspondingProcess = process.find(
+          (proc) => proc.name === sub.pName
+        );
 
-      rawData.push(...subTasks);
+        if (correspondingProcess) {
+          // Add the subprocess to the corresponding process
+          if (!correspondingProcess.subprocesses) {
+            correspondingProcess.subprocesses = [];
+          }
+          correspondingProcess.subprocesses.push(sub);
+        }
+      });
 
-      const newTasks = rawData.map((item) => ({
-        start: new Date(item.start),
-        end: new Date(item.end),
-        name: item.name,
-        id: item._id,
-        progress: 25,
-        type: "project",
-        dependencies: [subTasks.id],
-      }));
-      setTasks(newTasks);
+      let count = 1; // Initialize a count variable
+      const mappedProcesses = [];
 
-      console.log("Process", newTasks);
+      // Create a map of subprocesses by their _id for efficient lookup
+      const subprocessMap = {};
+      // Iterate through the process array
+      process.forEach((item) => {
+        // Map the item to the desired format
+        const mappedItem = {
+          key: item.name,
+          start: new Date(item.start),
+          end: new Date(item.end),
+          name: item.name,
+          id: item.name,
+          humanresource: item.humanResource,
+          rawmaterial: item.rawMaterial,
+          type: "process",
+          displayOrder: count++,
+        };
+        mappedProcesses.push(mappedItem);
+
+        if (item.subprocesses.length > 0) {
+          let lastItem = [];
+          item.subprocesses.forEach((subitem) => {
+            const mappedItem = {
+              key: subitem.subname,
+              start: new Date(subitem.substart),
+              end: new Date(subitem.subend),
+              name: subitem.subname,
+              id: subitem.subname,
+              subhumanresource: subitem.humanResource,
+              subrawmaterial: subitem.rawMaterial,
+              type: "subprocess",
+              project: item.name,
+              displayOrder: count++,
+              dependencies: lastItem,
+            };
+            mappedProcesses.push(mappedItem);
+            lastItem = [subitem.subname];
+          });
+        }
+      });
+
+      // Log the mapped processes
+      console.log(mappedProcesses);
+
+      setTasks(mappedProcesses);
+
+      //done?
+
+      //zaeem suno
     } catch (error) {
       console.error("Error fetching data:", error);
     }
-  };
-
-  const onChange = (e) => {
-    setSize(e.target.value);
   };
 
   let columnWidth = 65;
   if (view === ViewMode.Hour) {
     columnWidth = 50;
   } else if (view === ViewMode.Day) {
-    columnWidth = 400;
+    columnWidth = 100;
   } else if (view === ViewMode.Month) {
     columnWidth = 500;
   }
@@ -93,18 +135,18 @@ function ProcessChart() {
     setTasks(newTasks);
   };
 
-  const handleTaskDelete = (task) => {
-    const conf = window.confirm("Are you sure about " + task.name + " ?");
-    if (conf) {
-      setTasks(tasks.filter((t) => t.id !== task.id));
-    }
-    return conf;
-  };
+  // const handleTaskDelete = (task) => {
+  //   const conf = window.confirm("Are you sure about " + task.name + " ?");
+  //   if (conf) {
+  //     setTasks(tasks.filter((t) => t.id !== task.id));
+  //   }
+  //   return conf;
+  // };
 
-  const handleProgressChange = async (task) => {
-    setTasks(tasks.map((t) => (t.id === task.id ? task : t)));
-    console.log("On progress change Id:" + task.id);
-  };
+  // const handleProgressChange = async (task) => {
+  //   setTasks(tasks.map((t) => (t.id === task.id ? task : t)));
+  //   console.log("On progress change Id:" + task.id);
+  // };
 
   const handleDblClick = (taskId) => {
     console.log("Clicked task ID:", taskId);
@@ -114,13 +156,13 @@ function ProcessChart() {
 
     if (selectedTaskData) {
       setSelectedTaskData(selectedTaskData);
-      setIsSidebarOpen(true); // Open the sidebar
+      // setIsSidebarOpen(true); // Open the sidebar
     }
   };
 
-  const closeSidebar = () => {
-    setIsSidebarOpen(false); // Close the sidebar
-  };
+  // const closeSidebar = () => {
+  //   setIsSidebarOpen(false); // Close the sidebar
+  // };
 
   const handleClick = (task) => {
     console.log("On Click event Id:" + task.id);
@@ -132,16 +174,19 @@ function ProcessChart() {
     if (selectedTaskData) {
       setSelectedTaskData(selectedTaskData);
     }
+    setOpen(true);
+
+    console.log()
   };
 
-  const handleSelect = (task, isSelected) => {
-    console.log(task.name + " has " + (isSelected ? "selected" : "unselected"));
-  };
+  // const handleSelect = (task, isSelected) => {
+  //   console.log(task.name + " has " + (isSelected ? "selected" : "unselected"));
+  // };
 
-  const handleExpanderClick = (task) => {
-    setTasks(tasks.map((t) => (t.id === task.id ? task : t)));
-    console.log("On expander click Id:" + task.id);
-  };
+  // const handleExpanderClick = (task) => {
+  //   setTasks(tasks.map((t) => (t.id === task.id ? task : t)));
+  //   console.log("On expander click Id:" + task.id);
+  // };
 
   return (
     <>
@@ -162,12 +207,12 @@ function ProcessChart() {
             tasks={tasks}
             viewMode={view}
             onDateChange={handleTaskChange}
-            onDelete={handleTaskDelete}
-            onProgressChange={handleProgressChange}
+            // onDelete={handleTaskDelete}
+            // onProgressChange={handleProgressChange}
             onDoubleClick={handleDblClick}
             onClick={handleClick}
-            onSelect={handleSelect}
-            onExpanderClick={handleExpanderClick}
+            // onSelect={handleSelect}
+            // onExpanderClick={handleExpanderClick}
             listCellWidth={isChecked ? "155px" : ""}
             columnWidth={columnWidth}
           />
@@ -179,7 +224,16 @@ function ProcessChart() {
               width: "2500px",
             }}
           >
-            <SidebarWrapper selectedTaskData={selectedTaskData} />
+            <Modal
+              title=""
+              centered
+              open={open}
+              onOk={() => setOpen(false)}
+              onCancel={() => setOpen(false)}
+              width={1000}
+            >
+              <SidebarWrapper selectedTaskData={selectedTaskData}  />
+            </Modal>
           </Wrapper>
         </Chart>
       ) : (

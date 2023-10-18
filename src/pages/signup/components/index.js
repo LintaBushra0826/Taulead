@@ -1,12 +1,14 @@
 import React, { useState } from "react";
-import { Checkbox, message } from "antd";
-import { FormWrapper, FormHeader, Container } from "./index.styled";
+import { Button, Checkbox, message } from "antd";
+import { FormWrapper, FormHeader, Container, Btn } from "./index.styled";
 // import { Checkbox } from "antd/es";
 // import { Footer } from "../../../../styles/global.styled";
-import { Input, Form, Button, Divider } from "antd";
+import { Input, Form, Divider } from "antd";
 import { Footer } from "../../../styles/global.styled";
+import { useNavigate } from "react-router-dom";
 
 function SignupForm() {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     username: "",
     email: "",
@@ -21,36 +23,37 @@ function SignupForm() {
   };
 
   const handleSubmit = async (event) => {
-    event.preventDefault();
-    console.log("ON SUBMIT FUNCTION CALLED");
-    try {
-      const response = await fetch("http://localhost:3003/signup", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
+    navigate("/dashboard");
+    // event.preventDefault();
+    // console.log("ON SUBMIT FUNCTION CALLED");
+    // try {
+    //   const response = await fetch("http://localhost:3003/signup", {
+    //     method: "POST",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //     },
+    //     body: JSON.stringify(formData),
+    //   });
 
-      if (response.ok) {
-        const data = await response.json();
-        console.log("Registration successful");
-        message.success(data.message);
-        setFormData({
-          username: "",
-          email: "",
-          password: "",
-          confirmpassword: "",
-          businessname: "",
-        });
-      } else {
-        const errorData = await response.json();
-        message.error(errorData.message);
-      }
-    } catch (error) {
-      console.error("Error during signup:", error);
-      message.error("Signup failed. Please try again later.");
-    }
+    //   if (response.ok) {
+    //     const data = await response.json();
+    //     console.log("Registration successful");
+    //     message.success(data.message);
+    //     setFormData({
+    //       username: "",
+    //       email: "",
+    //       password: "",
+    //       confirmpassword: "",
+    //       businessname: "",
+    //     });
+    //   } else {
+    //     const errorData = await response.json();
+    //     message.error(errorData.message);
+    //   }
+    // } catch (error) {
+    //   console.error("Error during signup:", error);
+    //   message.error("Signup failed. Please try again later.");
+    // }
   };
 
   return (
@@ -125,6 +128,7 @@ function SignupForm() {
               Email
             </label>
             <Input
+              type="email"
               placeholder="email"
               name="email"
               value={formData.email}
@@ -137,6 +141,7 @@ function SignupForm() {
               Password
             </label>
             <Input
+              type="password"
               placeholder="password"
               name="password"
               value={formData.password}
@@ -149,6 +154,7 @@ function SignupForm() {
               Confirm Password
             </label>
             <Input
+              type="password"
               placeholder="confirm password"
               name="confirmpassword"
               value={formData.confirmpassword}
@@ -172,7 +178,7 @@ function SignupForm() {
 
           <Form.Item>
             <Container>
-              <Checkbox> I have agree with terms and conditions </Checkbox>
+              <Checkbox style={{ marginTop: "16px" }}> I have agree with terms and conditions </Checkbox>
               <Button
                 type="primary"
                 htmlType="submit"
@@ -185,7 +191,7 @@ function SignupForm() {
 
             <Footer>
               <label>Already have an account?</label>
-              <a href="/home"> Sign In</a>
+              <a href="/login"> Sign In</a>
             </Footer>
           </Form.Item>
         </Form>

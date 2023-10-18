@@ -1,26 +1,30 @@
 import { Col, DatePicker, Form, Input, Row } from "antd";
-import { useAtom, useAtomValue, useSetAtom } from "jotai";
+import { useSetAtom } from "jotai";
 import React, { useState, useEffect } from "react";
 import { SubProcessAtom } from "../../../../../../../../atoms/subprocess.atom";
-import { ProcessAtom } from "../../../../../../../../atoms/process.atom";
+// import { ProcessAtom } from "../../../../../../../../atoms/process.atom";
 
 function SubProcessForm({ formData, setFormData, processName, processID }) {
-  const process = useAtomValue(ProcessAtom);
+  // const process = useAtomValue(ProcessAtom);
   const setSubProcess = useSetAtom(SubProcessAtom);
   const [pName, setPName] = useState(processName);
   const [pid, setPID] = useState(processID);
 
-  useEffect(() => {
-    // Update pName in the SubProcessAtom when processName changes
-    setSubProcess((prevSubprocess) => ({
-      ...prevSubprocess,
-      pName: processName,
-      pid: processID,
-    }));
-    // Update the controlled component value
-    setPName(processName);
-    setPID(processID);
-  }, [processName, setSubProcess], [processID, setPID]);
+  useEffect(
+    () => {
+      // Update pName in the SubProcessAtom when processName changes
+      setSubProcess((prevSubprocess) => ({
+        ...prevSubprocess,
+        pName: processName,
+        pid: processID,
+      }));
+      // Update the controlled component value
+      setPName(processName);
+      setPID(processID);
+    },
+    [processName, setSubProcess],
+    [processID, setPID]
+  );
 
   const onStartChange = (value, dateString) => {
     console.log("Selected Start Time: ", value);
@@ -68,11 +72,14 @@ function SubProcessForm({ formData, setFormData, processName, processID }) {
 
   const [form] = Form.useForm(); // Create a form instance
 
-  React.useEffect(() => {
-    // Set the initial value for the "Process Name" field
-    setProcessFieldValue(processName, processID);
-  }, [processName], [processID]);
-
+  React.useEffect(
+    () => {
+      // Set the initial value for the "Process Name" field
+      setProcessFieldValue(processName, processID);
+    },
+    [processName],
+    [processID]
+  );
 
   return (
     <Form
@@ -96,13 +103,13 @@ function SubProcessForm({ formData, setFormData, processName, processID }) {
         </Col>
 
         <Col padding="0px" span={8}>
-        <Form.Item label="Hidden Process Id" name="hiddenPID" hidden>
+          <Form.Item label="Hidden Process Id" name="hiddenPID" hidden>
             <Input name="pID" value={processID} />
           </Form.Item>
         </Col>
       </Row>
       <Row gutter={20}>
-      <Col span={8}>
+        <Col span={8}>
           <Form.Item label="SubProcess ID" name="subId">
             <Input
               name="subId"

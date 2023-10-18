@@ -81,14 +81,10 @@ function Header() {
       </HeadMenu>
       <HeadButton>
         <ButtonContainer>
-          <Link to="/login">
-            <a href="/login">Login</a>
-          </Link>
+          <a href="/login">Login</a>
           <br></br>
-          <Link to="/dashboard">
-            <Button className="signupbtn">
-              Get Started
-            </Button>
+          <Link to="/signup">
+            <Button className="signupbtn">Get Started</Button>
           </Link>
         </ButtonContainer>
       </HeadButton>

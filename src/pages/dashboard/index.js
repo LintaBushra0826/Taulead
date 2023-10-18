@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
-import Header from "../../layout/justheader";
+// import Header from "../../layout/justheader";
 import Sidemenu from "../../layout/sideMenu";
-import { Card, Progress, Button, Space, Divider } from "antd";
+import { Card, Progress, Button, Space } from "antd";
 import {
   Container,
   CardContainer,
   Paragraph,
-  DashboardchartWrapper,
-  StatsChartWrapper,
+  // DashboardchartWrapper,
+  // StatsChartWrapper,
 } from "./index.styled";
 import { Line } from "@ant-design/plots";
 import { BodyWrapper, MainContainer } from "../../styles/global.styled";

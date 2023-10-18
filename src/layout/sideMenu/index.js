@@ -91,18 +91,13 @@ const items = [
     label: <Link to="/profile">Profile</Link>,
     name: "profile",
     key: "profile",
-  },
-  {
-    label: <Link to="/settings">Settings</Link>,
-    name: "settings",
-    key: "settings",
-  },
+  }
 ];
 
 function SideMenu() {
-  const onClick = (e) => {
-    console.log("click ", e);
-  };
+  // const onClick = (e) => {
+  //   console.log("click ", e);
+  // };
 
   return (
     <SideMenuContainer>

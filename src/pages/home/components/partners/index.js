@@ -1,19 +1,20 @@
-import React, { useState } from "react";
-import img3 from "../../../../assets/images/img3.jpg";
-import { Box, Wrapper, Div } from "./index.styled";
+import React from "react";
+// import img3 from "../../../../assets/images/img3.jpg";
+import { Box, Wrapper } from "./index.styled";
 import nastp from "../../../../assets/images/nastp-removebg-preview.png";
 import siber from "../../../../assets/images/siber-removebg-preview.png";
 
 export default function Features() {
-  const [slideUp, setSlideUp] = useState(false);
+  // const [slideUp, setSlideUp] = useState(false);
   return (
     <Wrapper>
-      <Box
-        className={`col-lg-6 my-5 col-12 col-md-6 col-sm-10 ${
-          slideUp ? "slide-up" : ""
-        }`}
-      >
-         <h5 className="h5" style={{top:"20px", color:"#279EFF", bottom:"20px"}}>Our Partners</h5>
+      <Box className={`col-lg-6 my-5 col-12 col-md-6 col-sm-10 `}>
+        <h5
+          className="h5"
+          style={{ top: "20px", color: "#279EFF", bottom: "20px" }}
+        >
+          Our Partners
+        </h5>
         <h1 className="h1">Business Communities</h1>
         <div className="Container">
           <div className="card-container">
@@ -22,6 +23,7 @@ export default function Features() {
                 <div className="card-body mt-2">
                   <img
                     src={nastp}
+                    alt= "nastp"
                     style={{
                       display: "flex",
                       width: "75%",
@@ -40,11 +42,12 @@ export default function Features() {
                 <div className="card-body mt-2">
                   <img
                     src={siber}
+                    alt= "siber"
                     style={{
                       display: "flex",
                       width: "120%",
                       height: "100%",
-                      position:"relative",
+                      position: "relative",
                       left: "-15px",
                       top: "-20%",
                       bottom: "10px",

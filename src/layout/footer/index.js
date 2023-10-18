@@ -10,7 +10,7 @@ import "mdb-react-ui-kit/dist/css/mdb.min.css";
 import { FooterWrapper } from "./index.styled";
 import logo from "../../assets/images/Logo white.png";
 import { Logo } from "../header/index.styled";
-import { CiLocationOn} from "react-icons/ci";
+import { CiLocationOn } from "react-icons/ci";
 import { AiOutlineInfoCircle } from "react-icons/ai";
 
 export default function App() {
@@ -27,7 +27,7 @@ export default function App() {
           >
             <span>Get connected with us</span>
           </div>
-
+          {/* 
           <div>
             <a href="" className="me-4 text-reset">
               <MDBIcon color="secondary" fab icon="facebook-f" />
@@ -47,7 +47,7 @@ export default function App() {
             <a href="" className="me-4 text-reset">
               <MDBIcon color="secondary" fab icon="github" />
             </a>
-          </div>
+          </div> */}
         </section>
 
         <section className="">
@@ -55,7 +55,6 @@ export default function App() {
             <MDBRow className="mt-3">
               <MDBCol md="3" lg="4" xl="3" className="mx-auto mb-4">
                 <Logo src={logo} alt="image" />
-
               </MDBCol>
 
               <MDBCol md="2" lg="2" xl="2" className="mx-auto mb-4">
@@ -99,12 +98,23 @@ export default function App() {
               <MDBCol md="4" lg="3" xl="3" className="mx-auto mb-md-0 mb-4">
                 <h6 className="text-uppercase fw-bold mb-4">Contact Us</h6>
                 <p>
-                  <MDBIcon color="secondary" icon="home" className="me-2" style={{display: 'flex', width: '100%'}}/>
-                  <CiLocationOn/> NASTP, Alpha Techno Square, Old Airport, Chaklala, Rawalpindi
+                  <MDBIcon
+                    color="secondary"
+                    icon="home"
+                    className="me-2"
+                    style={{ display: "flex", width: "100%" }}
+                  />
+                  <CiLocationOn /> NASTP, Alpha Techno Square, Old Airport,
+                  Chaklala, Rawalpindi
                 </p>
                 <p>
-                  <MDBIcon color="secondary" icon="envelope" className="me-3" style={{display: 'flex', width: '100%'}}/>
-                  <AiOutlineInfoCircle/> info@taulead.com
+                  <MDBIcon
+                    color="secondary"
+                    icon="envelope"
+                    className="me-3"
+                    style={{ display: "flex", width: "100%" }}
+                  />
+                  <AiOutlineInfoCircle /> info@taulead.com
                 </p>
               </MDBCol>
             </MDBRow>
@@ -113,8 +123,8 @@ export default function App() {
 
         <div className="text-center p-4">
           © 2021 Copyright: {"   "}
-          <a className="text-reset fw-bold" href="https://mdbootstrap.com/" >
-             Taulead.com
+          <a className="text-reset fw-bold" href="https://mdbootstrap.com/">
+            Taulead.com
           </a>
         </div>
       </MDBFooter>

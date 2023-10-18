@@ -23,7 +23,7 @@ function LoginForm() {
   };
 
   const handleSubmit = async (event) => {
-    navigate("/rawMaterial");
+    navigate("/dashboard");
     // event.preventDefault();
 
     // // Prevent multiple login requests while one is in progress
@@ -70,6 +70,7 @@ function LoginForm() {
           <Input
             placeholder="email"
             name="email"
+            type="email"
             value={formData.email}
             onChange={handleChange}
           />
@@ -82,6 +83,7 @@ function LoginForm() {
           <Input
             placeholder="password"
             name="password"
+            type="password"
             value={formData.password}
             onChange={handleChange}
           />
@@ -95,7 +97,7 @@ function LoginForm() {
 
         <Form.Item>
           <Container>
-            <Checkbox> Remember me </Checkbox>
+            <Checkbox style={{ marginTop: "16px" }}> Remember me </Checkbox>
             <Button
               type="primary"
               htmlType="submit"
@@ -109,7 +111,7 @@ function LoginForm() {
 
           <Footer>
             <label>Dont have account?</label>
-            <a href="/home"> Sign up</a>
+            <a href="/signup"> Sign up</a>
           </Footer>
         </Form.Item>
       </Form>

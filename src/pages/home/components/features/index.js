@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import img3 from "../../../../assets/images/img3.jpg";
-import { Box, Wrapper, Div } from "./index.styled";
+import React from "react";
+// import img3 from "../../../../assets/images/img3.jpg";
+import { Box, Wrapper } from "./index.styled";
 import { MdInventory } from "react-icons/md";
 import { ImProfile } from "react-icons/im";
 import { VscServerProcess } from "react-icons/vsc";
@@ -8,13 +8,11 @@ import { TbRulerMeasure } from "react-icons/tb";
 import { IoStatsChartOutline } from "react-icons/io5";
 
 export default function Features() {
-  const [slideUp, setSlideUp] = useState(false);
+  // const [slideUp, setSlideUp] = useState(false);
   return (
     <Wrapper>
       <Box
-        className={`col-lg-6 my-5 col-12 col-md-6 col-sm-10 ${
-          slideUp ? "slide-up" : ""
-        }`}
+        className={`col-lg-6 my-5 col-12 col-md-6 col-sm-10`}
       >
         <h1 className="h1">Features to Get Started</h1>
         <div className="Container">

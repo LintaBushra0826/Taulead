@@ -26,6 +26,7 @@ function Home() {
       <BodyWrapper>
         <img
           src={bgPic}
+          alt="bgPic"
           style={{ width: "100%", height: "100vh", opacity: "0.09" }}
         />
 

@@ -1,8 +1,7 @@
 import React from "react";
-import profile from "../../assets/images/profile.png";
 import { HeaderContainer, ProfileDropdown } from "./index.styled";
 import { Link } from "react-router-dom";
-import { AudioOutlined } from "@ant-design/icons";
+// import { AudioOutlined } from "@ant-design/icons";
 import { Dropdown, Input, Space } from "antd";
 import { CgProfile } from "react-icons/cg";
 
@@ -18,14 +17,14 @@ function DashboardHeader() {
     },
   ];
   const { Search } = Input;
-  const suffix = (
-    <AudioOutlined
-      style={{
-        fontSize: 16,
-        color: "#1677ff",
-      }}
-    />
-  );
+  // const suffix = (
+  //   <AudioOutlined
+  //     style={{
+  //       fontSize: 16,
+  //       color: "#1677ff",
+  //     }}
+  //   />
+  // );
   const onSearch = (value, _e, info) => console.log(info?.source, value);
 
   return (
