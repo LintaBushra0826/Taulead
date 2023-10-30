@@ -14,3 +14,9 @@ export const Wrapper = styled.div`
   justify-items: center;
   align-items: center;
 `;
+
+export const IconWrapper = styled.div`
+  position: absolute;
+  right: 60px;
+  top: 10px;
+`;

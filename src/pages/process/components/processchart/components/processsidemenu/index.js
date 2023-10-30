@@ -16,7 +16,7 @@ function SideMenu({ selectedTaskData }) {
   console.log("Data in modal", selectedTaskData);
   return (
     <MenuContainer>
-      {selectedTaskData.type === "process" ? (
+      {selectedTaskData.type === "project" ? (
         <>
           <TaskName>{selectedTaskData.name}</TaskName>
           <TaskDetail>
@@ -33,7 +33,7 @@ function SideMenu({ selectedTaskData }) {
               Start Time: {selectedTaskData.end.toLocaleTimeString()}
             </TimeFormat>
           </TaskDetail>
-          <TaskDetail>Duration: {selectedTaskData.duration} days</TaskDetail>
+          <TaskDetail>Duration: {selectedTaskData.duration}</TaskDetail>
           <TaskDetail>
             Progress: {selectedTaskData.progress}%{" "}
             <ProgressBar
@@ -99,7 +99,7 @@ function SideMenu({ selectedTaskData }) {
           </>
         </>
       ) : null}
-      {selectedTaskData.type === "subprocess" ? (
+      {selectedTaskData.type === "task" ? (
         <>
           <TaskName>{selectedTaskData.name}</TaskName>
           <TaskDetail>
@@ -116,7 +116,7 @@ function SideMenu({ selectedTaskData }) {
               Start Time: {selectedTaskData.end.toLocaleTimeString()}
             </TimeFormat>
           </TaskDetail>
-          <TaskDetail>Duration: {selectedTaskData.duration} days</TaskDetail>
+          <TaskDetail>Duration: {selectedTaskData.duration} </TaskDetail>
           <TaskDetail>
             Progress: {selectedTaskData.progress}%{" "}
             <ProgressBar

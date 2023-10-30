@@ -12,6 +12,8 @@ function RawMaterialForm() {
   const [value, setValue] = useState([]);
   const [rawMaterial, setRawMaterial] = useState([]);
   const [selectedItems, setSelectedItems] = useState([]);
+  // const [updatedItems, setUpdatedItems] = useState([]); // New state variable
+
 
   const onChange = (newValue) => {
     setValue(newValue);
@@ -19,7 +21,7 @@ function RawMaterialForm() {
 
   useEffect(() => {
     updateRawMaterial(selectedItems);
-    console.log("updateRawMaterial", selectedItems);
+    console.log("update Raw Material", selectedItems);
   }, [selectedItems]);
 
   useEffect(() => {
@@ -76,6 +78,7 @@ function RawMaterialForm() {
       // If the value is different from the current value in the selected materials
       if (value !== itemToUpdate.quan) {
         setSelectedItems(updatedSelectedItems);
+        console.log("updatedSelectedItems", updatedSelectedItems);
       } else {
         // If the value remains the same (1), add the item as is (without quantity change)
         setSelectedItems((prevSelectedItems) => {
