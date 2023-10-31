@@ -14,58 +14,43 @@ import {
 } from "./index.styled";
 import { Button } from "antd";
 import axios from "axios";
-import { useAtomValue, useSetAtom } from "jotai";
-import { ExecutedProcessAtom } from "../../../../../../atoms/executedProcess.atom";
 
-function SideMenu({ selectedTaskData, onCancel }) {
+function SideMenu({ selectedTaskData, onCancel}) {
   console.log("Data in modal", selectedTaskData);
 
-  // const [formData, setFormData] = useState({});
+  const [formData, setFormData] = useState({});
   const API_BASE_URL = "http://localhost:3003";
-  const setExecutedProcess = useSetAtom(ExecutedProcessAtom);
-  const executedProcess = useAtomValue(ExecutedProcessAtom);
 
   const handleSubmit = async () => {
     try {
-      setExecutedProcess((selectedTaskData) => ({
-        name: selectedTaskData.name,
-        start: selectedTaskData.start,
-        end: selectedTaskData.end,
-        duration: selectedTaskData.duration,
-        humanresource: selectedTaskData.humanresource,
-        rawmaterial: selectedTaskData.rawmaterial,
-      }));
-      // const combinedData = {
-      //   name: selectedTaskData.name,
-      //   start: selectedTaskData.start,
-      //   end: selectedTaskData.end,
-      //   duration: selectedTaskData.duration,
-      //   humanresource: selectedTaskData.humanresource,
-      //   rawmaterial: selectedTaskData.rawmaterial,
-      // };
-
-      // Set the ExecutedProcessAtom with combinedData
-      // setExecutedProcess(combinedData);
-
-      console.log("executedProcess", executedProcess);
+      const combinedData = {
+        ...process,
+      };
 
       const response = await axios.post(
         `${API_BASE_URL}/process`,
-        executedProcess
+        combinedData
       );
 
       if (response.status === 200) {
-        alert("Executed successfully!");
-        // setFormData(response.data);
+        alert("Process added successfully!");
+        setFormData(response.data);
+
+        // // Check if the checkbox is checked before opening the subprocess modal
+        // if (showSubprocessContent) {
+        //   setSubIsModalVisible(true);
+        // }
       } else {
         alert("Error adding process");
       }
-
-      console.log("response", response);
     } catch (error) {
       alert("Error adding process");
     }
   };
+
+  // const handleCancel = () => {
+  //   setOpen(false);
+  // };
 
   return (
     <MenuContainer>
@@ -87,6 +72,13 @@ function SideMenu({ selectedTaskData, onCancel }) {
             </TimeFormat>
           </TaskDetail>
           <TaskDetail>Duration: {selectedTaskData.duration}</TaskDetail>
+          {/* <TaskDetail>
+            Progress: {selectedTaskData.progress}%{" "}
+            <ProgressBar
+              max="100"
+              value={selectedTaskData.progress}
+            ></ProgressBar>
+          </TaskDetail> */}
           <>
             {selectedTaskData.humanresource &&
             selectedTaskData.humanresource.length > 0 ? (
@@ -163,6 +155,13 @@ function SideMenu({ selectedTaskData, onCancel }) {
             </TimeFormat>
           </TaskDetail>
           <TaskDetail>Duration: {selectedTaskData.duration} </TaskDetail>
+          {/* <TaskDetail>
+            Progress: {selectedTaskData.progress}%{" "}
+            <ProgressBar
+              max="100"
+              value={selectedTaskData.progress}
+            ></ProgressBar>
+          </TaskDetail> */}
           <>
             {selectedTaskData.subhumanresource &&
             selectedTaskData.subhumanresource.length > 0 ? (
@@ -224,12 +223,12 @@ function SideMenu({ selectedTaskData, onCancel }) {
         </>
       ) : null}
 
-      <CreateProcessCon>
+      {/* <CreateProcessCon>
         <Button onClick={onCancel}>Cancel</Button>
         <Button type="primary" onClick={handleSubmit}>
           Execute
         </Button>
-      </CreateProcessCon>
+      </CreateProcessCon> */}
     </MenuContainer>
   );
 }

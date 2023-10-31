@@ -1,14 +1,12 @@
 import styled from "styled-components";
 
 export const Chart = styled.div`
-  ._WuQ0f {
-    /* max-width: 200px; */
-    min-width: 200px;
+  /* ._WuQ0f {
+    display: none;
   }
   ._3lLk3{
-    /* max-width: 200px; */
-    min-width: 200px;
-  }
+    display:none;
+  } */
 `;
 
 export const Wrapper = styled.div`

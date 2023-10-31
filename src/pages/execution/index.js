@@ -6,8 +6,9 @@ import ProcessChart from "./components/processchart";
 import { Button } from "antd";
 import { ButtonWrapper, ChartWrapper } from "./index.styled";
 import CreateProcessModal from "./components/createprocessmodal";
+import { Link } from "react-router-dom";
 
-function Process() {
+function Execution() {
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   const handleOpenModal = () => {
@@ -23,25 +24,27 @@ function Process() {
       <BodyWrapper>
         <SideMenu />
         {/* <Header /> */}
-         
-          <ChartWrapper>
-            <ProcessChart />
-          </ChartWrapper>
 
-          <ButtonWrapper>
+        <ChartWrapper>
+          <ProcessChart />
+        </ChartWrapper>
+
+        <ButtonWrapper>
+          <Link to="/statisticspage">
             <Button type="primary" onClick={handleOpenModal}>
-              Create Process
+              View Statistics
             </Button>
-          </ButtonWrapper>
+          </Link>
+        </ButtonWrapper>
 
-        <CreateProcessModal
+        {/* <CreateProcessModal
           isVisible={isModalVisible}
           onClose={handleCloseModal}
-          
-        />
+        
+        /> */}
       </BodyWrapper>
     </>
   );
 }
 
-export default Process;
+export default Execution;

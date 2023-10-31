@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Header from "../../layout/dashboardheader";
 import SideMenu from "../../layout/sideMenu";
 import { BodyWrapper, TableWrapper } from "../../styles/global.styled";
-import { Table, Typography, Modal, Input, Form } from "antd";
+import { Table, Typography, Modal, Input, Form, Tag } from "antd";
 import axios from "axios";
 
 function ViewHumanResource() {
@@ -12,6 +12,19 @@ function ViewHumanResource() {
   const [editingKey] = useState("");
   const [open, setOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  function getTagColor(record) {
+    console.log("record", record);
+    let color = record.quan > 0 ? "green" : "green";
+    if (record === "busy") {
+      color = "green";
+    } else if (record === "terminated") {
+      color = "orange";
+    }
+    return color;
+  }
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -52,6 +65,7 @@ function ViewHumanResource() {
         desgn: formData.desgn,
         desgnesc: formData.desgnesc,
         skills: formData.skills,
+        tag: formData.tag,
       };
 
       await axios.put(
@@ -87,50 +101,52 @@ function ViewHumanResource() {
       title: "Phone Number",
       dataIndex: "phoneNumber",
       width: "fit-content",
-      editable: true,
     },
     {
       title: "Address",
       dataIndex: "address",
       width: "fit-content",
-      editable: true,
     },
     {
       title: "Email",
       dataIndex: "email",
-      width: "fit-content",
-      editable: true,
     },
     {
       title: "Salary",
       dataIndex: "salary",
       width: "fit-content",
-      editable: true,
+
       render: (text) => `Rs.${text}`,
     },
     {
       title: "Hired On",
       dataIndex: "hired",
       width: "fit-content",
-      editable: true,
     },
     {
       title: "Designation",
       dataIndex: "desgn",
       width: "fit-content",
-      editable: true,
     },
     {
       title: "Job Description",
       dataIndex: "desgnesc",
       width: "fit-content",
-      editable: true,
     },
     {
       title: "Skills",
       dataIndex: "skills",
       width: "fit-content",
-      editable: true,
+    },
+    {
+      title: "Status",
+      dataIndex: "tag",
+      width: "fit-content",
+      render: (_, record) => (
+        <Tag color={getTagColor(record)} key={record}>
+          {record.tag.toUpperCase()}
+        </Tag>
+      ),
     },
     {
       title: "Operation",
@@ -142,24 +158,44 @@ function ViewHumanResource() {
             <Typography.Link
               disabled={editingKey !== ""}
               onClick={() => showModal(record._id)}
-              style={{ padding: "10%" }}
+              style={{
+                fontSize: "12px",
+                // padding: "2%",
+                backgroundColor: "#ECF8F9",
+                color: "#00A9FF",
+                borderColor: "#AEE2FF",
+                border: "1px",
+                borderStyle: "solid",
+                borderRadius: "5px",
+                padding: "5px",
+                marginRight: "6px",
+               
+              }}
             >
-              Update
+              UPDATE
             </Typography.Link>
             <Typography.Link
               disabled={editingKey !== ""}
               onClick={() => handleDeleteItem(record._id)}
-              style={{ padding: "10%" }}
+              style={{
+                Left: "5%",
+                fontSize: "12px",
+                backgroundColor: "#FFE5E5",
+                color: "#BB2525",
+                borderColor: "#FF9B82",
+                border: "1px",
+                borderStyle: "solid",
+                borderRadius: "4px",
+                padding: "5px",
+              }}
             >
-              Delete
+              DELETE
             </Typography.Link>
           </>
         );
       },
     },
   ];
-  const [data, setData] = useState(null); // Initialize data as null instead of an empty array
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetchHumanResource();

@@ -7,16 +7,10 @@ export const MenuContainer = styled.div`
   width: 100%;
 `;
 
-export const TaskID = styled.h2`
-  font-size: 20px;
-  font-weight: bold;
-  color: #2a0845;
-`;
-
 export const TaskName = styled.h2`
   font-size: 20px;
   font-weight: bold;
-  color: #2a0845;
+  color: #333;
 `;
 
 export const TaskDetail = styled.p`
@@ -32,12 +26,11 @@ export const ProgressBar = styled.progress`
 export const Table = styled.table`
   width: 100%;
   margin-top: 20px;
-  /* border-collapse: collapse; */
-  
+  border-collapse: collapse;
 `;
 
 export const TableHeader = styled.th`
-  background-color: #F4EEEE;
+  background-color: #f0f0f0;
   padding: 8px;
   border: 1px solid #ddd;
   text-align: left;

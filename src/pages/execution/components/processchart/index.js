@@ -129,6 +129,7 @@ function ProcessChart() {
           humanresource: item.humanResource,
           rawmaterial: item.rawMaterial,
           duration: ProcessdurationInHours,
+          progress: "55",
           type: "project",
           displayOrder: count++,
         };
@@ -150,6 +151,7 @@ function ProcessChart() {
               subhumanresource: subitem.humanResource,
               subrawmaterial: subitem.rawMaterial,
               duration: subdurationInHours,
+              progress: "35",
               type: "task",
               project: item.name,
               displayOrder: count++,

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Header from "../../layout/dashboardheader";
 import SideMenu from "../../layout/sideMenu";
 import { BodyWrapper, TableWrapper } from "../../styles/global.styled";
-import { Table, Typography, Modal, Input, Form } from "antd";
+import { Table, Typography, Modal, Input, Form, Tag } from "antd";
 import axios from "axios";
 
 function ViewRawMaterial() {
@@ -12,14 +12,35 @@ function ViewRawMaterial() {
   const [editingKey] = useState("");
   const [open, setOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
-  const [data, setData] = useState(null); // Initialize data as null instead of an empty array
+  const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [one, setOne] = useState("");
+  const [two, setTwo] = useState("");
+  const [total, setTotal] = useState(0);
 
- 
-  
+  function getTagColor(record) {
+    console.log("record", record.quan);
+    let color = record.quan > 0 ? "green" : "green";
+    if (record.quan === 0) {
+      color = "grey";
+      record.tag = "Finished";
+    } else if (record.quan < 10) {
+      color = "red";
+      record.tag = "Alert";
+    }
+    return color;
+  }
+
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setFormData({ ...formData, [name]: value });
+
+    // Check the name of the input field and set the appropriate state variable
+    if (name === "price") {
+      setOne(value);
+    } else if (name === "quan") {
+      setTwo(value);
+    }
   };
 
   const showModal = async (id) => {
@@ -56,11 +77,16 @@ function ViewRawMaterial() {
         expdate: formData.expdate,
         price: formData.price,
         totcost: formData.totcost,
+        tag: formData.tag,
       };
-  
-      await axios.put(`${API_BASE_URL}/rawMaterial/${selectedItem._id}`, updateData);
+
+      await axios.put(
+        `${API_BASE_URL}/rawMaterial/${selectedItem._id}`,
+        updateData
+      );
       alert("Item Updated");
       setOpen(false);
+      window.location.reload();
     } catch (error) {
       // Handle error
       console.error("Error updating item:", error);
@@ -74,6 +100,24 @@ function ViewRawMaterial() {
   const handleCancel = () => {
     setOpen(false);
   };
+
+  useEffect(
+    () => {
+      const numOne = one;
+      const numTwo = two;
+
+      if (!isNaN(numOne) && !isNaN(numTwo)) {
+        const result = numOne * numTwo;
+        setTotal(result);
+        setFormData({ ...formData, totcost: result });
+      } else {
+        setTotal(0);
+        setFormData({ ...formData, totcost: 0 });
+      }
+    },
+    [one],
+    [two]
+  );
 
   const columns = [
     {
@@ -116,6 +160,16 @@ function ViewRawMaterial() {
       render: (text) => `Rs.${text}`,
     },
     {
+      title: "Status",
+      dataIndex: "tag",
+      width: "fit-content",
+      render: (_, record) => (
+        <Tag color={getTagColor(record)} key={record}>
+          {record.tag.toUpperCase()}
+        </Tag>
+      ),
+    },
+    {
       title: "Operation",
       dataIndex: "operation",
       width: "fit-content",
@@ -125,16 +179,37 @@ function ViewRawMaterial() {
             <Typography.Link
               disabled={editingKey !== ""}
               onClick={() => showModal(record._id)}
-              style={{ padding: "10%" }}
+              style={{
+                fontSize: "12px",
+                // padding: "2%",
+                backgroundColor: "#ECF8F9",
+                color: "#00A9FF",
+                borderColor: "#AEE2FF",
+                border: "1px",
+                borderStyle: "solid",
+                borderRadius: "5px",
+                padding: "5px",
+                marginRight: "6px",
+              }}
             >
-              Update
+              UPDATE
             </Typography.Link>
             <Typography.Link
               disabled={editingKey !== ""}
               onClick={() => handleDeleteItem(record._id)}
-              style={{ padding: "10%" }}
+              style={{
+                Left: "5%",
+                fontSize: "12px",
+                backgroundColor: "#FFE5E5",
+                color: "#BB2525",
+                borderColor: "#FF9B82",
+                border: "1px",
+                borderStyle: "solid",
+                borderRadius: "4px",
+                padding: "5px",
+              }}
             >
-              Delete
+              DELETE
             </Typography.Link>
           </>
         );
@@ -169,7 +244,13 @@ function ViewRawMaterial() {
         <SideMenu />
         <TableWrapper>
           {!loading && data.length > 0 ? ( // Conditionally render the table when data is available and not loading
-            <Table columns={columns} dataSource={data} loading={loading} style={{width:"100"}}/>
+            <Table
+              columns={columns}
+              dataSource={data}
+              loading={loading}
+              style={{ width: "100" }}
+              rowKey={(record) => record.uid}
+            />
           ) : (
             <p>Loading..</p>
           )}
@@ -253,6 +334,16 @@ function ViewRawMaterial() {
                 value={formData.price}
                 onChange={handleInputChange}
               />
+            </Form.Item>
+
+            <Form.Item label="Total Cost" name="totcost">
+              <Input
+                name="totcost"
+                value={total}
+                onChange={handleInputChange}
+              />
+              {/* console.log("total value", total) */}
+              {total}
             </Form.Item>
           </Form>
         )}

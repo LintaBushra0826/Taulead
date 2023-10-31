@@ -60,9 +60,14 @@ const items = [
     key: "processes",
     children: [
       {
-        type: "View Processes",
-        name: "View Processes",
-        label: <Link to="/process">View Processes</Link>,
+        type: "Definition",
+        name: "Definition",
+        label: <Link to="/process">Definition</Link>,
+      },
+      {
+        type: "Execution",
+        name: "Execution",
+        label: <Link to="/execution">Execution</Link>,
       },
     ],
   },

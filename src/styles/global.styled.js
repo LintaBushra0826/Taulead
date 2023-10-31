@@ -20,7 +20,8 @@ export const FormHeading = styled.div`
 
 export const TableWrapper = styled.div`
   padding: 15px;
-  width: 100%;
+  width: 1170px;
+  overflow: scroll;
 `;
 
 export const ChartWrapper = styled.div`

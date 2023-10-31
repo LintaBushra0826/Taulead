@@ -16,6 +16,7 @@ import ViewPriceLogs from "../pages/pricelogs";
 import ViewHumanResource from "../pages/viewhumanresource";
 import Dashboard from "../pages/dashboard";
 import Statistics from "../pages/statisticspage";
+import Execution from "../pages/execution";
 // import RawMaterialStats from "../pages/rawmaterialstats";
 // import HumanResourceStats from "../pages/humanresourcestats";
 // import ColorPlatte from "../layout/colorPlatte";
@@ -89,6 +90,10 @@ const router = createBrowserRouter([
   {
     path: "/process",
     element: <Process />,
+  },
+  {
+    path: "/execution",
+    element: <Execution />,
   },
   {
     path: "/statisticspage",

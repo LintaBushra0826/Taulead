@@ -12,8 +12,14 @@ function RawMaterialForm() {
   const location = useLocation();
   const API_BASE_URL = "http://localhost:3003";
   const [formData, setFormData] = useState({
-    quan: "", // Provide initial values for quan and price
+    Name: "",
+    Desc: "",
+    unit: "",
+    quan: "",
+    expdate: "",
     price: "",
+    totcost: 0,
+    tag: "available",
   });
   const [searchValue] = useState("");
   const [options, setOptions] = useState([]);
@@ -25,6 +31,13 @@ function RawMaterialForm() {
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setFormData({ ...formData, [name]: value });
+
+    // Check the name of the input field and set the appropriate state variable
+    if (name === "price") {
+      setOne(value);
+    } else if (name === "quan") {
+      setTwo(value);
+    }
   };
 
   const handleSubmit = async () => {
@@ -86,9 +99,10 @@ function RawMaterialForm() {
     if (!isNaN(numOne) && !isNaN(numTwo)) {
       const result = numOne * numTwo;
       setTotal(result);
-
+      setFormData({ ...formData, totcost: result });
     } else {
       setTotal(0);
+      setFormData({ ...formData, totcost: 0 });
     }
   }, [one, two]);
 
@@ -144,7 +158,8 @@ function RawMaterialForm() {
               <Input
                 name="quan"
                 value={formData.quan}
-                onChange={(e) => setOne(e.target.value)}
+                // onChange={(e) => setOne(e.target.value)}
+                onChange={handleInputChange}
               />
             </Form.Item>
           </Col>
@@ -166,16 +181,32 @@ function RawMaterialForm() {
               <Input
                 name="price"
                 value={formData.price}
-                onChange={(e) => setTwo(e.target.value)}
+                // onChange={(e) => setTwo(e.target.value)}
+                onChange={handleInputChange}
               />
             </Form.Item>
           </Col>
 
           <Col span={8}>
             <Form.Item label="Total Cost" name="totcost">
-              <Input name="totcost" value={total} readOnly />
+              <Input
+                name="totcost"
+                value={total}
+                onChange={handleInputChange}
+              />
               {/* console.log("total value", total) */}
               {total}
+            </Form.Item>
+          </Col>
+
+          <Col span={8}>
+            <Form.Item label="Tag" name="tag">
+              <Input
+                name="tag"
+                defaultValue={formData.tag}
+                onChange={handleInputChange}
+                readOnly
+              />
             </Form.Item>
           </Col>
         </Row>

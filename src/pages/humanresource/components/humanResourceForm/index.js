@@ -7,7 +7,9 @@ import { useLocation } from "react-router-dom";
 function HumanresourceForm() {
   const location = useLocation();
   const API_BASE_URL = "http://localhost:3003"; 
-  const [formData, setFormData] = useState({});
+  const [formData, setFormData] = useState({
+    tag: "available", 
+  });
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -94,6 +96,17 @@ function HumanresourceForm() {
               <Input name="skills" value={formData.skills} onChange={handleInputChange} />
             </Form.Item>
           </Col>
+
+          <Col span={8}>
+            <Form.Item label="Tag" name="tag">
+              <Input
+                name="tag"
+                defaultValue={formData.tag}
+                onChange={handleInputChange}
+                readOnly
+              />
+            </Form.Item>
+          </Col>
         </Row>
 
         <Form.Item>
@@ -104,6 +117,7 @@ function HumanresourceForm() {
           </ButtonContainer>
         </Form.Item>
       </Form>
+
     </FormWrapper>
   );
 }
