@@ -1,6 +1,6 @@
 import React from "react";
 // import img3 from "../../../../assets/images/img3.jpg";
-import { Box, Wrapper } from "./index.styled";
+import { Box, Wrapper2 } from "./index.styled";
 import { MdInventory } from "react-icons/md";
 import { ImProfile } from "react-icons/im";
 import { VscServerProcess } from "react-icons/vsc";
@@ -10,7 +10,7 @@ import { IoStatsChartOutline } from "react-icons/io5";
 export default function Features() {
   // const [slideUp, setSlideUp] = useState(false);
   return (
-    <Wrapper>
+    <Wrapper2>
       <Box
         className={`col-lg-6 my-5 col-12 col-md-6 col-sm-10`}
       >
@@ -47,9 +47,7 @@ export default function Features() {
                   >
                     Raw Material Inventory Management
                   </h5>
-                  {/* <p className="card-text" style={{ position:"absolute", top:"70%", fontSize:"14px", textAlign:"center", paddingRight:"17px"}}>
-                  Efficiently track and manage your raw material inventory
-                  </p> */}
+                 
                 </div>
               </div>
               <div className="card">
@@ -229,6 +227,6 @@ export default function Features() {
           </div>
         </div>
       </Box>
-    </Wrapper>
+    </Wrapper2>
   );
 }

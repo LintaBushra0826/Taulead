@@ -6,7 +6,7 @@ import { Table, Typography, Modal, Input, Form } from "antd";
 import axios from "axios";
 
 function ViewRawMaterial() {
-  const API_BASE_URL = "http://localhost:3003";
+  const API_BASE_URL = "http://localhost:3005";
   const [formData, setFormData] = useState({});
   const [selectedItem, setSelectedItem] = useState({});
   const [editingKey] = useState("");
@@ -14,7 +14,7 @@ function ViewRawMaterial() {
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [data, setData] = useState(null); // Initialize data as null instead of an empty array
   const [loading, setLoading] = useState(true);
-  
+
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setFormData({ ...formData, [name]: value });
@@ -55,8 +55,11 @@ function ViewRawMaterial() {
         price: formData.price,
         totcost: formData.totcost,
       };
-  
-      await axios.put(`${API_BASE_URL}/rawMaterial/${selectedItem._id}`, updateData);
+
+      await axios.put(
+        `${API_BASE_URL}/rawMaterial/${selectedItem._id}`,
+        updateData
+      );
       alert("Item Updated");
       setOpen(false);
     } catch (error) {
@@ -147,7 +150,7 @@ function ViewRawMaterial() {
 
   const fetchRawMaterials = async () => {
     try {
-      const response = await axios.get("http://localhost:3003/rawMaterial");
+      const response = await axios.get("http://localhost:3005/rawMaterial");
       const rawData = response.data.data;
 
       // Ensure data is an array
@@ -168,7 +171,12 @@ function ViewRawMaterial() {
         <SideMenu />
         <TableWrapper>
           {!loading && data.length > 0 ? ( // Conditionally render the table when data is available and not loading
-            <Table columns={columns} dataSource={data} loading={loading} style={{width:"100"}}/>
+            <Table
+              columns={columns}
+              dataSource={data}
+              loading={loading}
+              style={{ width: "100" }}
+            />
           ) : (
             <p>Loading..</p>
           )}

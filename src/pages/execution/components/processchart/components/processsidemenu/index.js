@@ -15,11 +15,11 @@ import {
 import { Button } from "antd";
 import axios from "axios";
 
-function SideMenu({ selectedTaskData, onCancel}) {
+function SideMenu({ selectedTaskData, onCancel }) {
   console.log("Data in modal", selectedTaskData);
 
   const [formData, setFormData] = useState({});
-  const API_BASE_URL = "http://localhost:3003";
+  const API_BASE_URL = "http://localhost:3005";
 
   const handleSubmit = async () => {
     try {
@@ -72,13 +72,13 @@ function SideMenu({ selectedTaskData, onCancel}) {
             </TimeFormat>
           </TaskDetail>
           <TaskDetail>Duration: {selectedTaskData.duration}</TaskDetail>
-          {/* <TaskDetail>
+          <TaskDetail>
             Progress: {selectedTaskData.progress}%{" "}
-            <ProgressBar
+            {/* <ProgressBar
               max="100"
               value={selectedTaskData.progress}
-            ></ProgressBar>
-          </TaskDetail> */}
+            ></ProgressBar> */}
+          </TaskDetail>
           <>
             {selectedTaskData.humanresource &&
             selectedTaskData.humanresource.length > 0 ? (
@@ -155,13 +155,13 @@ function SideMenu({ selectedTaskData, onCancel}) {
             </TimeFormat>
           </TaskDetail>
           <TaskDetail>Duration: {selectedTaskData.duration} </TaskDetail>
-          {/* <TaskDetail>
+          <TaskDetail>
             Progress: {selectedTaskData.progress}%{" "}
-            <ProgressBar
+            {/* <ProgressBar
               max="100"
               value={selectedTaskData.progress}
-            ></ProgressBar>
-          </TaskDetail> */}
+            ></ProgressBar> */}
+          </TaskDetail>
           <>
             {selectedTaskData.subhumanresource &&
             selectedTaskData.subhumanresource.length > 0 ? (

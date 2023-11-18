@@ -11,32 +11,34 @@ const slideUp = keyframes`
   }
 `;
 
-export const Wrapper = styled.div`
+export const Wrapper2 = styled.div`
   width: 100%;
-  min-height: 100vh;
+  min-height: 90vh;
   display: flex;
   align-items: center;
   justify-content: center;
+  background: linear-gradient(100deg, #e8cbc0, #cbb4d4);
 `;
 
 export const Box = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  position: absolute;
-  top: 165%;
+  position: relative;
+  top: -30%;
   transform: translateY(-50%);
   border-radius: 35px;
   color: #2a0845;
   .h1 {
     text-align: center;
     font-size: 36px;
+    color: "#F3904F";
   }
   .Container {
     display: flex;
     position: absolute;
     top: 100%;
-    right: 30%;
+    right: 34%;
   }
   .card-container {
     display: flex;

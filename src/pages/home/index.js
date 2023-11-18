@@ -51,15 +51,15 @@ function Home() {
           </Space>
         </ButtonWrapper>
 
-        <Section2>
-          <Features />
-        </Section2>
-
         <Section3>
           <Partners />
         </Section3>
 
-        <Section4></Section4>
+        <Section2>
+          <Features />
+        </Section2>
+
+        {/* <Section4></Section4> */}
 
         <Footer />
       </BodyWrapper>

@@ -6,7 +6,7 @@ import { Table, Typography, Modal, Input, Form, Tag } from "antd";
 import axios from "axios";
 
 function ViewHumanResource() {
-  const API_BASE_URL = "http://localhost:3003";
+  const API_BASE_URL = "http://localhost:3005";
   const [formData, setFormData] = useState({});
   const [selectedHR, setSelectedHR] = useState({});
   const [editingKey] = useState("");
@@ -169,7 +169,6 @@ function ViewHumanResource() {
                 borderRadius: "5px",
                 padding: "5px",
                 marginRight: "6px",
-               
               }}
             >
               UPDATE
@@ -203,7 +202,7 @@ function ViewHumanResource() {
 
   const fetchHumanResource = async () => {
     try {
-      const response = await axios.get("http://localhost:3003/humanresource");
+      const response = await axios.get("http://localhost:3005/humanresource");
       const rawData = response.data.data;
 
       // Ensure data is an array

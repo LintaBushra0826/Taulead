@@ -12,16 +12,31 @@ function RawMaterialForm() {
   const [value, setValue] = useState([]);
   const [rawMaterial, setRawMaterial] = useState([]);
   const [selectedItems, setSelectedItems] = useState([]);
-  // const [updatedItems, setUpdatedItems] = useState([]); // New state variable
-
+  // const [selectedMaterials, setSelectedMaterials] = useState([]); // New state variable
 
   const onChange = (newValue) => {
     setValue(newValue);
   };
 
   useEffect(() => {
+    const updatedValue = value.map((id) => {
+      const item = rawMaterial.find((_item) => id === _item._id);
+      const prevItem = selectedItems.find((_item) => id === _item._id);
+      if (item && prevItem) {
+        return prevItem;
+      } else if (item) {
+        return {
+          ...item,
+          quan: 1,
+        };
+      }
+      return item;
+    });
+    setSelectedItems(updatedValue);
+  }, [value]);
+
+  useEffect(() => {
     updateRawMaterial(selectedItems);
-    console.log("update Raw Material", selectedItems);
   }, [selectedItems]);
 
   useEffect(() => {
@@ -39,7 +54,7 @@ function RawMaterialForm() {
 
   const fetchRawMaterials = async () => {
     try {
-      const response = await axios.get("http://localhost:3003/rawMaterial");
+      const response = await axios.get("http://localhost:3005/rawMaterial");
       const rawData = response.data.data;
       const dataArray = Array.isArray(rawData) ? rawData : [];
       setRawMaterial(dataArray);
@@ -60,46 +75,46 @@ function RawMaterialForm() {
     maxTagCount: "responsive",
   };
 
-  const handleInputChange = (value, id) => {
+  const handleInputChange = (updatedValue, id) => {
     const itemToUpdate = rawMaterial.find((_item) => id === _item._id);
     if (itemToUpdate) {
-      const updatedSelectedItems = selectedMaterials.map((item) => {
+      const updatedSelectedItems = selectedItems.map((item) => {
         if (id === item._id) {
           return {
-            id: id,
-            Name: item.Name,
-            quantity: value,
-            unit: item.unit,
+            ...item,
+            quan: updatedValue,
           };
         }
         return item;
       });
 
       // If the value is different from the current value in the selected materials
-      if (value !== itemToUpdate.quan) {
-        setSelectedItems(updatedSelectedItems);
-        console.log("updatedSelectedItems", updatedSelectedItems);
-      } else {
-        // If the value remains the same (1), add the item as is (without quantity change)
-        setSelectedItems((prevSelectedItems) => {
-          if (!prevSelectedItems.find((item) => item.id === id)) {
-            return [...prevSelectedItems, itemToUpdate];
-          }
-          return prevSelectedItems;
-        });
-      }
+      setSelectedItems(updatedSelectedItems);
+      // if (value !== itemToUpdate.quan) {
+      // } else {
+      //   // If the value remains the same (1), add the item as is (without quan change)
+      //   setSelectedItems((prevSelectedItems) => {
+      //     if (!prevSelectedItems.find((item) => item.id === id)) {
+      //       return [...prevSelectedItems, itemToUpdate];
+      //     }
+      //     return prevSelectedItems;
+      //   });
+      // }
     }
   };
 
-  const selectedMaterials = useMemo(() => {
-    return value.map((id) => {
-      const item = rawMaterial.find((_item) => id === _item._id);
-      return {
-        ...item,
-        quan: item.quan,
-      };
-    });
-  }, [value, rawMaterial]);
+  // const selectedMaterials = useMemo(() => {
+  //   return value.map((id) => {
+  //     const item = rawMaterial.find((_item) => id === _item._id);
+  //     if (item) {
+  //       return {
+  //         ...item,
+  //         quan: 1,
+  //       };
+  //     }
+  //     return item;
+  //   });
+  // }, [value]);
 
   const columns = [
     {
@@ -108,15 +123,16 @@ function RawMaterialForm() {
       key: "Name",
     },
     {
-      title: "Item Quantity",
+      title: "Item quan",
       dataIndex: "quan",
       key: "quan",
       render: (record, item) => {
         return (
           <InputNumber
             min={1}
-            max={item.quan}
+            // max={item.quan}
             defaultValue={1}
+            // value={item.quan}
             onChange={(value) => handleInputChange(value, item._id)}
             style={{ width: "50%", position: "relative" }}
           />
@@ -140,7 +156,7 @@ function RawMaterialForm() {
         <Select {...selectProps} />
       </Space>
 
-      <Table dataSource={selectedMaterials} columns={columns} />
+      <Table dataSource={selectedItems} columns={columns} />
     </FormWrapper>
   );
 }

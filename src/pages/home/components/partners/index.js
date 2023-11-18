@@ -11,7 +11,7 @@ export default function Features() {
       <Box className={`col-lg-6 my-5 col-12 col-md-6 col-sm-10 `}>
         <h5
           className="h5"
-          style={{ top: "20px", color: "#279EFF", bottom: "20px" }}
+          style={{  color: "#279EFF" }}
         >
           Our Partners
         </h5>

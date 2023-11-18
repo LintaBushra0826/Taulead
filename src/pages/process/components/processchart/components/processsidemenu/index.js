@@ -18,41 +18,33 @@ import { useAtomValue, useSetAtom } from "jotai";
 import { ExecutedProcessAtom } from "../../../../../../atoms/executedProcess.atom";
 
 function SideMenu({ selectedTaskData, onCancel }) {
-  console.log("Data in modal", selectedTaskData);
-
-  // const [formData, setFormData] = useState({});
-  const API_BASE_URL = "http://localhost:3003";
+  const API_BASE_URL = "http://localhost:3005";
   const setExecutedProcess = useSetAtom(ExecutedProcessAtom);
   const executedProcess = useAtomValue(ExecutedProcessAtom);
 
   const handleSubmit = async () => {
     try {
-      setExecutedProcess((selectedTaskData) => ({
+      setExecutedProcess({
         name: selectedTaskData.name,
         start: selectedTaskData.start,
         end: selectedTaskData.end,
+        desc: selectedTaskData.desc,
         duration: selectedTaskData.duration,
         humanresource: selectedTaskData.humanresource,
         rawmaterial: selectedTaskData.rawmaterial,
-      }));
-      // const combinedData = {
-      //   name: selectedTaskData.name,
-      //   start: selectedTaskData.start,
-      //   end: selectedTaskData.end,
-      //   duration: selectedTaskData.duration,
-      //   humanresource: selectedTaskData.humanresource,
-      //   rawmaterial: selectedTaskData.rawmaterial,
-      // };
-
-      // Set the ExecutedProcessAtom with combinedData
-      // setExecutedProcess(combinedData);
+      });
 
       console.log("executedProcess", executedProcess);
 
-      const response = await axios.post(
-        `${API_BASE_URL}/process`,
-        executedProcess
-      );
+      const response = await axios.post(`${API_BASE_URL}/executed-process`, {
+        name: selectedTaskData.name,
+        start: selectedTaskData.start,
+        end: selectedTaskData.end,
+        desc: selectedTaskData.desc,
+        duration: selectedTaskData.duration,
+        humanresource: selectedTaskData.humanresource,
+        rawmaterial: selectedTaskData.rawmaterial,
+      });
 
       if (response.status === 200) {
         alert("Executed successfully!");
@@ -66,6 +58,21 @@ function SideMenu({ selectedTaskData, onCancel }) {
       alert("Error adding process");
     }
   };
+  function formatDuration(start, end) {
+    const durationInmilliseconds = end - start;
+    const hours = Math.floor(durationInmilliseconds / (1000 * 60 * 60));
+    const minutes = Math.floor(
+      (durationInmilliseconds % (1000 * 60 * 60)) / (1000 * 60)
+    );
+
+    if (hours === 0) {
+      return `${minutes} minute(s)`;
+    } else if (minutes === 0) {
+      return `${hours} hour(s)`;
+    } else {
+      return `${hours} hour(s) and ${minutes} minute(s)`;
+    }
+  }
 
   return (
     <MenuContainer>
@@ -86,7 +93,10 @@ function SideMenu({ selectedTaskData, onCancel }) {
               Start Time: {selectedTaskData.end.toLocaleTimeString()}
             </TimeFormat>
           </TaskDetail>
-          <TaskDetail>Duration: {selectedTaskData.duration}</TaskDetail>
+          <TaskDetail>
+            Duration:
+            {formatDuration(selectedTaskData.start, selectedTaskData.end)}
+          </TaskDetail>
           <>
             {selectedTaskData.humanresource &&
             selectedTaskData.humanresource.length > 0 ? (
@@ -107,7 +117,12 @@ function SideMenu({ selectedTaskData, onCancel }) {
                         <TableCell>{humanresource.name}</TableCell>
                         <TableCell>{humanresource.desgn}</TableCell>
                         <TableCell>{humanresource.skills}</TableCell>
-                        <TableCell>{selectedTaskData.duration}</TableCell>
+                        <TableCell>
+                          {formatDuration(
+                            selectedTaskData.start,
+                            selectedTaskData.end
+                          )}
+                        </TableCell>
                       </TableRow>
                     )
                   )}
@@ -133,7 +148,7 @@ function SideMenu({ selectedTaskData, onCancel }) {
                   {selectedTaskData.rawmaterial.map((rawmaterial, index) => (
                     <TableRow key={index}>
                       <TableCell>{rawmaterial.Name}</TableCell>
-                      <TableCell>{rawmaterial.quantity}</TableCell>
+                      <TableCell>{rawmaterial.quan}</TableCell>
                       <TableCell>{rawmaterial.unit}</TableCell>
                     </TableRow>
                   ))}
@@ -162,7 +177,10 @@ function SideMenu({ selectedTaskData, onCancel }) {
               Start Time: {selectedTaskData.end.toLocaleTimeString()}
             </TimeFormat>
           </TaskDetail>
-          <TaskDetail>Duration: {selectedTaskData.duration} </TaskDetail>
+          <TaskDetail>
+            Duration:
+            {formatDuration(selectedTaskData.start, selectedTaskData.end)}
+          </TaskDetail>
           <>
             {selectedTaskData.subhumanresource &&
             selectedTaskData.subhumanresource.length > 0 ? (
@@ -183,7 +201,12 @@ function SideMenu({ selectedTaskData, onCancel }) {
                         <TableCell>{subhumanresource.name}</TableCell>
                         <TableCell>{subhumanresource.desgn}</TableCell>
                         <TableCell>{subhumanresource.skills}</TableCell>
-                        <TableCell>{selectedTaskData.duration}</TableCell>
+                        <TableCell>
+                          {formatDuration(
+                            selectedTaskData.start,
+                            selectedTaskData.end
+                          )}
+                        </TableCell>
                       </TableRow>
                     )
                   )}

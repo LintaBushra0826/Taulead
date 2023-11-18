@@ -6,7 +6,7 @@ import { Table, Typography, Modal, Input, Form } from "antd";
 import axios from "axios";
 
 function ViewMeauringUnit() {
-  const API_BASE_URL = "http://localhost:3003";
+  const API_BASE_URL = "http://localhost:3005";
   const [formData, setFormData] = useState({});
   const [selectedUnit, setSelectedUnit] = useState({});
   const [editingKey] = useState("");
@@ -133,7 +133,7 @@ function ViewMeauringUnit() {
 
   const fetchMeasuringUnit = async () => {
     try {
-      const response = await axios.get("http://localhost:3003/MeasuringUnit");
+      const response = await axios.get("http://localhost:3005/MeasuringUnit");
       const rawData = response.data.data;
 
       // Ensure data is an array

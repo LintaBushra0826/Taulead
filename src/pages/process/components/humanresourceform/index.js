@@ -19,7 +19,7 @@ function HumanResourceForm() {
 
   const fetchHumanResource = async () => {
     try {
-      const response = await axios.get("http://localhost:3003/humanresource");
+      const response = await axios.get("http://localhost:3005/humanresource");
       const rawData = response.data.data;
       const dataArray = Array.isArray(rawData) ? rawData : [];
       setHumanResource(dataArray);
@@ -64,7 +64,6 @@ function HumanResourceForm() {
       };
     });
   }, [value, humanresource]);
-  
 
   useEffect(() => {
     UpdateHumanResource(selectedHumanResource);

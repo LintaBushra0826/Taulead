@@ -170,21 +170,21 @@ export const ButtonWrapper = styled.button`
 export const Section2 = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: left;
-  text-align: left;
+  align-items: center;
+  text-align: center;
   /* background: linear-gradient(100deg, #dbe6f6, #e6dada); */
   width: 100%;
-  height: 60vh;
+  /* height: 60vh; */
 `;
 
 export const Section3 = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: left;
-  text-align: left;
+  align-items: center;
+  text-align: center;
   /* background: linear-gradient(100deg, #e6dada, #dbe6f6); */
   width: 100%;
-  height: 100vh;
+  /* height: 100vh; */
 `;
 
 export const Section4 = styled.div`

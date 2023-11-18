@@ -27,7 +27,7 @@ function SignupForm() {
     // event.preventDefault();
     // console.log("ON SUBMIT FUNCTION CALLED");
     // try {
-    //   const response = await fetch("http://localhost:3003/signup", {
+    //   const response = await fetch("http://localhost:3005/signup", {
     //     method: "POST",
     //     headers: {
     //       "Content-Type": "application/json",
@@ -178,7 +178,10 @@ function SignupForm() {
 
           <Form.Item>
             <Container>
-              <Checkbox style={{ marginTop: "16px" }}> I have agree with terms and conditions </Checkbox>
+              <Checkbox style={{ marginTop: "16px" }}>
+                {" "}
+                I have agree with terms and conditions{" "}
+              </Checkbox>
               <Button
                 type="primary"
                 htmlType="submit"

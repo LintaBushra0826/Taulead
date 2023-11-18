@@ -20,9 +20,9 @@ function ProcessChart() {
 
   const fetchProcessData = async () => {
     try {
-      const response = await axios.get("http://localhost:3003/process");
+      const response = await axios.get("http://localhost:3005/process");
       const subprocessResponse = await axios.get(
-        "http://localhost:3003/subprocess"
+        "http://localhost:3005/subprocess"
       );
       const rawData = response.data.data;
       const subprocess = subprocessResponse.data.data;

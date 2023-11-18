@@ -24,7 +24,7 @@ function SignupForm() {
     event.preventDefault();
     console.log("ON SUBMIT FUNCTION CALLED");
     try {
-      const response = await fetch("http://localhost:3003/signup", {
+      const response = await fetch("http://localhost:3005/signup", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -16,16 +16,33 @@ function SubRawMaterialForm() {
   const onChange = (newValue) => {
     setValue(newValue);
   };
+
   useEffect(() => {
+    const updatedValue = value.map((id) => {
+      const item = process.rawMaterial.find((_item) => id === _item._id);
+      const prevItem = selectedItems.find((_item) => id === _item._id);
+      if (item && prevItem) {
+        return prevItem;
+      } else if (item) {
+        return {
+          ...item,
+          quan: 1,
+        };
+      }
+      return item;
+    });
+    setSelectedItems(updatedValue);
+  }, [value]);
+
+  useEffect(() => {
+    console.log(selectedItems, "pjpj");
     updateSubRawMaterialAtom(selectedItems);
-  }, [selectedItems, updateSubRawMaterialAtom]);
+  }, [selectedItems]);
 
   const options = useMemo(() => {
     return process.rawMaterial.map((material) => ({
       label: material.Name,
-      value: material.id,
-      quantity: material.quantity,
-      unit: material.unit,
+      value: material._id,
     }));
   }, [process.rawMaterial]);
 
@@ -41,32 +58,31 @@ function SubRawMaterialForm() {
     maxTagCount: "responsive",
   };
 
-  const handleInputChange = (value, id) => {
-    const updatedSelectedItems = selectedMaterials.map((item) => {
-      if (id === item.id) {
-        return {
-          id: id,
-          Name: item.Name,
-          quantity: value,
-          unit: item.unit,
-        };
-      }
-      return item;
-    });
-    setSelectedItems(updatedSelectedItems);
+  const handleInputChange = (updatedValue, id) => {
+    console.log(process.rawMaterial, "pjl", id);
+    const itemToUpdate = process.rawMaterial.find((_item) => id === _item._id);
+    if (itemToUpdate) {
+      const updatedSelectedItems = selectedItems.map((item) => {
+        if (id === item._id) {
+          return {
+            ...item,
+            quan: updatedValue,
+          };
+        }
+        return item;
+      });
+      setSelectedItems(updatedSelectedItems);
+    }
   };
 
-  const selectedMaterials = useMemo(() => {
-    return value.map((item) => {
-      const rawMaterialItem = process.rawMaterial.find(
-        (_item) => item.id === _item._id
-      );
-      return {
-        ...rawMaterialItem,
-        ...item,
-      };
-    });
-  }, [value, process.rawMaterial]);
+  // const selectedMaterials = useMemo(() => {
+  //   return value.map((item) => {
+  //     const rawMaterialItem = process.rawMaterial.find(
+  //       (_item) => item.id === _item._id
+  //     );
+  //     return rawMaterialItem;
+  //   });
+  // }, [value]);
 
   const columns = [
     {
@@ -82,9 +98,9 @@ function SubRawMaterialForm() {
         return (
           <InputNumber
             min={1}
-            max={item.quantity}
+            // max={item.quan}
             defaultValue={1}
-            onChange={(value) => handleInputChange(value, item.id)}
+            onChange={(value) => handleInputChange(value, item._id)}
             style={{ width: "50%", position: "relative" }}
           />
         );
@@ -107,7 +123,7 @@ function SubRawMaterialForm() {
         <Select {...selectProps} />
       </Space>
 
-      <Table dataSource={selectedMaterials} columns={columns} />
+      <Table dataSource={selectedItems} columns={columns} />
     </FormWrapper>
   );
 }

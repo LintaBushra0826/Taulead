@@ -13,9 +13,9 @@ import UpdateProcess from "./components/updateprocess";
 import { FcProcess } from "react-icons/fc";
 
 function ProcessChart() {
-  const API_BASE_URL = "http://localhost:3003";
+  const API_BASE_URL = "http://localhost:3005";
   const [tasks, setTasks] = useState([]);
-  const [view, setView] = useState(ViewMode.Hour);
+  const [view, setView] = useState(ViewMode.Day);
   const [isChecked, setIsChecked] = useState(true);
   const [selectedTaskData, setSelectedTaskData] = useState(null);
   const [open, setOpen] = useState(false);
@@ -23,6 +23,7 @@ function ProcessChart() {
   const [showUpdate, setShowUpdate] = useState(false);
   const [updateModalVisible, setUpdateModalVisible] = useState(false);
   const [selectedProcessData, setSelectedProcessData] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   const handleEditProcessClick = (selectedTaskData) => {
     setSelectedProcessData(selectedTaskData);
@@ -37,6 +38,27 @@ function ProcessChart() {
     e.preventDefault(); // Prevent the default context menu from appearing
     setContextMenuVisible(true);
   };
+
+  const handleExpanderClick = (task) => {
+    setTasks(tasks.map((t) => (t.id === task.id ? task : t)));
+    console.log("On expander click Id:" + task.id);
+  };
+
+  function formatDuration(start, end) {
+    const durationInmilliseconds = end - start;
+    const hours = Math.floor(durationInmilliseconds / (1000 * 60 * 60));
+    const minutes = Math.floor(
+      (durationInmilliseconds % (1000 * 60 * 60)) / (1000 * 60)
+    );
+
+    if (hours === 0) {
+      return `${minutes} minute(s)`;
+    } else if (minutes === 0) {
+      return `${hours} hour(s)`;
+    } else {
+      return `${hours} hour(s) and ${minutes} minute(s)`;
+    }
+  }
 
   useEffect(() => {
     fetchProcessData();
@@ -64,9 +86,11 @@ function ProcessChart() {
   const fetchProcessData = async () => {
     try {
       const [response, subprocessResponse] = await Promise.all([
-        axios.get("http://localhost:3003/process"),
-        axios.get("http://localhost:3003/subprocess"),
+        axios.get("http://localhost:3005/executed-process"),
+        axios.get("http://localhost:3005/subprocess"),
       ]);
+
+      console.log("executed process response", response);
 
       const process = response.data.data;
       const subprocess = subprocessResponse.data.data;
@@ -88,28 +112,12 @@ function ProcessChart() {
       });
 
       let count = 1; // Initialize a count variable
-      const mappedProcesses = [];
+      const mappedProcesses = {};
 
       // Create a map of subprocesses by their _id for efficient lookup
       const subprocessMap = {};
       // Iterate through the process array
       process.forEach((item) => {
-        function formatDuration(start, end) {
-          const durationInMilliseconds = end - start;
-          const hours = Math.floor(durationInMilliseconds / (1000 * 60 * 60));
-          const minutes = Math.floor(
-            (durationInMilliseconds % (1000 * 60 * 60)) / (1000 * 60)
-          );
-
-          if (hours === 0) {
-            return `${minutes} minute(s)`;
-          } else if (minutes === 0) {
-            return `${hours} hour(s)`;
-          } else {
-            return `${hours} hour(s) and ${minutes} minute(s)`;
-          }
-        }
-
         const ProcessdurationInHours = formatDuration(
           new Date(item.start),
           new Date(item.end)
@@ -118,55 +126,114 @@ function ProcessChart() {
           "Formatted ProcessdurationInHours: " + ProcessdurationInHours
         );
 
-        // Map the item to the desired format
-        const mappedItem = {
-          key: item._id,
-          start: new Date(item.start),
-          end: new Date(item.end),
-          name: item.name,
-          id: item.name,
-          processId: item.pid,
-          humanresource: item.humanResource,
-          rawmaterial: item.rawMaterial,
-          duration: ProcessdurationInHours,
-          progress: "55",
-          type: "project",
-          displayOrder: count++,
-        };
-        mappedProcesses.push(mappedItem);
+        // Check if the item is already in mappedProcesses to avoid duplicates
+        if (!mappedProcesses[item._id]) {
+          const mappedItem = {
+            key: item._id,
+            start: new Date(item.start),
+            end: new Date(item.end),
+            name: item.name,
+            id: item.name,
+            processId: item.pid,
+            humanresource: item.humanResource,
+            rawmaterial: item.rawMaterial,
+            duration: ProcessdurationInHours,
+            progress:
+              (new Date(item.end) - new Date()) /
+              (new Date(item.end) - new Date(item.start)),
+            type: "project",
+            displayOrder: count++,
+            hideChildren: false,
+          };
+          mappedProcesses[item._id] = mappedItem;
 
-        if (item.subprocesses.length > 0) {
-          let lastItem = [];
-          item.subprocesses.forEach((subitem) => {
-            const subdurationInHours = formatDuration(
-              new Date(subitem.substart),
-              new Date(subitem.subend)
-            );
-            const mappedItem = {
-              key: subitem._id,
-              start: new Date(subitem.substart),
-              end: new Date(subitem.subend),
-              name: subitem.subname,
-              id: subitem.subname,
-              subhumanresource: subitem.humanResource,
-              subrawmaterial: subitem.rawMaterial,
-              duration: subdurationInHours,
-              progress: "35",
-              type: "task",
-              project: item.name,
-              displayOrder: count++,
-              dependencies: lastItem,
-            };
-            mappedProcesses.push(mappedItem);
-            lastItem = [subitem.subname];
-          });
+          if (item.subprocesses) {
+            item.subprocesses.forEach((subitem, index) => {
+              let lastItem = null;
+              const subdurationInHours = formatDuration(
+                new Date(new Date(subitem.substart).getTime() + item.diff),
+                new Date(new Date(subitem.subend).getTime() + item.diff)
+              );
+              const subMappedItem = {
+                key: subitem._id,
+                start: new Date(
+                  new Date(subitem.substart).getTime() + item.diff
+                ),
+                end: new Date(new Date(subitem.subend).getTime() + item.diff),
+                name: subitem.subname,
+                id: subitem.subname,
+                subprocessId: subitem.subId,
+                subhumanresource: subitem.humanResource,
+                subrawmaterial: subitem.rawMaterial,
+                duration: subdurationInHours,
+                progress:
+                  new Date() -
+                    new Date(new Date(subitem.substart).getTime() + item.diff) <
+                  0
+                    ? 0
+                    : ((new Date() -
+                        new Date(
+                          new Date(subitem.substart).getTime() + item.diff
+                        )) /
+                        (new Date(
+                          new Date(subitem.subend).getTime() + item.diff
+                        ) -
+                          new Date(
+                            new Date(subitem.substart).getTime() + item.diff
+                          ))) *
+                      100,
+                type: "task",
+                project: item.name,
+                displayOrder: count++,
+              };
+
+              if (index) {
+                subMappedItem = { ...subMappedItem, dependencies: [lastItem] };
+              }
+
+              lastItem = subitem.subname;
+              mappedProcesses[subitem._id] = subMappedItem;
+            });
+          }
         }
       });
 
-      // Log the mapped processes
-      console.log(mappedProcesses);
+      // Convert the mapped processes map to an array
+      const processesArray = Object.values(mappedProcesses);
 
-      setTasks(mappedProcesses);
+      setTasks(
+        processesArray.map((task) => ({
+          ...task,
+          name: (
+            <>
+              <FcProcess />{" "}
+              {task.processId ? (
+                <span style={{ color: "green" }}>
+                  {task.processId.toUpperCase()}
+                </span>
+              ) : (
+                ""
+              )}{" "}
+              {task.subprocessId ? (
+                <span style={{ color: "blue" }}>
+                  {task.subprocessId.toUpperCase()}
+                </span>
+              ) : (
+                ""
+              )}{" "}
+              {task.type === "project"
+                ? task.name
+                : task.subprocesses
+                ? `${task.subprocesses.subname} - ${task.name}`
+                : task.name}
+              <ProcessTags
+                status={getStatusForProcess(task)}
+                style={{ display: "flex" }}
+              />
+            </>
+          ),
+        }))
+      );
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -181,77 +248,48 @@ function ProcessChart() {
     columnWidth = 500;
   }
 
-  const handleTaskChange = (task) => {
-    console.log("On date change Id:" + task.id);
-    let newTasks = tasks.map((t) => (t.id === task.id ? task : t));
-    if (task.project) {
-      const [start, end] = getStartEndDateForProject(newTasks, task.project);
-      const project =
-        newTasks[newTasks.findIndex((t) => t.id === task.project)];
-      if (
-        project.start.getTime() !== start.getTime() ||
-        project.end.getTime() !== end.getTime()
-      ) {
-        const changedProject = { ...project, start, end };
-        newTasks = newTasks.map((t) =>
-          t.id === task.project ? changedProject : t
-        );
-      }
-    }
-    setTasks(newTasks);
-  };
-
-  const handleDblClick = (taskId) => {
-    console.log("Clicked task ID:", taskId);
-
-    const selectedTaskData = tasks.find((task) => task.id === taskId._id);
-    console.log("Selected task data:", selectedTaskData);
-
-    if (selectedTaskData) {
-      setSelectedTaskData(selectedTaskData);
-      // setIsSidebarOpen(true); // Open the sidebar
-    }
-  };
-
   const handleClick = (task) => {
-    console.log("On Click event Id:" + task.id);
-    console.log("Clicked task ID:", task);
+    console.log("up-onc", task);
+    // console.log("On Click event Id:" + task.id);
+    // console.log("Clicked task ID:", task);
 
-    const selectedTaskData = tasks.find((taskid) => taskid.id === task.id);
-    console.log("Selected task data:", selectedTaskData);
+    // const selectedTaskData = tasks.find((taskid) => taskid.id === task.id);
+    // console.log("Selected task data:", selectedTaskData);
 
-    if (selectedTaskData) {
-      setSelectedTaskData(selectedTaskData);
-    }
+    // if (selectedTaskData) {
+    // }
+    setSelectedTaskData(task);
     setOpen(true);
 
-    console.log();
+    // console.log();
   };
-
   const handleMenuClick = (e) => {
     // Handle menu item click here
     setContextMenuVisible(false);
   };
+
   const getStatusForProcess = (process) => {
-    if (process.isCompleted) {
+    console.log("executedprocess", process);
+    if (process.progress == 100) {
       return "completed";
-    } else if (process.isInProgress) {
+    } else if (process.progress > 0 && process.progress < 100) {
       return "inprogress";
     } else {
-      return "paused";
+      return "Not Started Yet";
     }
   };
 
   const handleDeleteProcess = async (prId, sprId) => {
     try {
       await axios.delete(`${API_BASE_URL}/process/${prId}`);
-      await axios.delete(`${API_BASE_URL}/subprocess/${sprId}`);
+      if (sprId) {
+        await axios.delete(`${API_BASE_URL}/subprocess/${sprId}`);
+      }
       alert("Process deleted successfully");
-
-      // Reload the current route
       window.location.reload();
     } catch (error) {
-      alert("Process data deleted");
+      console.error("Error deleting process:", error);
+      alert("Error deleting process");
     }
   };
 
@@ -262,7 +300,6 @@ function ProcessChart() {
           onViewModeChange={(viewMode) => setView(viewMode)}
           onViewListChange={setIsChecked}
           isChecked={isChecked}
-          defaultViewMode={ViewMode.Hour}
         />
       </Wrapper>
 
@@ -271,25 +308,11 @@ function ProcessChart() {
       {tasks.length > 0 ? (
         <Chart>
           <Gantt
-            tasks={tasks.map((task) => ({
-              ...task,
-              name: (
-                <>
-                  <FcProcess />{" "}
-                  {task.processId ? task.processId.toUpperCase() : ""}{" "}
-                  {task.name}{" "}
-                  <ProcessTags
-                    status={getStatusForProcess(task)}
-                    style={{ display: "flex" }}
-                  />
-                </>
-              ),
-            }))}
+            tasks={tasks}
             viewMode={view}
-            onDateChange={handleTaskChange}
-            onDoubleClick={handleDblClick}
-            onClick={handleClick}
+            onDoubleClick={handleClick}
             listCellWidth={isChecked ? "155px" : ""}
+            onExpanderClick={handleExpanderClick}
           />
           <Wrapper
             style={{

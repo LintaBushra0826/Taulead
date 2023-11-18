@@ -2,11 +2,11 @@ import React, { useState, useEffect } from "react";
 import Header from "../../layout/dashboardheader";
 import SideMenu from "../../layout/sideMenu";
 import { BodyWrapper, TableWrapper } from "../../styles/global.styled";
-import { Table, Typography, Modal, Input, Form, Tag } from "antd";
+import { Table, Typography, Modal, Input, Form, Tag, InputNumber } from "antd";
 import axios from "axios";
 
 function ViewRawMaterial() {
-  const API_BASE_URL = "http://localhost:3003";
+  const API_BASE_URL = "http://localhost:3005";
   const [formData, setFormData] = useState({});
   const [selectedItem, setSelectedItem] = useState({});
   const [editingKey] = useState("");
@@ -143,6 +143,17 @@ function ViewRawMaterial() {
       dataIndex: "quan",
       width: "fit-content",
       editable: true,
+      render: (record, item) => {
+        return (
+          <InputNumber
+            min={1}
+            max={item.quan}
+            defaultValue={1}
+            onChange={(value) => handleInputChange(value, item._id)}
+            style={{ width: "50%", position: "relative" }}
+          />
+        );
+      },
     },
 
     {
@@ -223,7 +234,7 @@ function ViewRawMaterial() {
 
   const fetchRawMaterials = async () => {
     try {
-      const response = await axios.get("http://localhost:3003/rawMaterial");
+      const response = await axios.get("http://localhost:3005/rawMaterial");
       const rawData = response.data.data;
 
       // Ensure data is an array
