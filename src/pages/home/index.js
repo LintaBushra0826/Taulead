@@ -15,6 +15,8 @@ import bgPic from "../../assets/images/whitebg4.jpeg";
 import backgroundpic from "../../assets/images/bgAnimation.png";
 import Features from "../home/components/features";
 import Partners from "../home/components/partners";
+import Contact from "../home/components/contactUsform";
+// import Monitoring from "../home/components/monitoring copy";
 
 function Home() {
   const ToDown = () => {
@@ -58,6 +60,14 @@ function Home() {
         <Section2>
           <Features />
         </Section2>
+
+        <Section2>
+          {/* <Monitoring /> */}
+        </Section2>
+
+        <Section2>
+          <Contact />
+        </Section2> 
 
         {/* <Section4></Section4> */}
 

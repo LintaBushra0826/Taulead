@@ -1,70 +1,226 @@
 import styled, { keyframes } from "styled-components";
 
-const slideUp = keyframes`
+
+const circular = keyframes`
   0% {
-    transform: translateY(100%);
+    transform: translate(-50%, -50%) rotate(-90deg) translateY(300px) rotate(90deg); 
     opacity: 0;
   }
+  5%{
+    opacity: 1;
+  }
   100% {
-    transform: translateY(0);
+    transform: translate(-50%, -50%) rotate(-630deg) translateY(300px) rotate(630deg);
     opacity: 1;
   }
 `;
 
-export const Wrapper2 = styled.div`
-  width: 100%;
-  min-height: 90vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: linear-gradient(100deg, #e8cbc0, #cbb4d4);
+const pulseGlow = keyframes`
+  from {
+    background-size: 60%;
+  }
+  to {
+    background-size: 100%;
+  }
 `;
 
-export const Box = styled.div`
+export const Body = styled.body`
+  margin: 0;
+`;
+
+export const Void = styled.div`
+  width: 100%;
+  max-width: 1024px;
+  margin: auto;
+  position: relative;
+  aspect-ratio: 1 / 1;
+  .center-circle {
+    position: absolute;
+    width: 230px;
+    aspect-ratio: 1 / 1;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background: #ffffff;
+    box-shadow: 0px 18px 36px -18px rgba(12, 5, 46, 0.3),
+      0px 30px 60px -12px rgba(12, 5, 46, 0.25);
+    border-radius: 50%;
+  }
+`;
+
+export const Ul = styled.ul`
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  outline: 2px dotted magenta;
+  z-index: 1;
+  &:hover * {
+    animation-play-state: paused;
+  }
+`;
+
+export const Li = styled.li`
+  padding: 10px;
+  position: absolute;
+  top: 50%;
+  left: 45%;
+  width: 22%;
+  opacity: 0;
+  animation: none;
+  &:nth-child(1) {
+    opacity: 0;
+    animation: ${circular} 30s linear 1.7s infinite;
+  }
+  &:nth-child(2) {
+    opacity: 0;
+    animation: ${circular} 30s linear 4s infinite;
+  }
+  &:nth-child(3) {
+    opacity: 0;
+    animation: ${circular} 30s linear 6s infinite;
+  }
+  &:nth-child(4) {
+    opacity: 0;
+    animation: ${circular} 30s linear 8s infinite;
+  }
+  &:nth-child(5) {
+    opacity: 0;
+    animation: ${circular} 30s linear 10s infinite;
+  }
+  &:nth-child(6) {
+    opacity: 0;
+    animation: ${circular} 30s linear 12s infinite;
+  }
+  &:nth-child(7) {
+    opacity: 0;
+    animation: ${circular} 30s linear 16s infinite;
+  }
+`;
+
+export const Card = styled.div`
+  width: 57%;
   display: flex;
   flex-direction: column;
   align-items: center;
-  position: relative;
-  top: -30%;
-  transform: translateY(-50%);
-  border-radius: 35px;
-  color: #2a0845;
-  .h1 {
-    text-align: center;
-    font-size: 36px;
-    color: "#F3904F";
-  }
-  .Container {
-    display: flex;
-    position: absolute;
-    top: 100%;
-    right: 34%;
-  }
-  .card-container {
-    display: flex;
-    position: relative;
-    flex-direction: column;
-    margin-top: 20px;
-    max-width: 800px;
-  }
-  .card-row {
-    display: flex;
-    justify-content: space-between;
-    .card {
-      flex: 0 0 calc(50% - 10px); /* Adjust the width as needed with some spacing */
-      height: 12rem;
-      border-radius: 20px;
-      background: linear-gradient(100deg, #d3cce3, #e9e4f0);
-      box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1);
-      transition: all 0.3s ease;
-      margin-top: 20px;
-      margin-right: 20px; /* Add spacing between the cards */
-      border-color: 2px solid transparent;
+  padding: 100px 24px;
+  gap: 8px;
+  background: #ffffff;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1), 0px 16px 32px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  font-family: "Inter", sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+  color: #535062;
+`;
 
-      /* animation: ${slideUp} s ease-out 2s 1; */
-    }
+export const A = styled.a`
+  text-decoration: none;
+  color: unset;
+`;
+
+export const ModelName = styled.span`
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 150%;
+  color: #3b2ed0;
+  display: block;
+`;
+
+export const Crop = styled.div`
+  -webkit-mask-image: linear-gradient(
+    90deg,
+    rgba(0, 0, 0, 0),
+    rgba(0, 0, 0, 0) 50%,
+    rgba(0, 0, 0, 1) 50%,
+    rgba(0, 0, 0, 1)
+  );
+  mask-image: linear-gradient(
+    90deg,
+    rgba(0, 0, 0, 0),
+    rgba(0, 0, 0, 0) 50%,
+    rgba(0, 0, 0, 1) 50%,
+    rgba(0, 0, 0, 1)
+  );
+  .second-circle {
+    position: absolute;
+    width: 40%;
+    aspect-ratio: 1 / 1;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background: #f5f4fe;
+    opacity: 0.5;
+    box-shadow: 0px 18px 36px -18px rgba(12, 5, 46, 0.3),
+      0px 30px 60px -12px rgba(12, 5, 46, 0.25);
+    border-radius: 50%;
   }
-  .card:hover {
-  border-color: #2a0845; /* Change the border color on hover */
-}
+  .last-circle {
+    position: absolute;
+    width: 66%;
+    aspect-ratio: 1 / 1;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background: #f5f4fe;
+    opacity: 0.25;
+    box-shadow: 0px 18px 36px -18px rgba(12, 5, 46, 0.3),
+      0px 30px 60px -12px rgba(12, 5, 46, 0.25);
+    border-radius: 50%;
+  }
+`;
+
+export const Mask = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 50%;
+  animation: ${pulseGlow} 5s linear infinite alternate;
+  background-position: 100% 50%;
+  background-repeat: no-repeat;
+  background-image: radial-gradient(
+    100% 50% at 100% 50%,
+    rgba(60, 26, 229, 0.25) 0%,
+    rgba(60, 26, 229, 0.247904) 11.79%,
+    rgba(32, 26, 229, 0) 100%
+  );
+
+  &:after {
+    content: "";
+    position: absolute;
+    width: 1px;
+    height: 80%;
+    right: 0;
+    display: block;
+    background-image: linear-gradient(
+      180deg,
+      rgba(60, 26, 229, 0) 0%,
+      #3c1ae5 50%,
+      rgba(60, 26, 229, 0) 100%
+    );
+  }
+`;
+
+export const FeaturesHead = styled.div`
+  display: block;
+  font-size: 30px;
+  color: #ffaf7b;
+  text-align: center;
+  padding-top: 90px;
+  margin-bottom: 20px;
+`;
+
+export const Wrapper2 = styled.div`
+  width: 100%;
+  min-height: 50vh;
+  background: linear-gradient(
+    0deg,
+    rgba(42, 8, 69, 0.88),
+    rgba(42, 8, 69, 0.88)
+  );
 `;

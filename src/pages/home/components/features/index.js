@@ -1,232 +1,130 @@
 import React from "react";
 // import img3 from "../../../../assets/images/img3.jpg";
-import { Box, Wrapper2 } from "./index.styled";
+import {
+  A,
+  Box,
+  Crop,
+  FeaturesHead,
+  ImageWrapper,
+  Li,
+  Mask,
+  Root,
+  Ul,
+  Void,
+  Wrapper2,
+} from "./index.styled";
+import invenImg from "../../../../assets/images/inventory.jpg";
+// import hrImg from "../../../../assets"
+import { Card, Carousel } from "antd";
+import Meta from "antd/es/card/Meta";
+import { CardWrapper } from "./index.styled";
 import { MdInventory } from "react-icons/md";
-import { ImProfile } from "react-icons/im";
-import { VscServerProcess } from "react-icons/vsc";
+import { GoPersonFill } from "react-icons/go";
 import { TbRulerMeasure } from "react-icons/tb";
-import { IoStatsChartOutline } from "react-icons/io5";
+import { VscServerProcess } from "react-icons/vsc";
+import { ImStatsBars } from "react-icons/im";
+import { MdTableRows } from "react-icons/md";
 
 export default function Features() {
-  // const [slideUp, setSlideUp] = useState(false);
   return (
     <Wrapper2>
-      <Box
-        className={`col-lg-6 my-5 col-12 col-md-6 col-sm-10`}
-      >
-        <h1 className="h1">Features to Get Started</h1>
-        <div className="Container">
-          <div className="card-container">
-            <div className="card-row">
-              <div className="card">
-                <div className="card-body mt-2">
-                  <MdInventory
-                    style={{
-                      display: "flex",
-                      width: "30%",
-                      height: "40%",
-                      position: "relative",
-                      left: "60px",
-                      top: "20%",
-                      bottom: "0px",
-                      float: "left",
-                      color: "#F3904F",
-                    }}
-                  />
-                </div>
-                <div className="card-body">
-                  <h5
-                    className="card-title"
-                    style={{
-                      position: "absolute",
-                      top: "50%",
-                      fontSize: "18px",
-                      textAlign: "center",
-                      paddingRight: "17px",
-                    }}
-                  >
-                    Raw Material Inventory Management
-                  </h5>
-                 
-                </div>
-              </div>
-              <div className="card">
-                <div className="card-body mt-2">
-                  <ImProfile
-                    style={{
-                      display: "flex",
-                      width: "30%",
-                      height: "40%",
-                      position: "relative",
-                      left: "60px",
-                      top: "20%",
-                      bottom: "0px",
-                      float: "left",
-                      color: "#F3904F",
-                    }}
-                  />
-                </div>
-                <div className="card-body">
-                  <h5
-                    className="card-title"
-                    style={{
-                      position: "absolute",
-                      top: "50%",
-                      fontSize: "18px",
-                      textAlign: "center",
-                      paddingRight: "17px",
-                    }}
-                  >
-                    Human Resource Management
-                  </h5>
-                  {/* <p className="card-text" style={{ position:"absolute", top:"70%", fontSize:"14px", textAlign:"center", paddingRight:"17px"}}>
-                  Efficiently track and manage your raw material inventory
-                  </p> */}
-                </div>
-              </div>
-              <div className="card">
-                <div className="card-body mt-2">
-                  <TbRulerMeasure
-                    style={{
-                      display: "flex",
-                      width: "30%",
-                      height: "40%",
-                      position: "relative",
-                      left: "60px",
-                      top: "20%",
-                      bottom: "0px",
-                      float: "left",
-                      color: "#F3904F",
-                    }}
-                  />
-                </div>
-                <div className="card-body">
-                  <h5
-                    className="card-title"
-                    style={{
-                      position: "absolute",
-                      top: "50%",
-                      fontSize: "18px",
-                      textAlign: "center",
-                      paddingRight: "17px",
-                    }}
-                  >
-                    Customize Measuring Units
-                  </h5>
-                  {/* <p className="card-text" style={{ position:"absolute", top:"70%", fontSize:"14px", textAlign:"center", paddingRight:"17px"}}>
-                  Efficiently track and manage your raw material inventory
-                  </p> */}
-                </div>
-              </div>
-            </div>
-            <div className="card-row">
-              <div className="card">
-                <div className="card-body mt-2">
-                  <VscServerProcess
-                    style={{
-                      display: "flex",
-                      width: "30%",
-                      height: "40%",
-                      position: "relative",
-                      left: "60px",
-                      top: "20%",
-                      bottom: "0px",
-                      float: "left",
-                      color: "#F3904F",
-                    }}
-                  />
-                </div>
-                <div className="card-body">
-                  <h5
-                    className="card-title"
-                    style={{
-                      position: "absolute",
-                      top: "50%",
-                      fontSize: "18px",
-                      textAlign: "center",
-                      paddingRight: "50px",
-                      paddingLeft: "30px",
-                    }}
-                  >
-                    Process Management
-                  </h5>
-                  {/* <p className="card-text" style={{ position:"absolute", top:"70%", fontSize:"14px", textAlign:"center", paddingRight:"17px"}}>
-                  Efficiently track and manage your raw material inventory
-                  </p> */}
-                </div>
-              </div>
-              <div className="card">
-                <div className="card-body mt-2">
-                  <IoStatsChartOutline
-                    style={{
-                      display: "flex",
-                      width: "30%",
-                      height: "40%",
-                      position: "relative",
-                      left: "60px",
-                      top: "20%",
-                      bottom: "0px",
-                      float: "left",
-                      color: "#F3904F",
-                    }}
-                  />
-                </div>
-                <div className="card-body">
-                  <h5
-                    className="card-title"
-                    style={{
-                      position: "absolute",
-                      top: "50%",
-                      fontSize: "18px",
-                      textAlign: "center",
-                      paddingRight: "17px",
-                      paddingLeft: "20px",
-                    }}
-                  >
-                    Pipeline Statistics
-                  </h5>
-                  {/* <p className="card-text" style={{ position:"absolute", top:"70%", fontSize:"14px", textAlign:"center", paddingRight:"17px"}}>
-                  Efficiently track and manage your raw material inventory
-                  </p> */}
-                </div>
-              </div>
-              <div className="card">
-                <div className="card-body mt-2">
-                  <IoStatsChartOutline
-                    style={{
-                      display: "flex",
-                      width: "30%",
-                      height: "45%",
-                      position: "relative",
-                      left: "60px",
-                      top: "20%",
-                      bottom: "0px",
-                      float: "left",
-                      color: "#F3904F",
-                    }}
-                  />
-                </div>
-                <div className="card-body">
-                  <h5
-                    className="card-title"
-                    style={{
-                      position: "relative",
-                      fontSize: "18px",
-                      textAlign: "center",
-                      marginTop: "-50px",
-                    }}
-                  >
-                    Understand Your Customers
-                  </h5>
-                  {/* <p className="card-text" style={{ position:"absolute", top:"70%", fontSize:"14px", textAlign:"center", paddingRight:"17px"}}>
-                  Efficiently track and manage your raw material inventory
-                  </p> */}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </Box>
+      <>
+
+        <Void class="void" id="void">
+          <Crop class="crop">
+            <Ul id="card-list" style={{ "--count": 6 , "--rotate-speed": 40}}>
+              <Li>
+                <Card class="card">
+                  <A href="">
+                    <MdInventory
+                      class="model-name"
+                      style={{ width: "10%", color: "#ffaf7b", height: "10%" }}
+                    />
+                    <br />
+                    <span>Raw Material Inventory Management</span>
+                  </A>
+                </Card>
+              </Li>
+              <Li>
+                <Card class="card">
+                  <A href="">
+                    <GoPersonFill
+                      class="model-name"
+                      style={{ width: "10%", color: "#ffaf7b", height: "10%" }}
+                    />
+                    <br />
+                    <span>Human Resource Management</span>
+                  </A>
+                </Card>
+              </Li>
+              <Li>
+                <Card class="card">
+                  <A href="">
+                    <TbRulerMeasure
+                      class="model-name"
+                      style={{ width: "10%", color: "#ffaf7b", height: "10%" }}
+                    />
+                    <br />
+                    <span>Measuring Unit Management</span>
+                  </A>
+                </Card>
+              </Li>
+              <Li>
+                <Card class="card">
+                  <A href="">
+                    <VscServerProcess
+                      class="model-name"
+                      style={{ width: "10%", color: "#ffaf7b", height: "10%" }}
+                    />
+                    <br />
+                    <span>Process Management</span>
+                  </A>
+                </Card>
+              </Li>
+              <Li>
+                <Card class="card">
+                  <A href="">
+                    <ImStatsBars
+                      class="model-name"
+                      style={{ width: "10%", color: "#ffaf7b", height: "10%" }}
+                    />
+                    <br />
+                    <span>Statistics</span>
+                  </A>
+                </Card>
+              </Li>
+              <Li>
+                <Card class="card">
+                  <A href="">
+                    <MdTableRows
+                      class="model-name"
+                      style={{ width: "10%", color: "#ffaf7b", height: "10%" }}
+                    />
+                    <br />
+                    <span>Logging</span>
+                  </A>
+                </Card>
+              </Li>
+              <Li>
+                {/* <Card class="card">
+                  <A href="">
+                    <MdTableRows
+                      class="model-name"
+                      style={{ width: "10%", color: "#ffaf7b", height: "10%" }}
+                    />
+                    <br />
+                    <span></span>
+                  </A>
+                </Card> */}
+              </Li>
+            </Ul>
+            <div class="last-circle"></div>
+            <div class="second-circle"></div>
+          </Crop>
+          <Mask class="mask"></Mask>
+          <div class="center-circle"> <FeaturesHead>Features To Be</FeaturesHead></div>
+        </Void>
+      </>
     </Wrapper2>
   );
 }

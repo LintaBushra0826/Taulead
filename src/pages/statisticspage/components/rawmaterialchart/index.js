@@ -1,10 +1,11 @@
 import React, { useEffect, useRef } from "react";
 import { Bar } from "react-chartjs-2";
 import Chart from "chart.js/auto";
-import { CardContainer } from "./index.styled";
+import { CardContainer, Head } from "./index.styled";
 import { Card, Space } from "antd";
 
-const RawMaterialChart = () => {
+const RawMaterialChart = (rawMaterialData) => {
+  console.log("Prop rawMaterialData", rawMaterialData);
   const chartRef = useRef(null);
   let chartInstance = null; 
 
@@ -66,26 +67,28 @@ const RawMaterialChart = () => {
   return (
     <>
       <CardContainer>
-        <Card
+        <Head>Resource Inventory Bar Chart</Head>
+        {/* <Card
           title="Resource Inventory Bar Chart"
           style={{
-            width: "800px",
-            height: "360px",
+            width: "1000px",
+            height: "50%",
             borderRadius: "10px",
             boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
             marginTop: "2px",
           }}
-        >
+        > */}
           <canvas ref={chartRef} width={800} height={300} />
-          <Space
+          <br/>
+          {/* <Space
             direction="vertical"
             style={{
               width: "30%",
               display: "flex",
               flexDirection: "row",
             }}
-          />
-        </Card>
+          /> */}
+        {/* </Card> */}
       </CardContainer>
     </>
   );

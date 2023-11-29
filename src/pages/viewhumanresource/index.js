@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import Header from "../../layout/dashboardheader";
 import SideMenu from "../../layout/sideMenu";
-import { BodyWrapper, TableWrapper } from "../../styles/global.styled";
-import { Table, Typography, Modal, Input, Form, Tag } from "antd";
+import { BodyWrapper, SpinWrapper, TableWrapper } from "../../styles/global.styled";
+import { Table, Typography, Modal, Input, Form, Tag, Spin } from "antd";
 import axios from "axios";
+
 
 function ViewHumanResource() {
   const API_BASE_URL = "http://localhost:3005";
@@ -224,7 +225,11 @@ function ViewHumanResource() {
           {!loading && data.length > 0 ? (
             <Table columns={columns} dataSource={data} loading={loading} />
           ) : (
-            <p>Loading..</p>
+            <>
+              <SpinWrapper>
+                <Spin size="large" />
+              </SpinWrapper>
+            </>
           )}
         </TableWrapper>
       </BodyWrapper>

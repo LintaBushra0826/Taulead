@@ -10,19 +10,17 @@ export const ButtonWrapper = styled.div`
 `;
 
 export const ChartWrapper = styled.div`
-  width: fit-content;
+  width: 100%;
   height: fit-content;
   position: absolute;
   top: 100px;
   display: flex;
   left:280px;
   justify-content: flex-start;
-  /* box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  background-color: transparent; */
 `;
 
 export const TableWrapper = styled.div`
-  width: fit-content;
+  width: 100%;
   height: fit-content;
   position: absolute;
   top: 450px;

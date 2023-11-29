@@ -22,6 +22,8 @@ function SideMenu({ selectedTaskData, onCancel }) {
   const setExecutedProcess = useSetAtom(ExecutedProcessAtom);
   const executedProcess = useAtomValue(ExecutedProcessAtom);
 
+  console.log("selectedTaskData", selectedTaskData);
+
   const handleSubmit = async () => {
     try {
       setExecutedProcess({
@@ -30,6 +32,7 @@ function SideMenu({ selectedTaskData, onCancel }) {
         end: selectedTaskData.end,
         desc: selectedTaskData.desc,
         duration: selectedTaskData.duration,
+        pid: selectedTaskData.processId,
         humanresource: selectedTaskData.humanresource,
         rawmaterial: selectedTaskData.rawmaterial,
       });
@@ -42,20 +45,38 @@ function SideMenu({ selectedTaskData, onCancel }) {
         end: selectedTaskData.end,
         desc: selectedTaskData.desc,
         duration: selectedTaskData.duration,
+        pid: selectedTaskData.processId,
         humanresource: selectedTaskData.humanresource,
         rawmaterial: selectedTaskData.rawmaterial,
       });
 
       if (response.status === 200) {
+        const rawMaterials = selectedTaskData.rawmaterial;
+        console.log("rawMaterials",rawMaterials);
+        // Prepare an array to store update requests
+        const updateRequests = rawMaterials.map((material) => {
+          // Fetch raw material details from the database based on the executed process
+          return axios.put(`${API_BASE_URL}/rawMaterial/${material._id}`, {
+            // Your update data for each material
+            // For example: if you want to update the quantity, you might have something like:
+            quan: material.updatedQuantity,
+            // Include other fields if necessary
+          });
+        });
+
+        // Execute all update requests concurrently
+        const updatedMaterials = await Promise.all(updateRequests);
+
+        console.log("Updated Materials:", updatedMaterials);
+
         alert("Executed successfully!");
-        // setFormData(response.data);
       } else {
-        alert("Error adding process");
+        alert("Error Executed process");
       }
 
       console.log("response", response);
     } catch (error) {
-      alert("Error adding process");
+      alert("Error Executed process");
     }
   };
   function formatDuration(start, end) {

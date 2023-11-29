@@ -1,6 +1,5 @@
 import styled from "styled-components";
 
-
 export const BodyWrapper = styled.div`
   display: flex;
   height: 100vh;
@@ -33,7 +32,6 @@ export const ButtonContainer = styled.div`
   position: relative;
   display: flex;
   justify-content: flex-end;
-  
 `;
 export const FormHeader = styled.div`
   width: 500px;
@@ -54,7 +52,7 @@ export const FormHeader = styled.div`
 export const Container = styled.div`
   display: flex;
   justify-content: space-between;
-  padding-bottom:20px;
+  padding-bottom: 20px;
 `;
 
 export const Footer = styled.div`
@@ -62,4 +60,11 @@ export const Footer = styled.div`
   display: flex;
   justify-content: center;
   gap: 10px;
+`;
+
+export const SpinWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
 `;

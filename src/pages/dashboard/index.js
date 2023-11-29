@@ -11,24 +11,56 @@ import {
 } from "./index.styled";
 import { Line } from "@ant-design/plots";
 import { BodyWrapper, MainContainer } from "../../styles/global.styled";
+import axios from "axios";
 
 function Dashboard() {
   const [data, setData] = useState([]);
-
+  const [totalInventoryCount, setTotalInventoryCount] = useState(0);
+  const [totalhrCount, setTotalhrCount] = useState(0);
+  const [hrdata, sethrData] = useState([]);
   useEffect(() => {
-    asyncFetch();
+    fetchRawMaterial();
   }, []);
 
-  const asyncFetch = () => {
-    fetch(
-      "https://gw.alipayobjects.com/os/bmw-prod/e00d52f4-2fa6-47ee-a0d7-105dd95bde20.json"
-    )
-      .then((response) => response.json())
-      .then((json) => setData(json))
-      .catch((error) => {
-        console.log("fetch data failed", error);
-      });
+  const fetchRawMaterial = async () => {
+    try {
+      const response = await axios.get("http://localhost:3005/rawMaterial");
+      const rawData = response.data.data;
+
+      const dataArray = Array.isArray(rawData) ? rawData : [];
+      setData(dataArray);
+
+      setTotalInventoryCount(dataArray.length);
+    } catch (error) {
+      console.error("Error fetching raw material:", error);
+    }
   };
+
+  useEffect(() => {
+    fetchHumanResource();
+  }, []);
+
+  const fetchHumanResource = async () => {
+    try {
+      const response = await axios.get("http://localhost:3005/humanresource");
+      const rawData = response.data.data;
+
+      const dataArray = Array.isArray(rawData) ? rawData : [];
+      sethrData(dataArray);
+
+      const hrElements = dataArray.filter(
+        (element) => element.tag === "available"
+      );
+
+      setTotalhrCount(hrElements.length);
+    } catch (error) {
+      console.error("Error fetching human resource:", error);
+    }
+  };
+
+  // Calculate the total limit based on the maximum item limit (example: itemlimit property)
+  const totalLimit = Math.max(...data.map((item) => item.itemlimit));
+
   const config = {
     data,
     xField: "year",
@@ -69,9 +101,9 @@ function Dashboard() {
                 <Paragraph>Total Inventory</Paragraph>
                 <Progress
                   type="circle"
-                  percent={75}
+                  percent={(totalInventoryCount * 100) / totalLimit}
                   width={80}
-                  format={() => "75%"}
+                  format={() => `${(totalInventoryCount * 100) / totalLimit}%`}
                   strokeColor="#52c41a"
                   style={{ display: "flex", justifyContent: "flex-end" }}
                 />
@@ -101,13 +133,13 @@ function Dashboard() {
                   boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
                 }}
               >
-                <Paragraph>Total Resource</Paragraph>
+                <Paragraph>Available Resource</Paragraph>
                 <Progress
                   type="circle"
-                  percent={60}
+                  percent={(totalhrCount * 100) / hrdata.length}
                   width={80}
-                  format={() => "60%"}
-                  strokeColor="#1890ff"
+                  format={() => `${(totalhrCount * 100) / hrdata.length}%`}
+                  strokeColor="#52c41a"
                   style={{ display: "flex", justifyContent: "flex-end" }}
                 />
                 <Space
@@ -165,61 +197,65 @@ function Dashboard() {
           </Container>
 
           <CardContainer>
-          <Card
-            title="Process Statistics"
-            style={{
-              width: "660px",
-              height: "400px",
-              borderRadius: "20px",
-              boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-              marginTop: "20px",
-            }}
-          >
-            <Line {...config}  style={{
-              width: "600px",
-              height: "300px",
-            }}/>
-            <Space
-                  direction="vertical"
-                  style={{
-                    width: "30%",
-                    display: "flex",
-                    flexDirection: "row",
-                  }}
-                />
-          </Card>
-          <Card
-            title="Completed Processes"
-            style={{
-              width: "400px",
-              height: "400px",
-              borderRadius: "20px",
-              boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-              float:"right",
-              marginTop:'-400px',
-              paddingBottom:"30px",
-            }}
-          >
-            <Line {...config} style={{
-              width: "350px",
-              height: "300px",
-            }}/>
-            <Space
-                  direction="vertical"
-                  style={{
-                    width: "30%",
-                    display: "flex",
-                    flexDirection: "row",
-                    justifyContent: "flex-end",
-                    alignItems:"flex-start",
-                  }}
-               />
-          </Card>
-         </CardContainer>
+            <Card
+              title="Process Statistics"
+              style={{
+                width: "660px",
+                height: "400px",
+                borderRadius: "20px",
+                boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+                marginTop: "20px",
+              }}
+            >
+              <Line
+                {...config}
+                style={{
+                  width: "600px",
+                  height: "300px",
+                }}
+              />
+              <Space
+                direction="vertical"
+                style={{
+                  width: "30%",
+                  display: "flex",
+                  flexDirection: "row",
+                }}
+              />
+            </Card>
+            <Card
+              title="Completed Processes"
+              style={{
+                width: "400px",
+                height: "400px",
+                borderRadius: "20px",
+                boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+                float: "right",
+                marginTop: "-400px",
+                paddingBottom: "30px",
+              }}
+            >
+              <Line
+                {...config}
+                style={{
+                  width: "350px",
+                  height: "300px",
+                }}
+              />
+              <Space
+                direction="vertical"
+                style={{
+                  width: "30%",
+                  display: "flex",
+                  flexDirection: "row",
+                  justifyContent: "flex-end",
+                  alignItems: "flex-start",
+                }}
+              />
+            </Card>
+          </CardContainer>
         </MainContainer>
       </BodyWrapper>
-
-      
     </>
   );
 }

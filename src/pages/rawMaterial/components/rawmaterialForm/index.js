@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Input, Form, Button, Row, Col } from "antd";
+import { Input, Form, Button, Row, Col, Divider } from "antd";
 import {
   ButtonContainer,
   FormHeading,
@@ -20,10 +20,11 @@ function RawMaterialForm() {
     price: "",
     totcost: 0,
     tag: "available",
+    itemlimit: 0,
   });
   const [searchValue] = useState("");
   const [options, setOptions] = useState([]);
-
+  const [data, setData] = useState(null);
   const [one, setOne] = useState("");
   const [two, setTwo] = useState("");
   const [total, setTotal] = useState(0);
@@ -108,13 +109,45 @@ function RawMaterialForm() {
 
   console.log("total", total);
 
+  // useEffect(() => {
+  //   fetchRawMaterials();
+  // }, []);
+
+  // const fetchRawMaterials = async () => {
+  //   try {
+  //     const response = await axios.get("http://localhost:3005/rawMaterial");
+  //     const rawData = response.data.data;
+
+  //     // Ensure data is an array
+  //     const dataArray = Array.isArray(rawData) ? rawData : [];
+
+  //     setData(dataArray); // Set the data array here
+  //   } catch (error) {
+  //     console.error("Error fetching raw materials:", error);
+  //   }
+  // };
+
   return (
     <>
       <FormHeading className="HeaderHeading">
         Raw Material Inventory
       </FormHeading>
-      <Form name="basic" layout="vertical" autoComplete="on">
+
+      <Form name="basic" layout="vertical" autoComplete="off">
         <Row gutter={20}>
+          <Col span={8}>
+            <Form.Item label="Inventory Limit" name="itemlimit">
+              <Input
+                name="itemlimit"
+                defaultValue={formData.itemlimit}
+                onChange={handleInputChange}
+              />
+            </Form.Item>
+          </Col>
+          <br />
+          <Divider />
+          <br />
+
           <Col span={8}>
             <Form.Item label="Item Name" name="Name">
               <Input

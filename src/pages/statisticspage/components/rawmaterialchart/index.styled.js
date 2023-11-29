@@ -10,10 +10,17 @@ export const Container = styled.div`
   display: flex;
   align-items: center;
   width: fit-content;
-  padding-bottom:"20px" ;
+  padding-bottom: "20px";
 `;
 
 export const CardContainer = styled.div`
   margin: 0 5px;
   /* padding-bottom:"20px" ; */
+`;
+
+export const Head = styled.div`
+   font-size: 16pt;
+  display: block;
+  width: fit-content;
+  padding-bottom: 15px;
 `;

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Chart, Wrapper, IconWrapper } from "./index.styled";
-import { Modal, Button, Dropdown, Menu } from "antd";
+import { Modal, Button, Dropdown, Menu, Spin } from "antd";
 import { ViewMode, Gantt } from "gantt-task-react-pro";
 import ViewSwitcher from "./components/view-switcher";
 import { getStartEndDateForProject } from "./components/helper";
@@ -11,6 +11,7 @@ import { MoreOutlined } from "@ant-design/icons";
 import ProcessTags from "./components/processtags";
 import UpdateProcess from "./components/updateprocess";
 import { FcProcess } from "react-icons/fc";
+import { SpinWrapper } from "../../../../styles/global.styled";
 
 function ProcessChart() {
   const API_BASE_URL = "http://localhost:3005";
@@ -59,11 +60,6 @@ function ProcessChart() {
       return `${hours} hour(s) and ${minutes} minute(s)`;
     }
   }
-
-  useEffect(() => {
-    fetchProcessData();
-  }, []);
-
   const menu = (
     <Menu>
       <Menu.Item
@@ -82,6 +78,10 @@ function ProcessChart() {
       </Menu.Item>
     </Menu>
   );
+
+  useEffect(() => {
+    fetchProcessData();
+  }, []);
 
   const fetchProcessData = async () => {
     try {
@@ -207,19 +207,15 @@ function ProcessChart() {
           name: (
             <>
               <FcProcess />{" "}
-              {task.processId ? (
+              {task.processId && (
                 <span style={{ color: "green" }}>
                   {task.processId.toUpperCase()}
                 </span>
-              ) : (
-                ""
               )}{" "}
-              {task.subprocessId ? (
+              {task.subprocessId && (
                 <span style={{ color: "blue" }}>
                   {task.subprocessId.toUpperCase()}
                 </span>
-              ) : (
-                ""
               )}{" "}
               {task.type === "project"
                 ? task.name
@@ -250,18 +246,9 @@ function ProcessChart() {
 
   const handleClick = (task) => {
     console.log("up-onc", task);
-    // console.log("On Click event Id:" + task.id);
-    // console.log("Clicked task ID:", task);
-
-    // const selectedTaskData = tasks.find((taskid) => taskid.id === task.id);
-    // console.log("Selected task data:", selectedTaskData);
-
-    // if (selectedTaskData) {
-    // }
     setSelectedTaskData(task);
     setOpen(true);
 
-    // console.log();
   };
   const handleMenuClick = (e) => {
     // Handle menu item click here
@@ -270,11 +257,11 @@ function ProcessChart() {
 
   const getStatusForProcess = (process) => {
     console.log("executedprocess", process);
-    if (process.progress == 100) {
+    if (process.progress >= 100) {
       return "completed";
     } else if (process.progress > 0 && process.progress < 100) {
       return "inprogress";
-    } else {
+    } else if ((process.progress = 0)) {
       return "Not Started Yet";
     }
   };
@@ -364,7 +351,11 @@ function ProcessChart() {
           </Wrapper>
         </Chart>
       ) : (
-        <p>Loading data...</p>
+        <>
+        <SpinWrapper>
+          <Spin size="large" />
+        </SpinWrapper>
+      </>
       )}
     </>
   );

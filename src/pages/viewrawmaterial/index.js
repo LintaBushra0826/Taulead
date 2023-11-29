@@ -3,7 +3,9 @@ import Header from "../../layout/dashboardheader";
 import SideMenu from "../../layout/sideMenu";
 import { BodyWrapper, TableWrapper } from "../../styles/global.styled";
 import { Table, Typography, Modal, Input, Form, Tag, InputNumber } from "antd";
+import { Spin } from "antd";
 import axios from "axios";
+import { SpinWrapper } from "../../styles/global.styled";
 
 function ViewRawMaterial() {
   const API_BASE_URL = "http://localhost:3005";
@@ -17,6 +19,14 @@ function ViewRawMaterial() {
   const [one, setOne] = useState("");
   const [two, setTwo] = useState("");
   const [total, setTotal] = useState(0);
+  // const [spinning, setSpinning] = React.useState(false);
+
+  // const showLoader = () => {
+  //   setSpinning(true);
+  //   setTimeout(() => {
+  //     setSpinning(false);
+  //   }, 3000);
+  // };
 
   function getTagColor(record) {
     console.log("record", record.quan);
@@ -78,6 +88,7 @@ function ViewRawMaterial() {
         price: formData.price,
         totcost: formData.totcost,
         tag: formData.tag,
+        itemlimit: formData.itemlimit,
       };
 
       await axios.put(
@@ -163,6 +174,13 @@ function ViewRawMaterial() {
       editable: true,
       render: (text) => `Rs.${text}`,
     },
+    // {
+    //   title: "Limit",
+    //   dataIndex: "itemlimit",
+    //   key: "itemlimit",
+    //   render: (text, record) => `${text} ${record.unit}`,
+    //   width: "fit-content",
+    // },
     {
       title: "Total Price",
       dataIndex: "totcost",
@@ -263,7 +281,11 @@ function ViewRawMaterial() {
               rowKey={(record) => record.uid}
             />
           ) : (
-            <p>Loading..</p>
+            <>
+              <SpinWrapper>
+                <Spin size="large" />
+              </SpinWrapper>
+            </>
           )}
         </TableWrapper>
       </BodyWrapper>

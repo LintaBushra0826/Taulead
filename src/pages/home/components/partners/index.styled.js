@@ -17,7 +17,16 @@ export const Wrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(100deg, #e8cbc0, #cbb4d4);
+  /* background: linear-gradient(
+    0deg,
+    rgba(42, 8, 69, 0.88),
+    rgba(42, 8, 69, 0.88)
+  ); */
+  background: linear-gradient(
+    100deg,
+    rgba(6, 17, 97, 0.89) -100%,
+    rgba(42, 8, 69, 0.9)
+  );
 `;
 
 export const Box = styled.div`

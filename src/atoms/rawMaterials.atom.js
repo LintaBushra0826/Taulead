@@ -8,6 +8,7 @@ export const rawMaterialAtom = atom({
   expdate: null,
   price: 0,
   totcost: 0,
+  itemlimit: 0,
 });
 
 export const UpdateRawMaterialAtom = atom(null, (get, set, update) => {

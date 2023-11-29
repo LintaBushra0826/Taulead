@@ -43,3 +43,16 @@ export const Logo = styled.img`
   color: white;
   text-decoration: none;
 `;
+
+export const LogoutDiv = styled.div`
+  position: absolute;
+  bottom: 60px;
+`;
+
+export const MenuDiv = styled.div`
+  position: absolute;
+  bottom: 10px;
+  left: 30px;
+  font-size: 10px;
+  text-align: left;
+`;

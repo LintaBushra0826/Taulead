@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Chart, Wrapper, IconWrapper } from "./index.styled";
-import { Modal, Button, Dropdown, Menu } from "antd";
+import { Modal, Button, Dropdown, Menu, Spin } from "antd";
 import { ViewMode, Gantt } from "gantt-task-react-pro";
 import ViewSwitcher from "./components/view-switcher";
 import { getStartEndDateForProject } from "./components/helper";
@@ -11,6 +11,7 @@ import { MoreOutlined } from "@ant-design/icons";
 import ProcessTags from "./components/processtags";
 import UpdateProcess from "./components/updateprocess";
 import { FcProcess } from "react-icons/fc";
+import { SpinWrapper } from "../../../../styles/global.styled";
 
 function ProcessChart() {
   const API_BASE_URL = "http://localhost:3005";
@@ -179,36 +180,35 @@ function ProcessChart() {
       setTasks(
         processesArray.map((task) => ({
           ...task,
-          name: (
-            <>
-              <FcProcess />{" "}
-              {task.processId ? (
-                <span style={{ color: "green" }}>
-                  {task.processId.toUpperCase()}
-                </span>
-              ) : (
-                ""
-              )}{" "}
-              {task.subprocessId ? (
-                <span style={{ color: "blue" }}>
-                  {task.subprocessId.toUpperCase()}
-                </span>
-              ) : (
-                ""
-              )}{" "}
-              {task.type === "project"
-                ? task.name
-                : task.subprocesses
-                ? `${task.subprocesses.subname} - ${task.name}`
-                : task.name}
-              <ProcessTags
-                status={getStatusForProcess(task)}
-                style={{ display: "flex" }}
-              />
-            </>
-          ),
+          // name: (
+          //   <>
+          //     <FcProcess />{" "}
+          //     {task.processId && (
+          //       <span style={{ color: "green" }}>
+          //         {task.processId.toUpperCase()}
+          //       </span>
+          //     )}
+          //     {" "}
+          //     {task.subprocessId && (
+          //       <span style={{ color: "blue" }}>
+          //         {task.subprocessId.toUpperCase()}
+          //       </span>
+          //     )}
+          //     {" "}
+          //     {task.type === "project"
+          //       ? task.name
+          //       : task.subprocesses
+          //       ? `${task.subprocesses.subname} - ${task.name}`
+          //       : task.name}
+          //     <ProcessTags
+          //       status={getStatusForProcess(task)}
+          //       style={{ display: "flex" }}
+          //     />
+          //   </>
+          // ),
         }))
       );
+      
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -327,7 +327,6 @@ function ProcessChart() {
             tasks={tasks}
             viewMode={view}
             onDateChange={handleTaskChange}
-            // onDoubleClick={handleDblClick}
             onDoubleClick={handleClick}
             listCellWidth={isChecked ? "155px" : ""}
             columnWidth={columnWidth}
@@ -345,7 +344,6 @@ function ProcessChart() {
               title=""
               centered
               open={open}
-              // onOk={() => setOpen(false)}
               onCancel={() => setOpen(false)}
               footer=""
               width={1000}
@@ -362,7 +360,6 @@ function ProcessChart() {
                 >
                   <div>
                     {" "}
-                    {/* Wrap the Button and UpdateProcess components in a parent container */}
                     <Button
                       type="text"
                       style={{ border: "none", padding: 0, background: "none" }}
@@ -373,7 +370,6 @@ function ProcessChart() {
                       <UpdateProcess
                         isVisible={updateModalVisible}
                         onClose={handleCloseUpdateModal}
-                        // Pass the selected process data here
                       />
                     )}
                   </div>
@@ -383,7 +379,11 @@ function ProcessChart() {
           </Wrapper>
         </Chart>
       ) : (
-        <p>Loading data...</p>
+        <>
+        <SpinWrapper>
+          <Spin size="large" />
+        </SpinWrapper>
+      </>
       )}
     </>
   );

@@ -5,7 +5,8 @@ export const BodyWrapper = styled.div`
   flex-direction: column;
   align-items: left;
   text-align: left;
-  background: linear-gradient(100deg, #2a0845, #2a0845, #061161 120%);
+  /* background: linear-gradient(100deg, #2a0845, #2a0845, #061161 120%); */
+  background: linear-gradient(100deg,#2a0845, #2a0845,  #061161 120%);
   width: 100%;
   height: 100vh;
   opacity: 1.05;

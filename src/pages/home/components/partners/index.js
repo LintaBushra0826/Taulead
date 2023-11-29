@@ -15,7 +15,7 @@ export default function Features() {
         >
           Our Partners
         </h5>
-        <h1 className="h1">Business Communities</h1>
+        <h1 className="h1" style={{color:"#ffaf7b"}}>Business Communities</h1>
         <div className="Container">
           <div className="card-container">
             <div className="card-row">

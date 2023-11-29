@@ -8,6 +8,7 @@ export const ProcessAtom = atom({
   desc: "",
   start: null,
   end: null,
+  link:"",
 });
 
 export const UpdateHumanResourceAtom = atom(null, (get, set, update) => {
