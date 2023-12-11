@@ -16,7 +16,7 @@ import { SpinWrapper } from "../../../../styles/global.styled";
 function ProcessChart() {
   const API_BASE_URL = "http://localhost:3005";
   const [tasks, setTasks] = useState([]);
-  const [view, setView] = useState(ViewMode.Day);
+  const [view, setView] = useState(ViewMode.Hour);
   const [isChecked, setIsChecked] = useState(true);
   const [selectedTaskData, setSelectedTaskData] = useState(null);
   const [open, setOpen] = useState(false);
@@ -89,6 +89,7 @@ function ProcessChart() {
       const process = response.data.data;
       const subprocess = subprocessResponse.data.data;
 
+      // console.log("process.rawMaterial.id",process);
       // Iterate through the subprocess array
       subprocess.forEach((sub) => {
         // Find the corresponding process using the "pName" field
@@ -175,37 +176,11 @@ function ProcessChart() {
       const processesArray = Object.values(mappedProcesses);
 
       // Log the mapped processes
-      console.log(processesArray, "sbdjhsbf");
+      console.log("processesArray",processesArray);
 
       setTasks(
         processesArray.map((task) => ({
           ...task,
-          // name: (
-          //   <>
-          //     <FcProcess />{" "}
-          //     {task.processId && (
-          //       <span style={{ color: "green" }}>
-          //         {task.processId.toUpperCase()}
-          //       </span>
-          //     )}
-          //     {" "}
-          //     {task.subprocessId && (
-          //       <span style={{ color: "blue" }}>
-          //         {task.subprocessId.toUpperCase()}
-          //       </span>
-          //     )}
-          //     {" "}
-          //     {task.type === "project"
-          //       ? task.name
-          //       : task.subprocesses
-          //       ? `${task.subprocesses.subname} - ${task.name}`
-          //       : task.name}
-          //     <ProcessTags
-          //       status={getStatusForProcess(task)}
-          //       style={{ display: "flex" }}
-          //     />
-          //   </>
-          // ),
         }))
       );
       
@@ -245,35 +220,13 @@ function ProcessChart() {
       }
     }
     setTasks(newTasks);
-    console.log("up", newTasks);
+    
   };
-
-  // const handleDblClick = (taskId) => {
-  //   console.log("Clicked task ID:", taskId);
-
-  //   const selectedTaskData = tasks.find((task) => task.id === taskId._id);
-  //   console.log("Selected task data:", selectedTaskData);
-
-  //   if (selectedTaskData) {
-  //     setSelectedTaskData(selectedTaskData);
-  //     // setIsSidebarOpen(true); // Open the sidebar
-  //   }
-  // };
 
   const handleClick = (task) => {
     console.log("up-onc", task);
-    // console.log("On Click event Id:" + task.id);
-    // console.log("Clicked task ID:", task);
-
-    // const selectedTaskData = tasks.find((taskid) => taskid.id === task.id);
-    // console.log("Selected task data:", selectedTaskData);
-
-    // if (selectedTaskData) {
-    // }
     setSelectedTaskData(task);
     setOpen(true);
-
-    // console.log();
   };
 
   const handleMenuClick = (e) => {
@@ -291,6 +244,7 @@ function ProcessChart() {
   };
 
   const handleDeleteProcess = async (prId, sprId) => {
+    console.log("prId, sprId",prId, sprId);
     try {
       await axios.delete(`${API_BASE_URL}/process/${prId}`);
       if (sprId) {
@@ -311,7 +265,7 @@ function ProcessChart() {
 
   return (
     <>
-      <Wrapper style={{ position: "relative", marginLeft: "410px" }}>
+      <Wrapper style={{ display:"flex", alignItems:"center", justifyContent:"center" }}>
         <ViewSwitcher
           onViewModeChange={(viewMode) => setView(viewMode)}
           onViewListChange={setIsChecked}
@@ -331,6 +285,7 @@ function ProcessChart() {
             listCellWidth={isChecked ? "155px" : ""}
             columnWidth={columnWidth}
             onExpanderClick={handleExpanderClick}
+            
           />
           <Wrapper
             style={{

@@ -1,96 +1,162 @@
-import React, { useEffect, useRef } from "react";
-import { Bar } from "react-chartjs-2";
+import React, { useEffect, useRef, useState } from "react";
 import Chart from "chart.js/auto";
-import { CardContainer, Head } from "./index.styled";
+import { CardContainer, ChartWrapper } from "./index.styled";
 import { Card, Space } from "antd";
 
-const RawMaterialChart = (rawMaterialData) => {
-  console.log("Prop rawMaterialData", rawMaterialData);
+const RawMaterialChart = ({ extractedProcessRecords }) => {
+  const [chartInstance, setChartInstance] = useState(null);
   const chartRef = useRef(null);
-  let chartInstance = null; 
 
   const destroyChart = () => {
     if (chartInstance) {
-      chartInstance.destroy(); 
+      chartInstance.destroy();
     }
   };
 
   useEffect(() => {
-    const data = {
-      labels: [
-        "Item 1",
-        "Item 2",
-        "Item 3",
-        "Item 4",
-        "Item 5",
-        "Item 6",
-        "Item 7",
-        "Item 8",
-      ],
-      datasets: [
-        {
-          label: "Process 1",
-          data: [12, 19, 3, 5, 2, 30, 23, 14],
-          backgroundColor: "#061161",
-        },
-        {
-          label: "Process 2",
-          data: [10, 15, 3, 6, 2, 25, 23, 10],
-          backgroundColor: "#F3904F",
-        },
-        {
-          label: "Process 3",
-          data: [9, 19, 5, 5, 10, 30, 25, 14],
-          backgroundColor: "#2a0845",
-        },
-      ],
+    const dataset = [];
+    const uniqueColors = {};
+    const colors = ["#061161", "#F3904F", "#2a0845", "#F3B664", "#001B79"];
+
+    Object.values(extractedProcessRecords).forEach((item) => {
+      const itemName = item.itemName || "";
+      const itemUnit = item.itemUnit || "";
+
+      if (
+        Array.isArray(item.processRecords) &&
+        item.processRecords.length > 0
+      ) {
+        item.processRecords.forEach((recordItem) => {
+          const processId = recordItem.processId.toUpperCase();
+
+          const key = `${itemName}-${itemUnit}-${processId}`;
+
+          if (!uniqueColors[key]) {
+            uniqueColors[key] = colors.shift();
+          }
+
+          const processRecord = {
+            ItemName: itemName,
+            ItemUnit: itemUnit,
+            ProcessId: processId,
+            UsedQuan: recordItem.usedQuan || "N/A",
+            ProcessName: recordItem.processName,
+            backgroundColor: uniqueColors[key],
+          };
+          dataset.push(processRecord);
+        });
+      } else {
+        console.log(
+          "Invalid structure: item.processRecords is missing or empty."
+        );
+      }
+    });
+
+    const labels = Array.from(
+      new Set(dataset.map((item) => `${item.ProcessId} - ${item.ProcessName}`))
+    );
+    
+    const uniqueItems = Array.from(
+      new Set(dataset.map((item) => `${item.ItemName} (${item.ItemUnit})`))
+    );
+    
+    const datasets = labels.map((processIdWithName) => {
+      const [processId, processName] = processIdWithName.split(" - ");
+      const data = dataset
+        .filter(
+          (item) =>
+            item.ProcessId === processId && item.ProcessName === processName
+        )
+        .map((record) => ({
+          itemName: `${record.ItemName} (${record.ItemUnit})`,
+          usedQuan: record.UsedQuan !== "N/A" ? record.UsedQuan : 0,
+        }));
+    
+      const dataForChart = uniqueItems.map((item) => {
+        const found = data.find((d) => d.itemName === item);
+        return {
+          itemName: item,
+          usedQuan: found ? found.usedQuan : 0,
+        };
+      });
+    
+      return {
+        label: processIdWithName,
+        data: dataForChart.map((dataItem) => dataItem.usedQuan),
+        backgroundColor: dataset.find(
+          (item) =>
+            item.ProcessId === processId && item.ProcessName === processName
+        ).backgroundColor,
+      };
+    });
+    
+    const chartData = {
+      labels: uniqueItems,
+      datasets: datasets,
     };
+    
+    console.log("chartData:", chartData);    
+
+    const maxUsedQuan = Math.max(
+      ...dataset.map((record) =>
+        record.UsedQuan !== "N/A" ? record.UsedQuan : 0
+      )
+    );
+
+    destroyChart();
 
     const options = {
       scales: {
         y: {
           beginAtZero: true,
+          suggestedMax: maxUsedQuan,
         },
       },
     };
 
-    destroyChart();
-    
     const ctx = chartRef.current.getContext("2d");
-    chartInstance = new Chart(ctx, {
+    const newChartInstance = new Chart(ctx, {
       type: "bar",
-      data: data,
+      data: chartData,
       options: options,
     });
-  }, []);
+
+    setChartInstance(newChartInstance);
+
+    return () => {
+      if (newChartInstance) {
+        newChartInstance.destroy();
+      }
+    };
+  }, [extractedProcessRecords]);
 
   return (
-    <>
-      <CardContainer>
-        <Head>Resource Inventory Bar Chart</Head>
-        {/* <Card
-          title="Resource Inventory Bar Chart"
+    <CardContainer>
+      <Card
+        title="Resource Inventory Bar Chart"
+        style={{
+          width: "100%",
+          height: "50%",
+          borderRadius: "10px",
+          boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+          marginTop: "2px",
+          marginRight: "2px",
+        }}
+      >
+        <ChartWrapper style={{ overflowX: "auto" }}>
+          <canvas ref={chartRef} width={900} height={200} />
+        </ChartWrapper>
+        <br />
+        <Space
+          direction="vertical"
           style={{
-            width: "1000px",
-            height: "50%",
-            borderRadius: "10px",
-            boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-            marginTop: "2px",
+            width: "30%",
+            display: "flex",
+            flexDirection: "row",
           }}
-        > */}
-          <canvas ref={chartRef} width={800} height={300} />
-          <br/>
-          {/* <Space
-            direction="vertical"
-            style={{
-              width: "30%",
-              display: "flex",
-              flexDirection: "row",
-            }}
-          /> */}
-        {/* </Card> */}
-      </CardContainer>
-    </>
+        />
+      </Card>
+    </CardContainer>
   );
 };
 

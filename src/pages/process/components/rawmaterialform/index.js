@@ -32,11 +32,13 @@ function RawMaterialForm() {
       }
       return item;
     });
+    console.log("item which is updtaed", updatedValue);
     setSelectedItems(updatedValue);
   }, [value]);
 
   useEffect(() => {
     updateRawMaterial(selectedItems);
+    console.log("selectedItems",selectedItems);
   }, [selectedItems]);
 
   useEffect(() => {
@@ -51,6 +53,8 @@ function RawMaterialForm() {
       })),
     [rawMaterial]
   );
+
+  console.log("options", options);
 
   const fetchRawMaterials = async () => {
     try {

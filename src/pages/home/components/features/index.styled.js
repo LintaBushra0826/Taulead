@@ -30,7 +30,7 @@ export const Body = styled.body`
 
 export const Void = styled.div`
   width: 100%;
-  max-width: 1024px;
+  max-width: 824px;
   margin: auto;
   position: relative;
   aspect-ratio: 1 / 1;
@@ -67,7 +67,8 @@ export const Li = styled.li`
   position: absolute;
   top: 50%;
   left: 45%;
-  width: 22%;
+  width: 24%;
+  height:20%;
   opacity: 0;
   animation: none;
   &:nth-child(1) {
@@ -148,7 +149,7 @@ export const Crop = styled.div`
   );
   .second-circle {
     position: absolute;
-    width: 40%;
+    width: 45%;
     aspect-ratio: 1 / 1;
     left: 50%;
     top: 50%;

@@ -61,7 +61,7 @@ export const Wrapper3 = styled.div`
 export const ContactHead = styled.div`
   position: relative;
   font-size: 36px;
-  color: #d3cce3;
+  color: #ffaf7b;
   top: -100px;
   left: -385px;
   margin-bottom: 20%;

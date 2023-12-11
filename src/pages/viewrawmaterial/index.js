@@ -112,23 +112,19 @@ function ViewRawMaterial() {
     setOpen(false);
   };
 
-  useEffect(
-    () => {
-      const numOne = one;
-      const numTwo = two;
+  useEffect(() => {
+    const numOne = one;
+    const numTwo = two;
 
-      if (!isNaN(numOne) && !isNaN(numTwo)) {
-        const result = numOne * numTwo;
-        setTotal(result);
-        setFormData({ ...formData, totcost: result });
-      } else {
-        setTotal(0);
-        setFormData({ ...formData, totcost: 0 });
-      }
-    },
-    [one],
-    [two]
-  );
+    if (!isNaN(numOne) && !isNaN(numTwo)) {
+      const result = numOne * numTwo;
+      setTotal(result);
+      setFormData({ ...formData, totcost: result });
+    } else {
+      setTotal(0);
+      setFormData({ ...formData, totcost: 0 });
+    }
+  }, [one] || [two]);
 
   const columns = [
     {
@@ -157,9 +153,7 @@ function ViewRawMaterial() {
       render: (record, item) => {
         return (
           <InputNumber
-            min={1}
-            max={item.quan}
-            defaultValue={1}
+            defaultValue={item.quan}
             onChange={(value) => handleInputChange(value, item._id)}
             style={{ width: "50%", position: "relative" }}
           />
@@ -272,7 +266,7 @@ function ViewRawMaterial() {
       <BodyWrapper>
         <SideMenu />
         <TableWrapper>
-          {!loading && data.length > 0 ? ( // Conditionally render the table when data is available and not loading
+          {!loading && data.length > 0 ? ( 
             <Table
               columns={columns}
               dataSource={data}

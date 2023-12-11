@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import SideMenu from "../../layout/sideMenu";
 import ProgressBar from "./components/progressbars";
-import RawMaterial from "./components/rawmaterialchart";
-import HumanResource from "./components/humanrsourcechart";
+import RawMaterialChart from "./components/rawmaterialchart";
+import HumanResourceChart from "./components/humanrsourcechart";
 import RawMaterialTable from "./components/rawmaterialtable";
 import HumanResourceTable from "./components/humanresourcetable";
 import Table from "./components/rawmaterialtable";
@@ -35,156 +35,46 @@ function Statistics() {
       return `${hours} hour(s) and ${minutes} minute(s)`;
     }
   }
+
   useEffect(() => {
-    fetchProcessData();
+    fetchRawMaterials();
   }, []);
 
-  const fetchProcessData = async () => {
+  const fetchRawMaterials = async () => {
     try {
-      const [response, subprocessResponse] = await Promise.all([
-        axios.get("http://localhost:3005/executed-process"),
-        axios.get("http://localhost:3005/subprocess"),
-      ]);
+      const response = await axios.get("http://localhost:3005/rawMaterial");
+      const rawData = response.data.data;
 
-      console.log("executed process response", response);
+      // Ensure data is an array
+      const dataArray = Array.isArray(rawData) ? rawData : [];
 
-      const process = response.data.data;
-      const subprocess = subprocessResponse.data.data;
-
-      // Iterate through the subprocess array
-      subprocess.forEach((sub) => {
-        // Find the corresponding process using the "pName" field
-        const correspondingProcess = process.find(
-          (proc) => proc.name === sub.pName
-        );
-
-        if (correspondingProcess) {
-          // Add the subprocess to the corresponding process
-          if (!correspondingProcess.subprocesses) {
-            correspondingProcess.subprocesses = [];
-          }
-          correspondingProcess.subprocesses.push(sub);
-        }
-      });
-
-      let count = 1; // Initialize a count variable
-      const mappedProcesses = {};
-
-      // Create a map of subprocesses by their _id for efficient lookup
-      const subprocessMap = {};
-      // Iterate through the process array
-      process.forEach((item) => {
-        const ProcessdurationInHours = formatDuration(
-          new Date(item.start),
-          new Date(item.end)
-        );
-        console.log(
-          "Formatted ProcessdurationInHours: " + ProcessdurationInHours
-        );
-
-        // Check if the item is already in mappedProcesses to avoid duplicates
-        if (!mappedProcesses[item._id]) {
-          const mappedItem = {
-            key: item._id,
-            start: new Date(item.start),
-            end: new Date(item.end),
-            name: item.name,
-            id: item.name,
-            processId: item.pid,
-            humanresource: item.humanResource,
-            rawmaterial: item.rawMaterial,
-            duration: ProcessdurationInHours,
-            progress:
-              (new Date(item.end) - new Date()) /
-              (new Date(item.end) - new Date(item.start)),
-            type: "project",
-            displayOrder: count++,
-            hideChildren: false,
-          };
-          mappedProcesses[item._id] = mappedItem;
-
-          if (item.subprocesses) {
-            item.subprocesses.forEach((subitem, index) => {
-              let lastItem = null;
-              const subdurationInHours = formatDuration(
-                new Date(new Date(subitem.substart).getTime() + item.diff),
-                new Date(new Date(subitem.subend).getTime() + item.diff)
-              );
-              const subMappedItem = {
-                key: subitem._id,
-                start: new Date(
-                  new Date(subitem.substart).getTime() + item.diff
-                ),
-                end: new Date(new Date(subitem.subend).getTime() + item.diff),
-                name: subitem.subname,
-                id: subitem.subname,
-                subprocessId: subitem.subId,
-                subhumanresource: subitem.humanResource,
-                subrawmaterial: subitem.rawMaterial,
-                duration: subdurationInHours,
-                progress:
-                  new Date() -
-                    new Date(new Date(subitem.substart).getTime() + item.diff) <
-                  0
-                    ? 0
-                    : ((new Date() -
-                        new Date(
-                          new Date(subitem.substart).getTime() + item.diff
-                        )) /
-                        (new Date(
-                          new Date(subitem.subend).getTime() + item.diff
-                        ) -
-                          new Date(
-                            new Date(subitem.substart).getTime() + item.diff
-                          ))) *
-                      100,
-                type: "task",
-                project: item.name,
-                displayOrder: count++,
-              };
-
-              if (index) {
-                subMappedItem = { ...subMappedItem, dependencies: [lastItem] };
-              }
-
-              lastItem = subitem.subname;
-              mappedProcesses[subitem._id] = subMappedItem;
-            });
-          }
-        }
-      });
-
-      // Convert the mapped processes map to an array
-      const processesArray = Object.values(mappedProcesses);
-      const rawMaterialArray = processesArray.map(
-        (process) => process.rawmaterial
-      );
-      setRawMaterialData(rawMaterialArray);
-
-      // console.log("Raw Material Data:", rawMaterialData);
-
-      // setRawMaterialData(processesArray.rawMaterial);
-      // setHumanResourceData(processesArray.humanResource);
-
-      // const extractedRawMaterial = processesArray
-      //   .filter((item) => item.rawMaterial !== undefined) // Filter out objects without rawMaterial property
-      //   .map((item) => item.rawMaterial);
-
-      // const extractedHumanResource = processesArray
-      //   .filter((item) => item.humanresource !== undefined) // Filter out objects without humanresource property
-      //   .map((item) => item.humanresource);
-
-      // // Set the extracted data into the state variables
-      // setRawMaterialData(extractedRawMaterial);
-      // setHumanResourceData(extractedHumanResource);
-
-      // // Logging for verification
-      // console.log("extractedRawMaterial:", extractedRawMaterial);
-      // console.log("extractedHumanResource:", extractedHumanResource);
+      setRawMaterialData(dataArray);
     } catch (error) {
-      console.error("Error fetching data:", error);
+      console.error("Error fetching raw materials:", error);
     }
   };
+
+  // console.log("RawMaterial Data", rawMaterialData);
+
+  const extractedProcessRecords = rawMaterialData.reduce((result, item) => {
+    if (item.hasOwnProperty("processRecords")) {
+      result.push({
+        itemId: item._id,
+        itemName: item.Name,
+        itemQuan: item.quan,
+        AvailableQuan: item.quan,
+        itemUnit: item.unit,
+        originalQuan: item.originalQuan,
+        updatedQuan: item.quan,
+        tag: item.tag,
+        processRecords: item.processRecords,
+      });
+    }
+    return result;
+  }, []);
+
+  console.log("Extracted Process Records:", extractedProcessRecords);
+
   const onChange = (value) => {
     console.log(`selected ${value}`);
   };
@@ -204,14 +94,14 @@ function Statistics() {
     if (selectedValue === "resource inventory") {
       return (
         <div>
-          <RawMaterial />
-          <RawMaterialTable />
+          <RawMaterialChart extractedProcessRecords={extractedProcessRecords} />
+          <RawMaterialTable extractedProcessRecords={extractedProcessRecords} />
         </div>
       );
     } else if (selectedValue === "human resource") {
       return (
         <div>
-          <HumanResource />
+          <HumanResourceChart />
           <HumanResourceTable />
         </div>
       );
@@ -220,8 +110,8 @@ function Statistics() {
     } else {
       return (
         <div>
-          <RawMaterial />
-          <RawMaterialTable />
+          <RawMaterialChart extractedProcessRecords={extractedProcessRecords} />
+          <RawMaterialTable extractedProcessRecords={extractedProcessRecords} />
         </div>
       );
     }

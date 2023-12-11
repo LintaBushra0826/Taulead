@@ -17,7 +17,9 @@ function Dashboard() {
   const [data, setData] = useState([]);
   const [totalInventoryCount, setTotalInventoryCount] = useState(0);
   const [totalhrCount, setTotalhrCount] = useState(0);
+  const [totalProcessCount, setTotalProcessCount] = useState(0);
   const [hrdata, sethrData] = useState([]);
+  const [CompProcessdata, setCompProcessdata] = useState([]);
   useEffect(() => {
     fetchRawMaterial();
   }, []);
@@ -58,8 +60,33 @@ function Dashboard() {
     }
   };
 
+  useEffect(() => {
+    fetchCompletedProcess();
+  }, []);
+
+  const fetchCompletedProcess = async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost:3005/completed-process"
+      );
+      const rawData = response.data.data;
+      const dataArray = Array.isArray(rawData) ? rawData : [];
+      setCompProcessdata(dataArray);
+      console.log("completed processes", dataArray);
+    } catch (error) {
+      console.error("Error fetching compeleted process:", error);
+    }
+  };
+
   // Calculate the total limit based on the maximum item limit (example: itemlimit property)
   const totalLimit = Math.max(...data.map((item) => item.itemlimit));
+  console.log("totalLimit", totalLimit);
+
+  const formattedData = CompProcessdata.map((process, index) => ({
+    name: process.name, // X-axis: Process name
+    end: new Date(process.actual_end).getHours(),
+    start: new Date(process.actual_start).getHours() // Y-axis: End time of the process (converted to milliseconds)
+  }));
 
   const config = {
     data,
@@ -83,6 +110,26 @@ function Dashboard() {
       },
     },
   };
+  const CompConfig = {
+    data: formattedData,
+    xField: "start", // X-axis field
+    yField: "end", // Y-axis field
+    seriesField: "name", // Field for series (if applicable)
+    yAxis: {
+      formatter: (v) => v,
+    },
+    legend: {
+      position: "top", // Legend position
+    },
+    smooth: true, // Smooth lines
+    animation: {
+      appear: {
+        animation: "path-in",
+        duration: 5000,
+      },
+    },
+  };
+
   return (
     <>
       <BodyWrapper>
@@ -207,13 +254,13 @@ function Dashboard() {
                 marginTop: "20px",
               }}
             >
-              <Line
+              {/* <Line
                 {...config}
                 style={{
                   width: "600px",
                   height: "300px",
                 }}
-              />
+              /> */}
               <Space
                 direction="vertical"
                 style={{
@@ -236,7 +283,7 @@ function Dashboard() {
               }}
             >
               <Line
-                {...config}
+                {...CompConfig}
                 style={{
                   width: "350px",
                   height: "300px",

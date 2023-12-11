@@ -16,7 +16,7 @@ import { SpinWrapper } from "../../../../styles/global.styled";
 function ProcessChart() {
   const API_BASE_URL = "http://localhost:3005";
   const [tasks, setTasks] = useState([]);
-  const [view, setView] = useState(ViewMode.Day);
+  const [view, setView] = useState(ViewMode.Hour);
   const [isChecked, setIsChecked] = useState(true);
   const [selectedTaskData, setSelectedTaskData] = useState(null);
   const [open, setOpen] = useState(false);
@@ -25,6 +25,7 @@ function ProcessChart() {
   const [updateModalVisible, setUpdateModalVisible] = useState(false);
   const [selectedProcessData, setSelectedProcessData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [inprogesponse, setinprogesponse] = useState([]);
 
   const handleEditProcessClick = (selectedTaskData) => {
     setSelectedProcessData(selectedTaskData);
@@ -38,6 +39,22 @@ function ProcessChart() {
   const handleContextMenu = (e) => {
     e.preventDefault(); // Prevent the default context menu from appearing
     setContextMenuVisible(true);
+  };
+
+  const handleDeleteProcess = async (prId) => {
+
+    console.log("prId, sprId",prId);
+    try {
+      await axios.delete(`${API_BASE_URL}/executed-process/${prId}`);
+      // if (sprId) {
+      //   await axios.delete(`${API_BASE_URL}/executed-subprocess/${sprId}`);
+      // }
+      alert("Executed Process deleted successfully");
+      window.location.reload();
+    } catch (error) {
+      console.error("Error deleting Executed process:", error);
+      alert("Error deleting Executed process",error);
+    }
   };
 
   const handleExpanderClick = (task) => {
@@ -139,8 +156,9 @@ function ProcessChart() {
             rawmaterial: item.rawMaterial,
             duration: ProcessdurationInHours,
             progress:
-              (new Date(item.end) - new Date()) /
-              (new Date(item.end) - new Date(item.start)),
+              ((new Date() - new Date(item.start)) /
+                (new Date(item.end) - new Date(item.start))) *
+              100,
             type: "project",
             displayOrder: count++,
             hideChildren: false,
@@ -200,44 +218,223 @@ function ProcessChart() {
 
       // Convert the mapped processes map to an array
       const processesArray = Object.values(mappedProcesses);
+      const updatedTasks = processesArray.map((task) => {
+        const newName = (
+          <>
+            <FcProcess />{" "}
+            {task.processId && (
+              <span style={{ color: "green" }}>
+                {task.processId.toUpperCase()}
+              </span>
+            )}{" "}
+            {task.subprocessId && (
+              <span style={{ color: "blue" }}>
+                {task.subprocessId.toUpperCase()}
+              </span>
+            )}{" "}
+            {task.type === "project"
+              ? task.name
+              : task.subprocesses
+              ? `${task.subprocesses.subname} - ${task.name}`
+              : task.name}
+            <ProcessTags
+              status={getStatusForProcess(task)}
+              style={{ display: "flex" }}
+            />
+          </>
+        );
 
-      setTasks(
-        processesArray.map((task) => ({
+        return {
           ...task,
-          name: (
-            <>
-              <FcProcess />{" "}
-              {task.processId && (
-                <span style={{ color: "green" }}>
-                  {task.processId.toUpperCase()}
-                </span>
-              )}{" "}
-              {task.subprocessId && (
-                <span style={{ color: "blue" }}>
-                  {task.subprocessId.toUpperCase()}
-                </span>
-              )}{" "}
-              {task.type === "project"
-                ? task.name
-                : task.subprocesses
-                ? `${task.subprocesses.subname} - ${task.name}`
-                : task.name}
-              <ProcessTags
-                status={getStatusForProcess(task)}
-                style={{ display: "flex" }}
-              />
-            </>
-          ),
-        }))
-      );
+          name: newName,
+          newName: task.name,
+          status: getStatusForProcess(task),
+        };
+      });
+      setTasks(updatedTasks);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
 
+  //  useEffect(() => {
+  //   const processTasks = async () => {
+  //     const processedTasks = new Set();
+
+  //     for (const task of tasks) {
+  //       if (!processedTasks.has(task.id)) {
+  //         processedTasks.add(task.id);
+
+  //         try {
+  //           let response;
+  //           if (task.status === "completed") {
+  //             response = await axios.post(`${API_BASE_URL}/completed-process`, {
+  //               name: task.newName,
+  //               start: task.start,
+  //               end: task.end,
+  //               desc: task.desc,
+  //               duration: task.duration,
+  //               pid: task.processId,
+  //               humanresource: task.humanresource,
+  //               rawmaterial: task.rawmaterial,
+  //             });
+  //           } else {
+  //             response = await axios.post(`${API_BASE_URL}/inprogress-process`, {
+  //               name: task.newName,
+  //               start: task.start,
+  //               end: task.end,
+  //               desc: task.desc,
+  //               duration: task.duration,
+  //               pid: task.processId,
+  //               humanresource: task.humanresource,
+  //               rawmaterial: task.rawmaterial,
+  //             });
+
+  //             if (response.status === 200) {
+  //               alert("Successfully added in-progress process");
+  //               console.error("In-progress process", response);
+  //             }
+  //           }
+
+  //           if (response && response.status === 200 && task.status === "completed") {
+  //             alert("Successfully added completed process");
+  //             console.error("Completed process", response);
+  //           }
+  //         } catch (error) {
+  //           if (task.status === "completed") {
+  //             alert("Error adding completed process");
+  //             console.error("Error posting completed process data:", error);
+  //           } else {
+  //             alert("Error adding in-progress process");
+  //             console.error("Error posting in-progress process data:", error);
+  //           }
+  //         }
+  //       }
+  //     }
+  //   };
+
+  //   processTasks();
+  // }, [tasks]);
+
+  useEffect(() => {
+    const processTasks = async () => {
+      try {
+        const [inprogressResponse] = await Promise.all([
+          axios.get("http://localhost:3005/inprogress-process"),
+        ]);
+
+        const inprogressData = inprogressResponse.data.data;
+        console.log("inprogressResponse", inprogressData);
+
+        let processedTasksIds = [];
+
+        for (const task of tasks) {
+          console.log("tasks.id", tasks);
+
+          if (inprogressData.length === 0 && task.length > 0) {
+            // If in-progress data is empty and there are tasks, mark the first task as in-progress
+            const firstTask = task[0];
+            try {
+              const postData = {
+                name: firstTask.newName,
+                start: firstTask.start,
+                end: firstTask.end,
+                desc: firstTask.desc,
+                duration: firstTask.duration,
+                pid: firstTask.processId,
+                humanresource: firstTask.humanresource,
+                rawmaterial: firstTask.rawmaterial,
+              };
+
+              const response = await axios.post(
+                `${API_BASE_URL}/inprogress-process`,
+                postData
+              );
+
+              if (response.status === 200) {
+                console.log("First task marked as in-progress", response);
+                processedTasksIds.push(tasks.key);
+                // tasks.shift();
+              }
+            } catch (error) {
+              alert("Error marking the first task as in-progress");
+              console.error(
+                "Error marking the first task as in-progress:",
+                error
+              );
+            }
+          }
+          const matchInProgress = inprogressData.find(
+            (item) => item.id === tasks.id
+          );
+          if (matchInProgress) {
+            console.log("Process attributes are matched", matchInProgress);
+            processedTasksIds.push(tasks.key);
+          }
+          // const newTasks = tasks.filter(
+          //   (task) => !processedTasksIds.includes(task.key)
+          // );
+          // console.log("newtask", newTasks);
+
+          // for (const task of newTasks) {
+          //   try {
+          //     let response;
+          //     const postData = {
+          //       name: task.newName,
+          //       start: task.start,
+          //       end: task.end,
+          //       desc: task.desc,
+          //       duration: task.duration,
+          //       pid: task.processId,
+          //       humanresource: task.humanresource,
+          //       rawmaterial: task.rawmaterial,
+          //     };
+
+          //     if (task.status === "inprogress") {
+          //       response = await axios.post(
+          //         `${API_BASE_URL}/inprogress-process`,
+          //         postData
+          //       );
+          //       console.log("In-progress process", response);
+          //     } else {
+          //       response = await axios.post(
+          //         `${API_BASE_URL}/completed-process`,
+          //         postData
+          //       );
+          //       if (response.status === 200) {
+          //         console.log("Completed process", response);
+          //       }
+          //     }
+
+          //     if (
+          //       response &&
+          //       response.status === 200 &&
+          //       task.status === "completed"
+          //     ) {
+          //       // alert("Successfully added completed process");
+          //     }
+          //   } catch (error) {
+          //     if (task.status === "completed") {
+          //       alert("Error adding completed process");
+          //       console.error("Error posting completed process data:", error);
+          //     } else {
+          //       alert("Error adding in-progress process");
+          //       console.error("Error posting in-progress process data:", error);
+          //     }
+          //   }
+          // }
+        }
+      } catch (error) {
+        console.error("Error fetching in-progress data:", error);
+      }
+    };
+
+    processTasks();
+  }, [tasks]);
+
   let columnWidth = 65;
   if (view === ViewMode.Hour) {
-    columnWidth = 50;
+    columnWidth = 100;
   } else if (view === ViewMode.Day) {
     columnWidth = 100;
   } else if (view === ViewMode.Month) {
@@ -248,7 +445,6 @@ function ProcessChart() {
     console.log("up-onc", task);
     setSelectedTaskData(task);
     setOpen(true);
-
   };
   const handleMenuClick = (e) => {
     // Handle menu item click here
@@ -261,28 +457,20 @@ function ProcessChart() {
       return "completed";
     } else if (process.progress > 0 && process.progress < 100) {
       return "inprogress";
-    } else if ((process.progress = 0)) {
+    } else if (process.progress === 0) {
       return "Not Started Yet";
-    }
-  };
-
-  const handleDeleteProcess = async (prId, sprId) => {
-    try {
-      await axios.delete(`${API_BASE_URL}/process/${prId}`);
-      if (sprId) {
-        await axios.delete(`${API_BASE_URL}/subprocess/${sprId}`);
-      }
-      alert("Process deleted successfully");
-      window.location.reload();
-    } catch (error) {
-      console.error("Error deleting process:", error);
-      alert("Error deleting process");
     }
   };
 
   return (
     <>
-      <Wrapper style={{ position: "relative", marginLeft: "410px" }}>
+      <Wrapper
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
         <ViewSwitcher
           onViewModeChange={(viewMode) => setView(viewMode)}
           onViewListChange={setIsChecked}
@@ -352,10 +540,10 @@ function ProcessChart() {
         </Chart>
       ) : (
         <>
-        <SpinWrapper>
-          <Spin size="large" />
-        </SpinWrapper>
-      </>
+          <SpinWrapper>
+            <Spin size="large" />
+          </SpinWrapper>
+        </>
       )}
     </>
   );

@@ -7,6 +7,7 @@ import {
 import axios from "axios";
 import { useLocation } from "react-router-dom";
 import { AutoComplete } from "antd";
+import LimitForm from "./component/limitform";
 
 function RawMaterialForm() {
   const location = useLocation();
@@ -45,6 +46,18 @@ function RawMaterialForm() {
     try {
       await axios.post(`${API_BASE_URL}/rawMaterial`, formData);
       alert("Raw material item added successfully!");
+      window.location.reload();
+      // setFormData({
+      //   Name: "",
+      //   Desc: "",
+      //   unit: "",
+      //   quan: "",
+      //   expdate: "",
+      //   price: "",
+      //   totcost: 0,
+      //   tag: "available",
+      //   itemlimit: 0,
+      // });
     } catch (error) {
       alert("Error adding raw material item");
     }
@@ -133,9 +146,12 @@ function RawMaterialForm() {
         Raw Material Inventory
       </FormHeading>
 
+      <LimitForm />
+      <Divider />
+
       <Form name="basic" layout="vertical" autoComplete="off">
         <Row gutter={20}>
-          <Col span={8}>
+          {/* <Col span={8}>
             <Form.Item label="Inventory Limit" name="itemlimit">
               <Input
                 name="itemlimit"
@@ -143,10 +159,10 @@ function RawMaterialForm() {
                 onChange={handleInputChange}
               />
             </Form.Item>
-          </Col>
-          <br />
+          </Col> */}
+          {/* <br />
           <Divider />
-          <br />
+          <br /> */}
 
           <Col span={8}>
             <Form.Item label="Item Name" name="Name">
@@ -175,7 +191,7 @@ function RawMaterialForm() {
                 options={options.map((option) => ({ value: option }))}
                 onSelect={handleSelect}
                 onSearch={handleSearch}
-                style={{ width: 200 }}
+                // style={{ width: 200 }}
               >
                 <Input
                   name="unit"

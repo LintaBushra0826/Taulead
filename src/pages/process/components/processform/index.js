@@ -245,27 +245,19 @@ function ProcessForm({ formData, setFormData }) {
     }));
   };
 
-  const startDateMoment = formData.start
-    ? (console.log("Start Date String:", formData.start),
-      moment(formData.start, "ddd MMM DD YYYY HH:mm:ss ZZ"))
-    : null;
-  const endDateMoment = formData.end
-    ? (console.log("End Date String:", formData.end),
-      moment(formData.end, "ddd MMM DD YYYY HH:mm:ss ZZ"))
-    : null;
+  // const startDateMoment = formData.start
+  //   ? (console.log("Start Date String:", formData.start),
+  //     moment(formData.start, "ddd MMM DD YYYY HH:mm:ss ZZ"))
+  //   : null;
+  // const endDateMoment = formData.end
+  //   ? (console.log("End Date String:", formData.end),
+  //     moment(formData.end, "ddd MMM DD YYYY HH:mm:ss ZZ"))
+  //   : null;
 
-  const startDateJSDate = startDateMoment ? startDateMoment.toDate() : null;
-  const endDateJSDate = endDateMoment ? endDateMoment.toDate() : null;
+  // const startDateJSDate = startDateMoment ? startDateMoment.toDate() : null;
+  // const endDateJSDate = endDateMoment ? endDateMoment.toDate() : null;
   return (
-    <Form
-      name="basic"
-      layout="vertical"
-      initialValues={{
-        start: formData.startDateJSDate,
-        end: formData.endDateJSDate,
-      }}
-      autoComplete="off"
-    >
+    <Form name="basic" layout="vertical" initialValues={{}} autoComplete="off">
       <Row gutter={20}>
         <Col span={8}>
           <Form.Item label="Process ID" name="pid">
@@ -330,16 +322,12 @@ function ProcessForm({ formData, setFormData }) {
       <Row gutter={20} justify="start">
         <Col span={8}>
           <Form.Item label="Process Start Date/Time" name="start">
-            <DatePicker
-              showTime
-              onChange={onEndChange}
-              value={formData.start}
-            />
+            <DatePicker showTime onChange={onStartChange} />
           </Form.Item>
         </Col>
         <Col padding="0px" span={8}>
           <Form.Item label="Process End Date/Time" name="end">
-            <DatePicker showTime onChange={onEndChange} value={formData.end} />
+            <DatePicker showTime onChange={onEndChange} />
           </Form.Item>
         </Col>
       </Row>

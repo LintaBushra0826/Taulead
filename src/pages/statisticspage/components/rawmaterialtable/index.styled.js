@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 export const BodyWrapper = styled.div`
-  display: flex;
+  /* display: flex; */
   flex-direction: column;
   justify-content: flex-start;
   position: relative;
@@ -9,10 +9,10 @@ export const BodyWrapper = styled.div`
   width: 800px;
 
   .ant-table-tbody .purple-row {
-    background-color: #EDE4FF !important;
+    background-color: #ede4ff !important;
     color: black !important;
   }
-  
+
   .ant-table-tbody .white-row {
     background-color: white !important;
     color: black !important;
@@ -20,12 +20,14 @@ export const BodyWrapper = styled.div`
 `;
 
 export const Container = styled.div`
-  display: flex;
+  /* display: flex; */
   align-items: center;
   width: fit-content;
-  padding-bottom:"20px" ;
+  padding-bottom: "20px";
 `;
 
 export const CardContainer = styled.div`
-  margin: 0 5px;
+  /* margin: 5 5px;
+  /* overflow: hidden; */
+  /*width: 100%; */
 `;

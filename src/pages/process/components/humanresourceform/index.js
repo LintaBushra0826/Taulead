@@ -41,6 +41,8 @@ function HumanResourceForm() {
     [humanresource]
   );
 
+  console.log("Options", options);
+
   const selectProps = {
     mode: "multiple",
     style: {
@@ -64,6 +66,8 @@ function HumanResourceForm() {
       };
     });
   }, [value, humanresource]);
+
+  console.log("selectedHumanResource", selectedHumanResource);
 
   useEffect(() => {
     UpdateHumanResource(selectedHumanResource);

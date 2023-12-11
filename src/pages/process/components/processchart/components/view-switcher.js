@@ -8,9 +8,8 @@ function ViewSwitcher ({ onViewModeChange, onViewListChange, isChecked }) {
   return (
     <div className="ViewContainer">
        <Radio.Group value={size} onChange={(e) => setSize(e.target.value)}>
-        <Radio.Button value="Hour" onClick={() => onViewModeChange(ViewMode.Hour)}>Hour</Radio.Button>
+        <Radio.Button  value="Hour" onClick={() => onViewModeChange(ViewMode.Hour)}>Hour</Radio.Button>
         <Radio.Button value="Day" onClick={() => onViewModeChange(ViewMode.Day)}>Day</Radio.Button>
-        {/* <Radio.Button value="Month" onClick={() => onViewModeChange(ViewMode.Month)}>Month</Radio.Button> */}
       </Radio.Group>
 
     </div>

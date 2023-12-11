@@ -36,10 +36,6 @@ function SideMenu({ selectedTaskData, onCancel }) {
         alert("Process added successfully!");
         setFormData(response.data);
 
-        // // Check if the checkbox is checked before opening the subprocess modal
-        // if (showSubprocessContent) {
-        //   setSubIsModalVisible(true);
-        // }
       } else {
         alert("Error adding process");
       }
@@ -125,7 +121,7 @@ function SideMenu({ selectedTaskData, onCancel }) {
                   {selectedTaskData.rawmaterial.map((rawmaterial, index) => (
                     <TableRow key={index}>
                       <TableCell>{rawmaterial.Name}</TableCell>
-                      <TableCell>{rawmaterial.quantity}</TableCell>
+                      <TableCell>{rawmaterial.quan}</TableCell>
                       <TableCell>{rawmaterial.unit}</TableCell>
                     </TableRow>
                   ))}
@@ -209,7 +205,7 @@ function SideMenu({ selectedTaskData, onCancel }) {
                     (subrawmaterial, index) => (
                       <TableRow key={index}>
                         <TableCell>{subrawmaterial.Name}</TableCell>
-                        <TableCell>{subrawmaterial.quantity}</TableCell>
+                        <TableCell>{subrawmaterial.quan}</TableCell>
                         <TableCell>{subrawmaterial.unit}</TableCell>
                       </TableRow>
                     )

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   MenuContainer,
   TaskName,
@@ -16,13 +16,35 @@ import { Button } from "antd";
 import axios from "axios";
 import { useAtomValue, useSetAtom } from "jotai";
 import { ExecutedProcessAtom } from "../../../../../../atoms/executedProcess.atom";
+import { RawMaterialAtom } from "../../../../../../atoms/rawMaterials.atom";
 
 function SideMenu({ selectedTaskData, onCancel }) {
   const API_BASE_URL = "http://localhost:3005";
   const setExecutedProcess = useSetAtom(ExecutedProcessAtom);
+  const setRawMaterialProcess = useSetAtom(RawMaterialAtom);
+  const RawMaterialProcess = useAtomValue(RawMaterialAtom);
   const executedProcess = useAtomValue(ExecutedProcessAtom);
+  const [data, setData] = useState(null);
 
   console.log("selectedTaskData", selectedTaskData);
+
+  useEffect(() => {
+    fetchRawMaterials();
+  }, []);
+
+  const fetchRawMaterials = async () => {
+    try {
+      const response = await axios.get("http://localhost:3005/rawMaterial");
+      const rawData = response.data.data;
+
+      // Ensure data is an array
+      const dataArray = Array.isArray(rawData) ? rawData : [];
+
+      setData(dataArray); // Set the data array here
+    } catch (error) {
+      console.error("Error fetching raw materials:", error);
+    }
+  };
 
   const handleSubmit = async () => {
     try {
@@ -49,25 +71,154 @@ function SideMenu({ selectedTaskData, onCancel }) {
         humanresource: selectedTaskData.humanresource,
         rawmaterial: selectedTaskData.rawmaterial,
       });
-
+      
+      await fetchRawMaterials();
       if (response.status === 200) {
+        const starttime = selectedTaskData.start;
+        const endtime = selectedTaskData.end;
+        const HumanResource = selectedTaskData.humanresource;
         const rawMaterials = selectedTaskData.rawmaterial;
-        console.log("rawMaterials",rawMaterials);
-        // Prepare an array to store update requests
-        const updateRequests = rawMaterials.map((material) => {
-          // Fetch raw material details from the database based on the executed process
-          return axios.put(`${API_BASE_URL}/rawMaterial/${material._id}`, {
-            // Your update data for each material
-            // For example: if you want to update the quantity, you might have something like:
-            quan: material.updatedQuantity,
-            // Include other fields if necessary
-          });
+        console.log("rawMaterials", rawMaterials);
+
+        // const hrresponse = await axios.get(
+        //   "http://localhost:3005/humanresource"
+        // );
+        // const hrData = hrresponse.data.data;
+
+        // const response = await axios.get("http://localhost:3005/rawMaterial");
+        // const rawData = response.data.data;
+
+        console.log("rawData ", data);
+        // Ensure data is an array
+        // const hrdataArray = Array.isArray(hrData) ? hrData : [];
+
+        // Ensure data is an array
+        const dataArray = Array.isArray(data) ? data : [];
+
+        const updateRequests = rawMaterials.map(async (material) => {
+          const updatedItem = rawMaterials.find(
+            (item) => item.id === material.id
+          );
+          console.log("updatedItem", updatedItem);
+          const originalItems = dataArray.find(
+            (dataItem) => dataItem._id === material.id
+          );
+          console.log("originalItems", originalItems);
+
+          const updatedQuantity = originalItems.quan - updatedItem.quan;
+
+          const existingProcessRecords = dataArray.find(
+            (dataItem) => dataItem._id === material.id
+          );
+          console.log("existingProcessRecords", existingProcessRecords);
+
+          const newRecord = {
+            processKey: selectedTaskData.key,
+            processId: selectedTaskData.processId,
+            processName: selectedTaskData.name,
+            usedQuan: updatedItem.quan,
+            availableQuan: updatedQuantity,
+            // originalQuan:  updatedQuantity,
+            updatedQuan: updatedQuantity,
+            usedQuanUnit: updatedItem.unit,
+            itemId: updatedItem.id,
+          };
+
+          const updatedProcessRecords = material.processRecords
+            ? [...material.processRecords, newRecord]
+            : [newRecord];
+
+          console.log("updatedProcessRecords", updatedProcessRecords);
+
+          try {
+            const response = await axios.put(
+              `${API_BASE_URL}/rawMaterial/${material.id}`,
+              {
+                quan: updatedQuantity,
+                // originalQuan:updatedQuantity,
+                $push: { processRecords: updatedProcessRecords },
+              }
+            );
+
+            console.log("UPDATED SUCCCCC");
+            return response.data;
+          } catch (error) {
+            console.error(
+              `Error updating raw material with ID ${material.id}`,
+              error
+            );
+            throw error;
+          }
         });
 
         // Execute all update requests concurrently
-        const updatedMaterials = await Promise.all(updateRequests);
+        try {
+          const updatedMaterials = await Promise.all(updateRequests);
+        } catch (error) {
+          console.error("Error updating materials:", error);
+        }
 
-        console.log("Updated Materials:", updatedMaterials);
+        // Wait until the end time of the process
+        const currentTime = new Date();
+        const timeDifference = endtime - currentTime;
+
+        console.log("timedifference", timeDifference);
+
+        if (timeDifference > 0) {
+          // Wait until the end time to update HumanResource status to "busy"
+          setTimeout(async () => {
+            const updateHrAvailabilityRequests = HumanResource.map(
+              async (employee) => {
+                try {
+                  const response = await axios.put(
+                    `${API_BASE_URL}/humanresource/${employee.id}`,
+                    {
+                      tag: "busy",
+                    }
+                  );
+
+                  return response.data;
+                  alert("Employee status updated to BUSY");
+                } catch (error) {
+                  console.error(
+                    `Error updating employee tag with ID ${employee.id}`,
+                    error
+                  );
+                  throw error;
+                }
+              }
+            );
+
+            // Execute update requests for HumanResource availability
+            await Promise.all(updateHrAvailabilityRequests);
+          }, timeDifference);
+        } else if (timeDifference < 0) {
+          // Update HumanResource status to "available" if process end time has passed
+          const updateHrAvailabilityRequests = HumanResource.map(
+            async (employee) => {
+              try {
+                const response = await axios.put(
+                  `${API_BASE_URL}/humanresource/${employee.id}`,
+                  {
+                    tag: "available",
+                  }
+                );
+
+                return response.data;
+                alert("Employee status updated to AVAILABLE");
+              } catch (error) {
+                console.error(
+                  `Error updating employee tag with ID ${employee.id}`,
+                  error
+                );
+                throw error;
+              }
+            }
+          );
+
+          // Execute update requests for HumanResource availability
+          await Promise.all(updateHrAvailabilityRequests);
+        }
 
         alert("Executed successfully!");
       } else {

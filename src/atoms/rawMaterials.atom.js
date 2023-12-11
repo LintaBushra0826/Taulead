@@ -1,6 +1,6 @@
 import { atom } from "jotai";
 
-export const rawMaterialAtom = atom({
+export const RawMaterialAtom = atom({
   name: "",
   desc: "",
   unit: "",
@@ -9,12 +9,18 @@ export const rawMaterialAtom = atom({
   price: 0,
   totcost: 0,
   itemlimit: 0,
+  processRecords: [],
 });
 
 export const UpdateRawMaterialAtom = atom(null, (get, set, update) => {
-  const value = get(rawMaterialAtom);
-  set(rawMaterialAtom, {
+  const value = get(RawMaterialAtom);
+  const { processRecords, quanIncrement } = update;
+
+  // Update 'quan' field and 'processRecords' array
+  set(RawMaterialAtom, {
     ...value,
-    ...update,
+    quan: value.quan + quanIncrement, // Update 'quan' based on the provided increment
+    processRecords: [...value.processRecords, ...processRecords],
+    // Assuming 'processRecords' contains the new records to be added
   });
 });

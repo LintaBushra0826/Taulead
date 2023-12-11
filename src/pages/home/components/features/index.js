@@ -29,19 +29,18 @@ export default function Features() {
   return (
     <Wrapper2>
       <>
-
         <Void class="void" id="void">
           <Crop class="crop">
-            <Ul id="card-list" style={{ "--count": 6 , "--rotate-speed": 40}}>
+            <Ul id="card-list" style={{ "--count": 6, "--rotate-speed": 40 }}>
               <Li>
                 <Card class="card">
                   <A href="">
                     <MdInventory
                       class="model-name"
-                      style={{ width: "10%", color: "#ffaf7b", height: "10%" }}
+                      style={{ width: "20%", color: "#ffaf7b", height: "20%" }}
                     />
                     <br />
-                    <span>Raw Material Inventory Management</span>
+                    <span>Material Inventory Management</span>
                   </A>
                 </Card>
               </Li>
@@ -50,10 +49,10 @@ export default function Features() {
                   <A href="">
                     <GoPersonFill
                       class="model-name"
-                      style={{ width: "10%", color: "#ffaf7b", height: "10%" }}
+                      style={{ width: "20%", color: "#ffaf7b", height: "20%" }}
                     />
                     <br />
-                    <span>Human Resource Management</span>
+                    <span>Human Resource Management </span>
                   </A>
                 </Card>
               </Li>
@@ -62,10 +61,10 @@ export default function Features() {
                   <A href="">
                     <TbRulerMeasure
                       class="model-name"
-                      style={{ width: "10%", color: "#ffaf7b", height: "10%" }}
+                      style={{ width: "20%", color: "#ffaf7b", height: "20%" }}
                     />
                     <br />
-                    <span>Measuring Unit Management</span>
+                    <span>Measuring Unit Management {"   "}</span>
                   </A>
                 </Card>
               </Li>
@@ -74,7 +73,7 @@ export default function Features() {
                   <A href="">
                     <VscServerProcess
                       class="model-name"
-                      style={{ width: "10%", color: "#ffaf7b", height: "10%" }}
+                      style={{ width: "20%", color: "#ffaf7b", height: "20%" }}
                     />
                     <br />
                     <span>Process Management</span>
@@ -86,10 +85,14 @@ export default function Features() {
                   <A href="">
                     <ImStatsBars
                       class="model-name"
-                      style={{ width: "10%", color: "#ffaf7b", height: "10%" }}
+                      style={{ width: "20%", color: "#ffaf7b", height: "20%" }}
                     />
                     <br />
-                    <span>Statistics</span>
+                    <span>
+                      Statistics
+                      <br />
+                      <br />
+                    </span>
                   </A>
                 </Card>
               </Li>
@@ -98,10 +101,14 @@ export default function Features() {
                   <A href="">
                     <MdTableRows
                       class="model-name"
-                      style={{ width: "10%", color: "#ffaf7b", height: "10%" }}
+                      style={{ width: "20%", color: "#ffaf7b", height: "20%" }}
                     />
                     <br />
-                    <span>Logging</span>
+                    <span>
+                      Logging
+                      <br />
+                      <br />
+                    </span>
                   </A>
                 </Card>
               </Li>
@@ -122,7 +129,10 @@ export default function Features() {
             <div class="second-circle"></div>
           </Crop>
           <Mask class="mask"></Mask>
-          <div class="center-circle"> <FeaturesHead>Features To Be</FeaturesHead></div>
+          <div class="center-circle">
+            {" "}
+            <FeaturesHead>Features To Be</FeaturesHead>
+          </div>
         </Void>
       </>
     </Wrapper2>

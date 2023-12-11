@@ -75,9 +75,12 @@ function CreateProcessModal({ isVisible, onClose }) {
 
   const handleSubmit = async () => {
     try {
+      console.log("process.humanresource", process.humanResource);
       const combinedData = {
         ...process,
       };
+
+      console.log("combineddata", combinedData);
 
       const response = await axios.post(
         `${API_BASE_URL}/process`,
@@ -85,13 +88,14 @@ function CreateProcessModal({ isVisible, onClose }) {
       );
 
       if (response.status === 200) {
+        console.log("response", response);
         alert("Process added successfully!");
         setFormData(response.data);
 
-        // Check if the checkbox is checked before opening the subprocess modal
         if (showSubprocessContent) {
           setSubIsModalVisible(true);
         }
+        // window.location.reload();
       } else {
         alert("Error adding process");
       }
@@ -113,10 +117,13 @@ function CreateProcessModal({ isVisible, onClose }) {
         combinedData
       );
       if (response.status === 200) {
-        alert("Subprocess added successfully!");
+        console.log("response", response);
+        alert("SubProcess added successfully!");
         setSubprocessCount((prevCount) => prevCount + 1);
 
-        // Clear the form fields for the next subprocess
+        if (showSubprocessContent) {
+          setSubIsModalVisible(true);
+        }
         setFormData({});
       } else {
         alert("Error adding subprocess");

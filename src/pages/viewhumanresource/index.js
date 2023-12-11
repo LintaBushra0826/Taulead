@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from "react";
 import Header from "../../layout/dashboardheader";
 import SideMenu from "../../layout/sideMenu";
-import { BodyWrapper, SpinWrapper, TableWrapper } from "../../styles/global.styled";
+import {
+  BodyWrapper,
+  SpinWrapper,
+  TableWrapper,
+} from "../../styles/global.styled";
 import { Table, Typography, Modal, Input, Form, Tag, Spin } from "antd";
 import axios from "axios";
-
 
 function ViewHumanResource() {
   const API_BASE_URL = "http://localhost:3005";
@@ -208,8 +211,8 @@ function ViewHumanResource() {
 
       // Ensure data is an array
       const dataArray = Array.isArray(rawData) ? rawData : [];
-
       setData(dataArray);
+      console.log("data", data);
       setLoading(false);
     } catch (error) {
       console.error("Error fetching human resource:", error);
@@ -223,7 +226,15 @@ function ViewHumanResource() {
         <SideMenu />
         <TableWrapper>
           {!loading && data.length > 0 ? (
-            <Table columns={columns} dataSource={data} loading={loading} />
+            <Table
+              columns={columns}
+              dataSource={data}
+              loading={loading}
+              scroll={{
+                x: 80, // Set a fixed height for vertical scrolling (can be 'number' or 'string')
+                scrollToFirstRowOnChange: true, // Scroll to the top of the table when paging, sorting, filtering changes
+              }}
+            />
           ) : (
             <>
               <SpinWrapper>

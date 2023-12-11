@@ -45,14 +45,18 @@ export const Logo = styled.img`
 `;
 
 export const LogoutDiv = styled.div`
-  position: absolute;
-  bottom: 60px;
+  display:"flex";
+  bottom:0px;
 `;
 
 export const MenuDiv = styled.div`
-  position: absolute;
+  /* position: absolute;
   bottom: 10px;
   left: 30px;
   font-size: 10px;
-  text-align: left;
+  text-align: left; */
+  display:"flex";
+  bottom:0px;
+  font-size: 10px;
+  padding-left: 30px;
 `;

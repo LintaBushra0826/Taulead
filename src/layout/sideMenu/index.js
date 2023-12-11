@@ -198,7 +198,7 @@ const items = [
 const logout = [
   {
     label: (
-      <Link to="/home">
+      <Link to="/login">
         <CiLogout />
         {"  "}Logout
       </Link>
@@ -222,16 +222,18 @@ function SideMenu() {
         <Menu style={{ width: 256 }} mode="inline" items={items} />
       </div>
 
-      <LogoutDiv>
-        <Divider />
-        <div className="menudiv">
-          <Menu style={{ width: 256 }} mode="inline" items={logout} />
-        </div>
-      </LogoutDiv>
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <div className="menudiv">
+        <Menu style={{ width: 256 }} mode="inline" items={logout} />
+      </div>
+      <br />
 
       <MenuDiv>
-        <br />
-        <br />
         © 2023 Copyright Tau_Lead
         <br />
         All rights reserved

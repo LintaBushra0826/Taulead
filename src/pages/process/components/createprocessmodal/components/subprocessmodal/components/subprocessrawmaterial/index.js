@@ -98,7 +98,7 @@ function SubRawMaterialForm() {
         return (
           <InputNumber
             min={1}
-            // max={item.quan}
+            max={process.rawMaterial.quan}
             defaultValue={1}
             onChange={(value) => handleInputChange(value, item._id)}
             style={{ width: "50%", position: "relative" }}
