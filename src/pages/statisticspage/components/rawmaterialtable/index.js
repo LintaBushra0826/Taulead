@@ -17,10 +17,6 @@ const columns = [
     dataIndex: "ItemUnit",
   },
   {
-    title: "Total Quantity",
-    dataIndex: "TotalQuan",
-  },
-  {
     title: "Process ID",
     dataIndex: "ProcessId",
   },
@@ -29,11 +25,15 @@ const columns = [
     dataIndex: "ProcessName",
   },
   {
+    title: "Total Quantity",
+    dataIndex: "TotalQuan",
+  },
+  {
     title: "Used Quantity",
     dataIndex: "UsedQuan",
   },
   {
-    title: "Updated Quantity",
+    title: "Updated Inventory",
     dataIndex: "UpdatedQuan",
   },
   // {
@@ -85,7 +85,7 @@ const StatsTable = (extractedProcessRecords) => {
                 ...record,
                 ProcessId: recordItem.processId.toUpperCase(),
                 UsedQuan: recordItem.usedQuan || "N/A",
-                ProcessName: recordItem.processName,
+                ProcessName: recordItem.processName || "N/A",
               };
               dataset.push(processRecord);
             });
@@ -96,6 +96,7 @@ const StatsTable = (extractedProcessRecords) => {
             );
             record.ProcessId = "N/A";
             record.UsedQuan = "N/A";
+            record.ProcessName = "N/A";
             dataset.push(record);
           }
         });
@@ -134,18 +135,17 @@ const StatsTable = (extractedProcessRecords) => {
           width: "99%",
           height: "280px",
           borderRadius: "10px",
-          boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+          // boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
           marginTop: "20px",
-
         }}
       >
         <Table
           columns={columns}
-          dataSource={Datasetdata} 
+          dataSource={Datasetdata}
           size="middle"
           scroll={{
-            y: 80, 
-            scrollToFirstRowOnChange: true, 
+            y: 80,
+            scrollToFirstRowOnChange: true,
           }}
         />
         <Space

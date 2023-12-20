@@ -1,16 +1,10 @@
 import styled from "styled-components";
 
-export const HeaderContainer = styled.div`
-  display: flex;
-  background: white;
-  width: 100%;
-  height: 70px;
-  padding: 5px 10px;
-  box-shadow: 0 1px 1px 0 lightgray;
-  color: white;
-  justify-content: space-between;
-  align-items: center;
-  position: relative;
+export const NavBarWrapper = styled.div`
+  width: 81%;
+  height: 10vh;
+  position: absolute;
+  right: 0;
 `;
 
 export const ProfileDropdown = styled.img`
@@ -20,7 +14,19 @@ export const ProfileDropdown = styled.img`
   text-decoration: none;
 `;
 export const Username = styled.div`
-  display: flex;
+  /* display: flex; */
   color: white;
   text-decoration: none;
+`;
+
+export const AvatarWrapper = styled.div`
+  width: fit-content;
+  right: 40px;
+  background-color: white;
+  top: 20px;
+  text-align: start;
+  position: absolute;
+  border-radius: 15px 15px;
+  box-shadow: 0 1px 4px #EAE6EE;
+  padding: 5px;
 `;

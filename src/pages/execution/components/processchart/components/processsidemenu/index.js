@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   MenuContainer,
   TaskName,
@@ -14,39 +14,14 @@ import {
 } from "./index.styled";
 import { Button } from "antd";
 import axios from "axios";
+import { ExecutedProcessAtom } from "../../../../../../atoms/executedProcess.atom";
+import { useSetAtom } from "jotai";
 
 function SideMenu({ selectedTaskData, onCancel }) {
-  console.log("Data in modal", selectedTaskData);
-
-  const [formData, setFormData] = useState({});
   const API_BASE_URL = "http://localhost:3005";
-
-  const handleSubmit = async () => {
-    try {
-      const combinedData = {
-        ...process,
-      };
-
-      const response = await axios.post(
-        `${API_BASE_URL}/process`,
-        combinedData
-      );
-
-      if (response.status === 200) {
-        alert("Process added successfully!");
-        setFormData(response.data);
-
-      } else {
-        alert("Error adding process");
-      }
-    } catch (error) {
-      alert("Error adding process");
-    }
-  };
-
-  // const handleCancel = () => {
-  //   setOpen(false);
-  // };
+  // const [executedprocess, setExecutedProcess] = useSetAtom(ExecutedProcessAtom);
+  console.log("Data in modal", selectedTaskData);
+  
 
   return (
     <MenuContainer>
@@ -64,7 +39,7 @@ function SideMenu({ selectedTaskData, onCancel }) {
             <DateFormat>End Date: </DateFormat>
             {selectedTaskData.end.toLocaleDateString("en-GB")}{" "}
             <TimeFormat>
-              Start Time: {selectedTaskData.end.toLocaleTimeString()}
+              End Time: {selectedTaskData.end.toLocaleTimeString()}
             </TimeFormat>
           </TaskDetail>
           <TaskDetail>Duration: {selectedTaskData.duration}</TaskDetail>

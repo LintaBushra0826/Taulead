@@ -80,11 +80,11 @@ const router = createBrowserRouter([
     element: <ViewMeasuringUnit />,
   },
   {
-    path: "/viewprocesslogs",
+    path: "/processlogs",
     element: <ViewProcessLogs />,
   },
   {
-    path: "/viewpricelogs",
+    path: "/pricelogs",
     element: <ViewPriceLogs />,
   },
   {

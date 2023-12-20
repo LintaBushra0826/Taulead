@@ -95,13 +95,13 @@ function CreateProcessModal({ isVisible, onClose }) {
         if (showSubprocessContent) {
           setSubIsModalVisible(true);
         }
-        // window.location.reload();
       } else {
         alert("Error adding process");
       }
     } catch (error) {
       alert("Error adding process");
     }
+    
   };
 
   const handleSubSubmit = async () => {

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Divider, Menu } from "antd";
 import { LogoutDiv, MenuDiv, SideMenuContainer } from "./index.styled";
 import "./index.styled";
@@ -209,27 +209,37 @@ const logout = [
 ];
 
 function SideMenu() {
-  // const onClick = (e) => {
-  //   console.log("click ", e);
-  // };
+  const rootSubmenuKeys = items
+    .filter((item) => item.children)
+    .map((item) => item.key);
 
+  const [openKeys, setOpenKeys] = useState(["sub1"]);
+
+  const onOpenChange = (keys) => {
+    const latestOpenKey = keys.find((key) => openKeys.indexOf(key) === -1);
+    if (latestOpenKey && rootSubmenuKeys.indexOf(latestOpenKey) === -1) {
+      setOpenKeys(keys);
+    } else {
+      setOpenKeys(latestOpenKey ? [latestOpenKey] : []);
+    }
+  };
   return (
     <SideMenuContainer>
       <LogoContainer>
         <Logo src={logo} alt="logo" className="logo" />
       </LogoContainer>
       <div className="menudiv">
-        <Menu style={{ width: 256 }} mode="inline" items={items} />
+        <Menu
+          style={{ width: 256 }}
+          mode="inline"
+          openKeys={openKeys}
+          onOpenChange={onOpenChange}
+          items={items}
+        />
       </div>
 
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <div className="menudiv">
-        <Menu style={{ width: 256 }} mode="inline" items={logout} />
+      <div className="menudiv" style={{position:"fixed", bottom:"100px"}}>
+        <Menu style={{ width: 256}} mode="inline" items={logout} />
       </div>
       <br />
 

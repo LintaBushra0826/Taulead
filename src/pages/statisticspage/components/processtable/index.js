@@ -4,10 +4,10 @@ import { BodyWrapper } from "./index.styled";
 import Paragraph from "antd/es/skeleton/Paragraph";
 import { CardContainer } from "./index.styled";
 import { Card, Space } from "antd";
+import { Head } from "../rawmaterialchart/index.styled";
 import axios from "axios";
 import { CheckCircleTwoTone, MinusCircleOutlined } from "@ant-design/icons";
 import { SyncOutlined } from "@ant-design/icons";
-import SideMenu from "../../layout/sideMenu";
 
 const columns = [
   {
@@ -177,7 +177,7 @@ const ProcessTable = () => {
           : "N/A";
 
         return {
-          ProcessId: item.pid.toUpperCase(), // Uppercase the ProcessId
+          ProcessId: item.pid, // Uppercase the ProcessId
           ProcessName: item.name,
           StartTime: item.start,
           EndTime: item.end,
@@ -244,7 +244,7 @@ const ProcessTable = () => {
           : "N/A";
 
         return {
-          ProcessId: item.pid.toUpperCase(),
+          ProcessId: item.pid,
           ProcessName: item.name,
           StartTime: item.start,
           EndTime: item.end,
@@ -292,7 +292,7 @@ const ProcessTable = () => {
           : "N/A";
 
         return {
-          ProcessId: backlogItem.pid.toUpperCase(),
+          ProcessId: backlogItem.pid,
           ProcessName: backlogItem.name,
           StartTime: backlogItem.start,
           EndTime: backlogItem.end,
@@ -324,40 +324,34 @@ const ProcessTable = () => {
     console.log("combined process stats", combined);
   }, [Compdata, Inprogdata, BackLogdata, Executeddata]);
   return (
-    <div className="divform">
-      <BodyWrapper>
-        <SideMenu />
-
-        <CardContainer>
-          <Card
-            title="Process Statistics Table View"
-            style={{
-              width: "99%",
-              height: "88vh",
-              borderRadius: "10px",
-            }}
-          >
-            <Table
-              columns={columns}
-              dataSource={CombinedData}
-              size="middle"
-              scroll={{
-                y: 515,
-                scrollToFirstRowOnChange: true,
-              }}
-            />
-            <Space
-              direction="vertical"
-              style={{
-                width: "30%",
-                display: "flex",
-                flexDirection: "row",
-              }}
-            />
-          </Card>
-        </CardContainer>
-      </BodyWrapper>
-    </div>
+    <CardContainer>
+      <Card
+        // title="Process Statistics Table View"
+        style={{
+          width: "99%",
+          height: "88vh",
+          borderRadius: "10px",
+        }}
+      >
+        <Table
+          columns={columns}
+          dataSource={CombinedData}
+          size="middle"
+          scroll={{
+            y: 515,
+            scrollToFirstRowOnChange: true,
+          }}
+        />
+        <Space
+          direction="vertical"
+          style={{
+            width: "30%",
+            display: "flex",
+            flexDirection: "row",
+          }}
+        />
+      </Card>
+    </CardContainer>
   );
 };
 export default ProcessTable;

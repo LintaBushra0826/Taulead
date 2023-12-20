@@ -1,22 +1,49 @@
 import styled from "styled-components";
 
-export const Container = styled.div`
+export const Container1 = styled.div`
+  position: relative;
+  top: 40px;
   display: flex;
-  align-items: center;
-  width: fit-content;
-  padding-bottom:"20px" ;
+  gap: 20px;
 `;
 
 export const CardContainer = styled.div`
-  margin: 20px 10px;
-  padding-bottom:"20px" ;
+  width: 270px;
+  height: 5px;
 `;
 
 export const Paragraph = styled.div`
   display: flex;
-  justify-content: flex-start;
-  position: absolute;
-  top: 100px;
-  font-size: 18px;
+  justify-content: center;
+  font-size: 14px;
+  margin-top: -10px;
+  padding-bottom: 5px;
   font-weight: bold;
+`;
+export const Paragraph1 = styled.div`
+  display: flex;
+  justify-content: left;
+  font-size: 14px;
+  margin-top: -10px;
+  padding-bottom: 5px;
+  font-weight: bold;
+`;
+
+export const Container2 = styled.div`
+  display: flex;
+  gap: 30px;
+`;
+
+export const Container3 = styled.div`
+  display: flex;
+  position: absolute;
+  left: 296px;
+  top: 240px;
+`;
+
+export const Container4 = styled.div`
+  display: flex;
+  position: absolute;
+  top: 500px;
+  gap: 150px;
 `;

@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 export const ChartWrapper = styled.div`
   width: 100%;
-  overflow: scroll;
+  overflow-y: auto;
   padding:15px;
 `;
 

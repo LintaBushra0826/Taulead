@@ -2,6 +2,8 @@ import styled from "styled-components";
 
 export const SideMenuContainer = styled.div`
   height: 100vh;
+  border-radius: 0px 10px 10px 0px;
+  /* margin:5px 5px; */
   .ant-menu-inline .ant-menu-item::before,
   .ant-menu-inline .ant-menu-submenu-title::before {
     display: none;
@@ -32,7 +34,7 @@ export const LogoContainer = styled.div`
   justify-content: center;
   align-items: center;
   position: relative;
-  top: 30px;
+  top: 15px;
   padding-bottom: 50px;
 `;
 
@@ -45,18 +47,17 @@ export const Logo = styled.img`
 `;
 
 export const LogoutDiv = styled.div`
-  display:"flex";
-  bottom:0px;
+  position: fixed;
+  display: "flex";
+  bottom: 40px;
+  font-size: 10px;
+  padding-left: 30px;
 `;
 
 export const MenuDiv = styled.div`
-  /* position: absolute;
-  bottom: 10px;
-  left: 30px;
-  font-size: 10px;
-  text-align: left; */
-  display:"flex";
-  bottom:0px;
+  position: fixed;
+  display: "flex";
+  bottom: 40px;
   font-size: 10px;
   padding-left: 30px;
 `;

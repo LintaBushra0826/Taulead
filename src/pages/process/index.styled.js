@@ -2,8 +2,8 @@ import styled from "styled-components";
 
 export const ChartWrapper = styled.div`
   width: 100%;
+  padding: 15px;
   overflow: scroll;
-  padding:15px;
 `;
 
 export const ButtonWrapper = styled.div`
@@ -11,7 +11,6 @@ export const ButtonWrapper = styled.div`
   bottom: 20px;
   right: 35px;
   //overflow: scroll;
-
 `;
 
 export const FormHeader = styled.div`

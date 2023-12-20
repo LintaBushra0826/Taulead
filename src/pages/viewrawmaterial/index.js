@@ -6,6 +6,8 @@ import { Table, Typography, Modal, Input, Form, Tag, InputNumber } from "antd";
 import { Spin } from "antd";
 import axios from "axios";
 import { SpinWrapper } from "../../styles/global.styled";
+import { MdOutlineDelete } from "react-icons/md";
+import { FiEdit3 } from "react-icons/fi";
 
 function ViewRawMaterial() {
   const API_BASE_URL = "http://localhost:3005";
@@ -199,7 +201,7 @@ function ViewRawMaterial() {
       render: (_, record) => {
         return (
           <>
-            <Typography.Link
+            {/* <Typography.Link
               disabled={editingKey !== ""}
               onClick={() => showModal(record._id)}
               style={{
@@ -216,8 +218,21 @@ function ViewRawMaterial() {
               }}
             >
               UPDATE
-            </Typography.Link>
-            <Typography.Link
+            </Typography.Link> */}
+            <FiEdit3
+              onClick={() => showModal(record._id)}
+              style={{ color: "#360a5a", width: "20px", height: "35px" }}
+            />
+            <MdOutlineDelete
+              onClick={() => handleDeleteItem(record._id)}
+              style={{
+                marginLeft: "25px",
+                color: "#360a5a",
+                width: "20px",
+                height: "35px",
+              }}
+            />
+            {/* <Typography.Link
               disabled={editingKey !== ""}
               onClick={() => handleDeleteItem(record._id)}
               style={{
@@ -233,7 +248,7 @@ function ViewRawMaterial() {
               }}
             >
               DELETE
-            </Typography.Link>
+            </Typography.Link> */}
           </>
         );
       },
@@ -266,7 +281,7 @@ function ViewRawMaterial() {
       <BodyWrapper>
         <SideMenu />
         <TableWrapper>
-          {!loading && data.length > 0 ? ( 
+          {!loading && data.length > 0 ? (
             <Table
               columns={columns}
               dataSource={data}

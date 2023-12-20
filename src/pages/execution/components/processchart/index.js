@@ -42,8 +42,7 @@ function ProcessChart() {
   };
 
   const handleDeleteProcess = async (prId) => {
-
-    console.log("prId, sprId",prId);
+    console.log("prId, sprId", prId);
     try {
       await axios.delete(`${API_BASE_URL}/executed-process/${prId}`);
       // if (sprId) {
@@ -53,7 +52,7 @@ function ProcessChart() {
       window.location.reload();
     } catch (error) {
       console.error("Error deleting Executed process:", error);
-      alert("Error deleting Executed process",error);
+      alert("Error deleting Executed process", error);
     }
   };
 
@@ -155,10 +154,22 @@ function ProcessChart() {
             humanresource: item.humanResource,
             rawmaterial: item.rawMaterial,
             duration: ProcessdurationInHours,
-            progress:
-              ((new Date() - new Date(item.start)) /
-                (new Date(item.end) - new Date(item.start))) *
-              100,
+            progress: (() => {
+              const startDate = new Date(item.start);
+              const endDate = new Date(item.end);
+              const currentTime = new Date();
+
+              if (currentTime < startDate) {
+                return 0; // Task hasn't started yet
+              } else if (currentTime > endDate) {
+                return 100; // Task has finished
+              } else {
+                const totalDuration = endDate - startDate;
+                const elapsed = currentTime - startDate;
+                const calculatedProgress = (elapsed / totalDuration) * 100;
+                return calculatedProgress;
+              }
+            })(),
             type: "project",
             displayOrder: count++,
             hideChildren: false,
@@ -184,22 +195,25 @@ function ProcessChart() {
                 subhumanresource: subitem.humanResource,
                 subrawmaterial: subitem.rawMaterial,
                 duration: subdurationInHours,
-                progress:
-                  new Date() -
-                    new Date(new Date(subitem.substart).getTime() + item.diff) <
-                  0
-                    ? 0
-                    : ((new Date() -
-                        new Date(
-                          new Date(subitem.substart).getTime() + item.diff
-                        )) /
-                        (new Date(
-                          new Date(subitem.subend).getTime() + item.diff
-                        ) -
-                          new Date(
-                            new Date(subitem.substart).getTime() + item.diff
-                          ))) *
-                      100,
+                progress: (() => {
+                  const subStartDate =
+                    new Date(subitem.substart).getTime() + item.diff;
+                  const subEndDate =
+                    new Date(subitem.subend).getTime() + item.diff;
+                  const currentTime = new Date().getTime();
+
+                  if (currentTime < subStartDate) {
+                    return 0; // Subtask hasn't started yet
+                  } else if (currentTime > subEndDate) {
+                    return 100; // Subtask has finished
+                  } else {
+                    const totalDuration = subEndDate - subStartDate;
+                    const elapsed = currentTime - subStartDate;
+                    const calculatedProgress = (elapsed / totalDuration) * 100;
+                    return calculatedProgress;
+                  }
+                })(),
+
                 type: "task",
                 project: item.name,
                 displayOrder: count++,
@@ -257,180 +271,192 @@ function ProcessChart() {
     }
   };
 
-  //  useEffect(() => {
+  useEffect(() => {
+    const processTasks = async () => {
+      try {
+        // Fetch existing in-progress tasks
+        const inprogressResponse = await axios.get("http://localhost:3005/inprogress-process");
+        const inprogressData = inprogressResponse.data.data;
+        const inprogressKeys = new Set(inprogressData.map(item => item.key));
+  
+        // Fetch existing completed tasks
+        const completedResponse = await axios.get("http://localhost:3005/completed-process");
+        const completedData = completedResponse.data.data;
+        const completedKeys = new Set(completedData.map(item => item.key));
+  
+        for (const task of tasks) {
+          const key = task.key;
+  
+          if (!inprogressKeys.has(key) && task.status === "inprogress") {
+            try {
+              // Add the task to the in-progress table using an API call
+              const response = await axios.post(
+                `${API_BASE_URL}/inprogress-process`,
+                {
+                  // Add your task properties here
+                  // Assuming task properties are: newName, start, end, desc, duration, processId, humanresource, rawmaterial
+                  name: task.newName,
+                  start: task.start,
+                  end: task.end,
+                  desc: task.desc,
+                  duration: task.duration,
+                  pid: task.processId,
+                  humanresource: task.humanresource,
+                  rawmaterial: task.rawmaterial,
+                  key:task.key,
+                  status: task.status,
+                  progress: task.progress,
+                }
+              );
+  
+              if (response.status === 200) {
+                console.log("Successfully added in-progress process");
+                console.log("In-progress process", response);
+                inprogressKeys.add(key); // Update the set with the added key
+              } else {
+                console.error("Error adding in-progress process");
+              }
+            } catch (error) {
+              console.error("Error posting in-progress process data:", error);
+            }
+          } else if (!completedKeys.has(key) && task.status === "completed") {
+            try {
+              // Add the task to the completed table using an API call
+              const response = await axios.post(
+                `${API_BASE_URL}/completed-process`,
+                {
+                  // Add your task properties here
+                  // Assuming task properties are: newName, start, end, desc, duration, processId, humanresource, rawmaterial
+                  name: task.newName,
+                  start: task.start,
+                  end: task.end,
+                  desc: task.desc,
+                  duration: task.duration,
+                  pid: task.processId,
+                  humanresource: task.humanresource,
+                  rawmaterial: task.rawmaterial,
+                  key:task.key,
+                  status: task.status,
+                 
+                }
+              );
+
+              // const delresponse = await axios.delete(
+              //   `${API_BASE_URL}/inprogress-process`,
+              //   {
+              //     name: task.newName,
+              //     start: task.start,
+              //     end: task.end,
+              //     desc: task.desc,
+              //     duration: task.duration,
+              //     pid: task.processId,
+              //     humanresource: task.humanresource,
+              //     rawmaterial: task.rawmaterial,
+              //     key:task.key,
+              //     status: task.status,
+                 
+              //   }
+              // )
+  
+              if (response.status === 200) {
+                console.log("Successfully added completed process");
+                console.log("Completed process", response);
+                completedKeys.add(key); // Update the set with the added key
+              } else {
+                console.error("Error adding completed process");
+              }
+            } catch (error) {
+              console.error("Error posting completed process data:", error);
+            }
+          } else {
+            console.log("Task with key", key, "already exists with status", task.status);
+          }
+        }
+      } catch (error) {
+        console.error("Error processing tasks:", error);
+      }
+    };
+  
+    processTasks();
+  }, [tasks]);
+  
+
+  // useEffect(() => {
   //   const processTasks = async () => {
-  //     const processedTasks = new Set();
+  //     try {
+  //       const [inprogressResponse] = await Promise.all([
+  //         axios.get("http://localhost:3005/inprogress-process"),
+  //       ]);
 
-  //     for (const task of tasks) {
-  //       if (!processedTasks.has(task.id)) {
-  //         processedTasks.add(task.id);
+  //       const inprogressData = inprogressResponse.data.data;
+  //       console.log("inprogressResponse", inprogressData);
 
-  //         try {
-  //           let response;
-  //           if (task.status === "completed") {
-  //             response = await axios.post(`${API_BASE_URL}/completed-process`, {
-  //               name: task.newName,
-  //               start: task.start,
-  //               end: task.end,
-  //               desc: task.desc,
-  //               duration: task.duration,
-  //               pid: task.processId,
-  //               humanresource: task.humanresource,
-  //               rawmaterial: task.rawmaterial,
-  //             });
-  //           } else {
-  //             response = await axios.post(`${API_BASE_URL}/inprogress-process`, {
-  //               name: task.newName,
-  //               start: task.start,
-  //               end: task.end,
-  //               desc: task.desc,
-  //               duration: task.duration,
-  //               pid: task.processId,
-  //               humanresource: task.humanresource,
-  //               rawmaterial: task.rawmaterial,
-  //             });
+  //       for (const task of tasks) {
+  //         const taskEndTime = new Date(task.end);
+  //         const currentTime = new Date();
 
-  //             if (response.status === 200) {
-  //               alert("Successfully added in-progress process");
-  //               console.error("In-progress process", response);
+  //         if (taskEndTime <= currentTime) {
+  //           // The task has reached its end time
+  //           try {
+  //             // Update HumanResource status to "Available"
+  //             const humanResourceUpdateResponse = await axios.put(
+  //               `${API_BASE_URL}/humanresource/${task.humanresource.id}`,
+  //               {
+  //                 tag: "Available",
+  //               }
+  //             );
+
+  //             if (humanResourceUpdateResponse.status === 200) {
+  //               console.log("Employee status updated to AVAILABLE");
   //             }
+  //           } catch (error) {
+  //             console.error("Error updating employee status:", error);
+  //             // Handle error while updating employee status
   //           }
 
-  //           if (response && response.status === 200 && task.status === "completed") {
-  //             alert("Successfully added completed process");
-  //             console.error("Completed process", response);
-  //           }
-  //         } catch (error) {
-  //           if (task.status === "completed") {
-  //             alert("Error adding completed process");
-  //             console.error("Error posting completed process data:", error);
+  //           // Check if the task is in progress or completed
+  //           const matchInProgress = inprogressData.find(
+  //             (item) => item.id === task.id
+  //           );
+
+  //           if (matchInProgress) {
+  //             // Handle logic for in-progress tasks if needed
+  //             // For example, update the in-progress process data
+  //             try {
+  //               // Post in-progress task to the in-progress table
+  //               const inprogressPostResponse = await axios.post(
+  //                 `${API_BASE_URL}/inprogress-process`,
+  //                 task // Assuming the task data matches the in-progress table structure
+  //               );
+  //               alert("Posted to in-progress table:", inprogressPostResponse);
+  //             } catch (error) {
+  //               console.error("Error posting to in-progress table:", error);
+  //               // Handle error while posting to in-progress table
+  //             }
   //           } else {
-  //             alert("Error adding in-progress process");
-  //             console.error("Error posting in-progress process data:", error);
+  //             // Handle logic for completed tasks if needed
+  //             // For example, post the task to the completed table
+  //             try {
+  //               // Post completed task to the completed table
+  //               const completedPostResponse = await axios.post(
+  //                 `${API_BASE_URL}/completed-process`,
+  //                 task // Assuming the task data matches the completed table structure
+  //               );
+  //               alert("Posted to completed table:", completedPostResponse);
+  //             } catch (error) {
+  //               console.error("Error posting to completed table:", error);
+  //               // Handle error while posting to completed table
+  //             }
   //           }
   //         }
   //       }
+  //     } catch (error) {
+  //       console.error("Error processing tasks:", error);
   //     }
   //   };
 
   //   processTasks();
   // }, [tasks]);
-
-  useEffect(() => {
-    const processTasks = async () => {
-      try {
-        const [inprogressResponse] = await Promise.all([
-          axios.get("http://localhost:3005/inprogress-process"),
-        ]);
-
-        const inprogressData = inprogressResponse.data.data;
-        console.log("inprogressResponse", inprogressData);
-
-        let processedTasksIds = [];
-
-        for (const task of tasks) {
-          console.log("tasks.id", tasks);
-
-          if (inprogressData.length === 0 && task.length > 0) {
-            // If in-progress data is empty and there are tasks, mark the first task as in-progress
-            const firstTask = task[0];
-            try {
-              const postData = {
-                name: firstTask.newName,
-                start: firstTask.start,
-                end: firstTask.end,
-                desc: firstTask.desc,
-                duration: firstTask.duration,
-                pid: firstTask.processId,
-                humanresource: firstTask.humanresource,
-                rawmaterial: firstTask.rawmaterial,
-              };
-
-              const response = await axios.post(
-                `${API_BASE_URL}/inprogress-process`,
-                postData
-              );
-
-              if (response.status === 200) {
-                console.log("First task marked as in-progress", response);
-                processedTasksIds.push(tasks.key);
-                // tasks.shift();
-              }
-            } catch (error) {
-              alert("Error marking the first task as in-progress");
-              console.error(
-                "Error marking the first task as in-progress:",
-                error
-              );
-            }
-          }
-          const matchInProgress = inprogressData.find(
-            (item) => item.id === tasks.id
-          );
-          if (matchInProgress) {
-            console.log("Process attributes are matched", matchInProgress);
-            processedTasksIds.push(tasks.key);
-          }
-          // const newTasks = tasks.filter(
-          //   (task) => !processedTasksIds.includes(task.key)
-          // );
-          // console.log("newtask", newTasks);
-
-          // for (const task of newTasks) {
-          //   try {
-          //     let response;
-          //     const postData = {
-          //       name: task.newName,
-          //       start: task.start,
-          //       end: task.end,
-          //       desc: task.desc,
-          //       duration: task.duration,
-          //       pid: task.processId,
-          //       humanresource: task.humanresource,
-          //       rawmaterial: task.rawmaterial,
-          //     };
-
-          //     if (task.status === "inprogress") {
-          //       response = await axios.post(
-          //         `${API_BASE_URL}/inprogress-process`,
-          //         postData
-          //       );
-          //       console.log("In-progress process", response);
-          //     } else {
-          //       response = await axios.post(
-          //         `${API_BASE_URL}/completed-process`,
-          //         postData
-          //       );
-          //       if (response.status === 200) {
-          //         console.log("Completed process", response);
-          //       }
-          //     }
-
-          //     if (
-          //       response &&
-          //       response.status === 200 &&
-          //       task.status === "completed"
-          //     ) {
-          //       // alert("Successfully added completed process");
-          //     }
-          //   } catch (error) {
-          //     if (task.status === "completed") {
-          //       alert("Error adding completed process");
-          //       console.error("Error posting completed process data:", error);
-          //     } else {
-          //       alert("Error adding in-progress process");
-          //       console.error("Error posting in-progress process data:", error);
-          //     }
-          //   }
-          // }
-        }
-      } catch (error) {
-        console.error("Error fetching in-progress data:", error);
-      }
-    };
-
-    processTasks();
-  }, [tasks]);
 
   let columnWidth = 65;
   if (view === ViewMode.Hour) {

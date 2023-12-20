@@ -32,9 +32,9 @@ function HumanresourceForm() {
   };
   return (
     <FormWrapper>
-      <FormHeading className="HeaderHeading">
+      {/* <FormHeading className="HeaderHeading">
         Human Resource Inventory
-      </FormHeading>
+      </FormHeading> */}
       <Form
         name="basic"
         layout="vertical"

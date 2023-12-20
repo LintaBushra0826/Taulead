@@ -1,306 +1,566 @@
 import React, { useState, useEffect } from "react";
-// import Header from "../../layout/justheader";
+import Header from "../../layout/justheader";
 import Sidemenu from "../../layout/sideMenu";
-import { Card, Progress, Button, Space } from "antd";
+import { Card, Progress, Button, Space, Tag, List, Table } from "antd";
 import {
-  Container,
+  Container1,
+  Container2,
+  Container3,
+  Container4,
+  Container5,
   CardContainer,
   Paragraph,
-  // DashboardchartWrapper,
-  // StatsChartWrapper,
+  Paragraph1,
+  TagWrapper,
 } from "./index.styled";
 import { Line } from "@ant-design/plots";
 import { BodyWrapper, MainContainer } from "../../styles/global.styled";
 import axios from "axios";
+import {
+  CheckCircleOutlined,
+  MinusCircleOutlined,
+  SyncOutlined,
+} from "@ant-design/icons";
+import { Doughnut } from "react-chartjs-2";
+import VirtualList from "rc-virtual-list";
+import { Avatar, message } from "antd";
+import { CgReorder } from "react-icons/cg";
+import { Link } from "react-router-dom";
+import { Column } from "@ant-design/plots";
+import { FcProcess } from "react-icons/fc";
+
+const fakeDataUrl =
+  "https://randomuser.me/api/?results=20&inc=name,gender,email,nat,picture&noinfo";
+const ContainerHeight = 330;
+
+const CContainerHeight = 210;
 
 function Dashboard() {
+  const pcmpercent = 5;
+  const pinpercent = 4;
+  const pbkpercent = 1;
+  const avaialable = 5;
+  const busy = 4;
+  const usedIn = 10;
+  const UnusedIn = 4;
+
+  const ppdata = {
+    datasets: [
+      {
+        data: [pcmpercent, pinpercent, pbkpercent],
+        backgroundColor: ["#061161", "#F3904F", "#F0ECE5"],
+        borderWidth: 2,
+        borderColor: "transparent",
+        spacing: 1,
+      },
+    ],
+  };
+  const hrdata = {
+    datasets: [
+      {
+        data: [avaialable, busy],
+        backgroundColor: ["#061161", "#F3904F"],
+        borderWidth: 2,
+        borderColor: "transparent",
+        spacing: 1,
+      },
+    ],
+  };
+  const Indata = {
+    datasets: [
+      {
+        data: [usedIn, UnusedIn],
+        backgroundColor: ["#061161", "#F3904F"],
+        borderWidth: 2,
+        borderColor: "transparent",
+        spacing: 1,
+      },
+    ],
+  };
+
   const [data, setData] = useState([]);
-  const [totalInventoryCount, setTotalInventoryCount] = useState(0);
-  const [totalhrCount, setTotalhrCount] = useState(0);
-  const [totalProcessCount, setTotalProcessCount] = useState(0);
-  const [hrdata, sethrData] = useState([]);
-  const [CompProcessdata, setCompProcessdata] = useState([]);
+  const appendData = () => {
+    fetch(fakeDataUrl)
+      .then((res) => res.json())
+      .then((body) => {
+        setData(data.concat(body.results));
+        // message.success(`${body.results.length} more items loaded!`);
+      });
+  };
   useEffect(() => {
-    fetchRawMaterial();
+    appendData();
   }, []);
-
-  const fetchRawMaterial = async () => {
-    try {
-      const response = await axios.get("http://localhost:3005/rawMaterial");
-      const rawData = response.data.data;
-
-      const dataArray = Array.isArray(rawData) ? rawData : [];
-      setData(dataArray);
-
-      setTotalInventoryCount(dataArray.length);
-    } catch (error) {
-      console.error("Error fetching raw material:", error);
+  const onScroll = (e) => {
+    if (
+      e.currentTarget.scrollHeight - e.currentTarget.scrollTop ===
+      ContainerHeight
+    ) {
+      appendData();
     }
   };
 
-  useEffect(() => {
-    fetchHumanResource();
-  }, []);
+  const [chartdata, setchartData] = useState([]);
 
-  const fetchHumanResource = async () => {
-    try {
-      const response = await axios.get("http://localhost:3005/humanresource");
-      const rawData = response.data.data;
-
-      const dataArray = Array.isArray(rawData) ? rawData : [];
-      sethrData(dataArray);
-
-      const hrElements = dataArray.filter(
-        (element) => element.tag === "available"
-      );
-
-      setTotalhrCount(hrElements.length);
-    } catch (error) {
-      console.error("Error fetching human resource:", error);
-    }
-  };
-
-  useEffect(() => {
-    fetchCompletedProcess();
-  }, []);
-
-  const fetchCompletedProcess = async () => {
-    try {
-      const response = await axios.get(
-        "http://localhost:3005/completed-process"
-      );
-      const rawData = response.data.data;
-      const dataArray = Array.isArray(rawData) ? rawData : [];
-      setCompProcessdata(dataArray);
-      console.log("completed processes", dataArray);
-    } catch (error) {
-      console.error("Error fetching compeleted process:", error);
-    }
-  };
-
-  // Calculate the total limit based on the maximum item limit (example: itemlimit property)
-  const totalLimit = Math.max(...data.map((item) => item.itemlimit));
-  console.log("totalLimit", totalLimit);
-
-  const formattedData = CompProcessdata.map((process, index) => ({
-    name: process.name, // X-axis: Process name
-    end: new Date(process.actual_end).getHours(),
-    start: new Date(process.actual_start).getHours() // Y-axis: End time of the process (converted to milliseconds)
-  }));
-
+  const statsdata = [
+    {
+      processId: "ppp-1",
+      hours: 4,
+      type: "hr",
+    },
+    {
+      processId: "ppp-1",
+      hours: 7,
+      type: "raw",
+    },
+    {
+      processId: "ppp-2",
+      hours: 6,
+      type: "hr",
+    },
+    {
+      processId: "ppp-2",
+      hours: 3,
+      type: "raw",
+    },
+    {
+      processId: "ppp-3",
+      hours: 2,
+      type: "hr",
+    },
+    {
+      processId: "ppp-4",
+      hours: 3,
+      type: "raw",
+    },
+    {
+      processId: "ppp-5",
+      hours: 9,
+      type: "raw",
+    },
+    {
+      processId: "ppp-6",
+      hours: 5,
+      type: "raw",
+    },
+  ];
   const config = {
-    data,
-    xField: "year",
-    yField: "gdp",
-    seriesField: "name",
-    yAxis: {
-      label: {
-        formatter: (v) => `${(v / 10e8).toFixed(1)} B`,
-      },
+    data: statsdata,
+    isStack: true,
+    xField: "processId",
+    yField: "hours",
+    seriesField: "type",
+    label: {
+      position: "middle",
+      layout: [
+        { type: "interval-adjust-position" },
+        { type: "interval-hide-overlap" },
+        { type: "adjust-color" },
+      ],
     },
-    legend: {
-      position: "top",
-    },
-    smooth: true,
-    // @TODO 后续会换一种动画方式
-    animation: {
-      appear: {
-        animation: "path-in",
-        duration: 5000,
-      },
-    },
-  };
-  const CompConfig = {
-    data: formattedData,
-    xField: "start", // X-axis field
-    yField: "end", // Y-axis field
-    seriesField: "name", // Field for series (if applicable)
-    yAxis: {
-      formatter: (v) => v,
-    },
-    legend: {
-      position: "top", // Legend position
-    },
-    smooth: true, // Smooth lines
-    animation: {
-      appear: {
-        animation: "path-in",
-        duration: 5000,
-      },
+    color: ({ type }) => {
+      if (type === "hr") {
+        return "#faa46e"; // Color for 'hr' type
+      } else if (type === "raw") {
+        return "#061161"; // Color for 'raw' type
+      }
     },
   };
+  const columns = [
+    {
+      title: "Process Id",
+      dataIndex: "ProcessId",
+    },
+    {
+      title: "Process Name",
+      dataIndex: "ProcessName",
+    },
+    {
+      title: "Possible Executions",
+      dataIndex: "possibleExe",
+    },
+    {
+      title: "Status",
+      dataIndex: "status",
+    },
+  ];
 
   return (
     <>
       <BodyWrapper>
         <Sidemenu />
+        <Header />
         <MainContainer>
-          <Container>
+          <Container1>
+            {/*Inventory Overview */}
             <CardContainer>
               <Card
-                title="Inventory"
                 style={{
-                  width: "350px",
-                  borderRadius: "20px",
-                  boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+                  height: "145px",
+                  borderRadius: "10px",
+                  textAlign: "center",
+                  boxShadow: "0 1px 8px #f3edf7",
+                  // backgroundColor: "#f3f0f5",
+                  background:
+                    "linear-gradient(140deg, #fafafa, #fafafa, #faece3 120%)",
                 }}
               >
-                <Paragraph>Total Inventory</Paragraph>
-                <Progress
-                  type="circle"
-                  percent={(totalInventoryCount * 100) / totalLimit}
-                  width={80}
-                  format={() => `${(totalInventoryCount * 100) / totalLimit}%`}
-                  strokeColor="#52c41a"
-                  style={{ display: "flex", justifyContent: "flex-end" }}
-                />
-                <Space
-                  direction="vertical"
-                  style={{
-                    width: "30%",
-                    display: "flex",
-                    flexDirection: "row",
-                  }}
-                >
-                  <Button type="text" block>
-                    Manage
-                  </Button>
-                  <Button type="link" block>
-                    View
-                  </Button>
-                </Space>
+                <Paragraph>Raw Material Overview</Paragraph>
+                <div style={{ position: "relative" }}>
+                  <Doughnut
+                    data={Indata}
+                    options={{
+                      cutout: 70,
+                      radius: 18,
+                    }}
+                    width={100}
+                    height={100}
+                    style={{
+                      position: "absolute",
+                      marginTop: "-10%",
+                      left: "30%",
+                      transform: "translate(-30%, -30%)", // Center the chart
+                      backgroundColor: "transparent",
+                    }}
+                  />
+                </div>
+                <div style={{ marginTop: "50px" }}>
+                  {" "}
+                  <Tag
+                    style={{
+                      fontSize: "9px",
+                      fontWeight: "bold",
+                      color: "#061161",
+                      border: "none",
+                    }}
+                  >
+                    {10} Used
+                  </Tag>
+                  <Tag
+                    style={{
+                      fontSize: "9px",
+                      fontWeight: "bold",
+                      color: "#F3904F",
+                      border: "none",
+                    }}
+                    u
+                  >
+                    {4} Un-Used
+                  </Tag>
+                </div>
               </Card>
             </CardContainer>
+            {/* Human Resource Overview */}
             <CardContainer>
               <Card
-                title="Human Resource"
                 style={{
-                  width: "350px",
-                  borderRadius: "20px",
-                  boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+                  height: "145px",
+                  borderRadius: "10px",
+                  textAlign: "center",
+                  boxShadow: "0 1px 8px #f3edf7",
+                  // backgroundColor: "#fcf1ed",
+                  background:
+                    "linear-gradient(140deg, #fafafa, #fafafa, #ebdcf7 120%)",
                 }}
               >
-                <Paragraph>Available Resource</Paragraph>
-                <Progress
-                  type="circle"
-                  percent={(totalhrCount * 100) / hrdata.length}
-                  width={80}
-                  format={() => `${(totalhrCount * 100) / hrdata.length}%`}
-                  strokeColor="#52c41a"
-                  style={{ display: "flex", justifyContent: "flex-end" }}
-                />
-                <Space
-                  direction="vertical"
-                  style={{
-                    width: "30%",
-                    display: "flex",
-                    flexDirection: "row",
-                  }}
-                >
-                  <Button type="text" block>
-                    Manage
-                  </Button>
-                  <Button type="link" block>
-                    View
-                  </Button>
-                </Space>
+                <Paragraph>HR Overview</Paragraph>
+                <div style={{ position: "relative" }}>
+                  <Doughnut
+                    data={hrdata}
+                    options={{
+                      cutout: 70,
+                      radius: 18,
+                    }}
+                    width={100}
+                    height={100}
+                    style={{
+                      position: "absolute",
+                      marginTop: "-10%",
+                      left: "30%",
+                      transform: "translate(-30%, -30%)", // Center the chart
+                      backgroundColor: "transparent",
+                    }}
+                  />
+                </div>
+                <div style={{ marginTop: "50px" }}>
+                  {" "}
+                  <Tag
+                    style={{
+                      fontSize: "9px",
+                      fontWeight: "bold",
+                      color: "#061161",
+                      border: "none",
+                    }}
+                  >
+                    {5} Available
+                  </Tag>
+                  <Tag
+                    style={{
+                      fontSize: "9px",
+                      fontWeight: "bold",
+                      color: "#F3904F",
+                      border: "none",
+                    }}
+                    u
+                  >
+                    {4} Busy
+                  </Tag>
+                </div>
               </Card>
             </CardContainer>
-            <CardContainer>
-              <Card
-                title="Process"
-                style={{
-                  width: "345px",
-                  borderRadius: "20px",
-                  boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-                }}
-              >
-                <Paragraph>Completed Process</Paragraph>
-                <Progress
-                  type="circle"
-                  percent={90}
-                  width={80}
-                  format={() => "90%"}
-                  strokeColor="#f5222d"
-                  style={{ display: "flex", justifyContent: "flex-end" }}
-                />
-                <Space
-                  direction="vertical"
-                  style={{
-                    width: "30%",
-                    display: "flex",
-                    flexDirection: "row",
-                  }}
-                >
-                  <Button type="text" block>
-                    Manage
-                  </Button>
-                  <Button type="link" block>
-                    View
-                  </Button>
-                </Space>
-              </Card>
-            </CardContainer>
-          </Container>
 
-          <CardContainer>
-            <Card
-              title="Process Statistics"
-              style={{
-                width: "660px",
-                height: "400px",
-                borderRadius: "20px",
-                boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-                marginTop: "20px",
-              }}
-            >
-              {/* <Line
-                {...config}
+            {/* Process Overview */}
+            <CardContainer>
+              <Card
                 style={{
-                  width: "600px",
-                  height: "300px",
+                  height: "145px",
+                  borderRadius: "10px",
+                  textAlign: "center",
+                  boxShadow: "0 1px 8px #f3edf7",
+                  // backgroundColor: "#f2f4fc",
+                  background:
+                    "linear-gradient(140deg, #fafafa, #fafafa, #faece3 120%)",
                 }}
-              /> */}
-              <Space
-                direction="vertical"
+              >
+                <Paragraph>Process Overview</Paragraph>
+                <div style={{ position: "relative" }}>
+                  <Doughnut
+                    data={ppdata}
+                    options={{
+                      cutout: 70,
+                      radius: 18,
+                    }}
+                    width={100}
+                    height={100}
+                    style={{
+                      position: "absolute",
+                      marginTop: "-10%",
+                      left: "30%",
+                      transform: "translate(-30%, -30%)", // Center the chart
+                      backgroundColor: "transparent",
+                    }}
+                  />
+                </div>
+                <div style={{ marginTop: "50px" }}>
+                  {" "}
+                  <Tag
+                    style={{
+                      fontSize: "9px",
+                      fontWeight: "bold",
+                      color: "#061161",
+                      border: "none",
+                    }}
+                  >
+                    {1} Completed
+                  </Tag>
+                  <Tag
+                    style={{
+                      fontSize: "9px",
+                      fontWeight: "bold",
+                      color: "#F3904F",
+                      border: "none",
+                    }}
+                    u
+                  >
+                    {1} In-Progress
+                  </Tag>
+                  <Tag
+                    style={{
+                      fontSize: "9px",
+                      fontWeight: "bold",
+                      color: "black",
+                      border: "none",
+                    }}
+                  >
+                    {1} Backlog
+                  </Tag>
+                </div>
+
+                {/* <Button
+                  type="link"
+                  style={{
+                    color: "#360a5a",
+                    display: "flex",
+                    fontSize: "12px",
+                    margin: "auto",
+                    paddingTop: "10px",
+                  }}
+                >
+                  View
+                </Button> */}
+              </Card>
+            </CardContainer>
+
+            <Container2>
+              {/* Inventory Reorders */}
+              <CardContainer>
+                <Card
+                  style={{
+                    height: "410px",
+                    width: "270px",
+                    borderRadius: "10px",
+                    textAlign: "center",
+                    boxShadow: "0 8px 8px #f0edf2",
+                    backgroundColor: "transparent",
+                  }}
+                >
+                  <Paragraph>Inventory Reorders</Paragraph>
+                  <div style={{ position: "relative", textAlign: "left" }}>
+                    <List>
+                      <VirtualList
+                        data={data}
+                        height={ContainerHeight}
+                        itemHeight={47}
+                        onScroll={onScroll}
+                      >
+                        {(item) => (
+                          <List.Item key={item.email}>
+                            <List.Item.Meta
+                              avatar={
+                                <CgReorder
+                                  style={{
+                                    color: "#F3904F",
+                                    width: "20px",
+                                    height: "30px",
+                                  }}
+                                />
+                              }
+                              title={
+                                <Link to="/viewrawmaterial">
+                                  {item.name.last}
+                                </Link>
+                              }
+                            />
+                            <div>
+                              23
+                              {/* <Progress
+                              steps={3}
+                              percent={50}
+                              
+                              size="small"
+                              strokeColor="#F3904F"
+                            /> */}
+                            </div>
+                          </List.Item>
+                        )}
+                      </VirtualList>
+                    </List>
+                  </div>
+                </Card>
+              </CardContainer>
+            </Container2>
+          </Container1>
+
+          <Container3>
+            <CardContainer>
+              <Card
                 style={{
-                  width: "30%",
-                  display: "flex",
-                  flexDirection: "row",
+                  height: "250px",
+                  width: "815px",
+                  borderRadius: "10px",
+                  textAlign: "center",
+                  boxShadow: "0 8px 8px #f0edf2",
+                  backgroundColor: "transparent",
                 }}
-              />
-            </Card>
-            <Card
-              title="Completed Processes"
-              style={{
-                width: "400px",
-                height: "400px",
-                borderRadius: "20px",
-                boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-                float: "right",
-                marginTop: "-400px",
-                paddingBottom: "30px",
-              }}
-            >
-              <Line
-                {...CompConfig}
+              >
+                <Paragraph1>Statistics</Paragraph1>
+                <div style={{ position: "relative", height: "200px" }}>
+                  <Column {...config} />
+                </div>
+              </Card>
+            </CardContainer>
+          </Container3>
+
+          <Container4>
+            <CardContainer>
+              <Card
                 style={{
-                  width: "350px",
-                  height: "300px",
+                  height: "270px",
+                  width: "400px",
+                  borderRadius: "10px",
+                  textAlign: "center",
+                  boxShadow: "0 8px 8px #f0edf2",
+                  backgroundColor: "transparent",
                 }}
-              />
-              <Space
-                direction="vertical"
+              >
+                <Paragraph1>Process Cost Analysis</Paragraph1>
+                <div style={{ position: "relative", textAlign: "left" }}>
+                  <List>
+                    <VirtualList
+                      data={data}
+                      height={CContainerHeight}
+                      itemHeight={47}
+                      onScroll={onScroll}
+                    >
+                      {(item) => (
+                        <List.Item key={item.email}>
+                          <List.Item.Meta
+                            avatar={
+                              <FcProcess
+                                style={{
+                                  color: "#360a5a",
+                                  width: "15px",
+                                  height: "20px",
+                                }}
+                              />
+                            }
+                            title={
+                              <Link to="/process">
+                                <span style={{ color: "green" }}>
+                                  {`ppp-1 `.toUpperCase()}
+                                </span>
+                                {item.name.last}
+                              </Link>
+                            }
+                          />
+                          <div>
+                            600000{" "}
+                            <span style={{ fontSize: "5px" }}>
+                              (Aggregate Cost)
+                            </span>
+                          </div>
+                        </List.Item>
+                      )}
+                    </VirtualList>
+                  </List>
+                </div>
+              </Card>
+            </CardContainer>
+
+            <CardContainer>
+              <Card
                 style={{
-                  width: "30%",
-                  display: "flex",
-                  flexDirection: "row",
-                  justifyContent: "flex-end",
-                  alignItems: "flex-start",
+                  height: "270px",
+                  width: "710px",
+                  borderRadius: "10px",
+                  textAlign: "center",
+                  boxShadow: "0 8px 8px #f0edf2",
+                  backgroundColor: "transparent",
                 }}
-              />
-            </Card>
-          </CardContainer>
+              >
+                <Paragraph1>Optimization</Paragraph1>
+                <div
+                  style={{
+                    position: "relative",
+                    height: "200px",
+                    background: "transparent",
+                  }}
+                >
+                  <Table
+                    columns={columns}
+                    // dataSource={CombinedData}
+                    size="middle"
+                    scroll={{
+                      y: 515,
+                      scrollToFirstRowOnChange: true,
+                    }}
+                    style={{
+                      background: "transparent",
+                    }}
+                  />
+                </div>
+              </Card>
+            </CardContainer>
+          </Container4>
         </MainContainer>
       </BodyWrapper>
     </>

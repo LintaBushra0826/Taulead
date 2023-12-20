@@ -26,7 +26,7 @@ function ProcessTags({ status }) {
   } else {
     // Handle other status values or provide a default
     tagColor = "default";
-    tagName = "Default";
+    tagName = "Not Started Yet";
     tagIcon = <ClockCircleOutlined />;
   }
 

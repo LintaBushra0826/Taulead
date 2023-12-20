@@ -8,6 +8,8 @@ import axios from "axios";
 import { useLocation } from "react-router-dom";
 import { AutoComplete } from "antd";
 import LimitForm from "./component/limitform";
+import { Link } from "react-router-dom";
+import { FormWrapper } from "./index.style";
 
 function RawMaterialForm() {
   const location = useLocation();
@@ -29,6 +31,7 @@ function RawMaterialForm() {
   const [one, setOne] = useState("");
   const [two, setTwo] = useState("");
   const [total, setTotal] = useState(0);
+  const [size, setSize] = useState("small");
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -142,16 +145,17 @@ function RawMaterialForm() {
 
   return (
     <>
-      <FormHeading className="HeaderHeading">
-        Raw Material Inventory
-      </FormHeading>
+      <FormWrapper>
+        {/* <FormHeading className="HeaderHeading">
+          Raw Material Inventory
+        </FormHeading> */}
 
-      <LimitForm />
-      <Divider />
+        {/* <LimitForm />
+        <Divider /> */}
 
-      <Form name="basic" layout="vertical" autoComplete="off">
-        <Row gutter={20}>
-          {/* <Col span={8}>
+        <Form name="basic" layout="vertical" autoComplete="off">
+          <Row gutter={20}>
+            {/* <Col span={8}>
             <Form.Item label="Inventory Limit" name="itemlimit">
               <Input
                 name="itemlimit"
@@ -160,116 +164,137 @@ function RawMaterialForm() {
               />
             </Form.Item>
           </Col> */}
-          {/* <br />
+            {/* <br />
           <Divider />
           <br /> */}
 
-          <Col span={8}>
-            <Form.Item label="Item Name" name="Name">
-              <Input
-                name="Name"
-                value={formData.Name}
-                onChange={handleInputChange}
-              />
-            </Form.Item>
-          </Col>
-
-          <Col span={8}>
-            <Form.Item label="Item Description" name="Desc">
-              <Input
-                name="Desc"
-                value={formData.Desc}
-                onChange={handleInputChange}
-              />
-            </Form.Item>
-          </Col>
-
-          <Col span={8}>
-            <Form.Item label="Item Unit" name="unit">
-              <AutoComplete
-                value={searchValue}
-                options={options.map((option) => ({ value: option }))}
-                onSelect={handleSelect}
-                onSearch={handleSearch}
-                // style={{ width: 200 }}
-              >
+            <Col span={8}>
+              <Form.Item label="Item Name" name="Name">
                 <Input
-                  name="unit"
-                  value={formData.unit}
+                  name="Name"
+                  value={formData.Name}
                   onChange={handleInputChange}
                 />
-              </AutoComplete>
-            </Form.Item>
-          </Col>
+              </Form.Item>
+            </Col>
 
-          <Col span={8}>
-            <Form.Item label="Item Quantity" name="quan">
-              <Input
-                name="quan"
-                value={formData.quan}
-                // onChange={(e) => setOne(e.target.value)}
-                onChange={handleInputChange}
-              />
-            </Form.Item>
-          </Col>
+            <Col span={8}>
+              <Form.Item label="Item Description" name="Desc">
+                <Input
+                  name="Desc"
+                  value={formData.Desc}
+                  onChange={handleInputChange}
+                />
+              </Form.Item>
+            </Col>
 
-          <Col span={8}>
-            <Form.Item label="Item Expiry Date" name="expdate">
-              <Input
-                name="expdate"
-                value={formData.expdate}
-                onChange={handleInputChange}
-                // placeholder="2025-10-13"
-                type="date"
-              />
-            </Form.Item>
-          </Col>
+            <Col span={6}>
+              <Form.Item label="Item Unit" name="unit">
+                <div style={{ display: "flex" }}>
+                  <AutoComplete
+                    value={searchValue}
+                    options={options.map((option) => ({ value: option }))}
+                    onSelect={handleSelect}
+                    onSearch={handleSearch}
+                    style={{ flex: "1" }}
+                  >
+                    <Input
+                      name="unit"
+                      value={formData.unit}
+                      onChange={handleInputChange}
+                      style={{
+                        border: "1px solid #ccc",
+                        color: "#555",
+                        flex: "1",
+                      }}
+                    />
+                  </AutoComplete>
 
-          <Col span={8}>
-            <Form.Item label="Item Price" name="price">
-              <Input
-                name="price"
-                value={formData.price}
-                // onChange={(e) => setTwo(e.target.value)}
-                onChange={handleInputChange}
-              />
-            </Form.Item>
-          </Col>
+                  <Link to="/measuringunit">
+                    <Button
+                      type="text"
+                      style={{
+                        marginLeft: "8px",
+                        background: "#f5f5f5",
+                        fontSize: "12px",
+                      }}
+                    >
+                      Customize..
+                    </Button>
+                  </Link>
+                </div>
+              </Form.Item>
+            </Col>
 
-          <Col span={8}>
-            <Form.Item label="Total Cost" name="totcost">
-              <Input
-                name="totcost"
-                value={total}
-                onChange={handleInputChange}
-              />
-              {/* console.log("total value", total) */}
-              {total}
-            </Form.Item>
-          </Col>
+            <Col span={8}>
+              <Form.Item label="Item Quantity" name="quan">
+                <Input
+                  name="quan"
+                  value={formData.quan}
+                  // onChange={(e) => setOne(e.target.value)}
+                  onChange={handleInputChange}
+                />
+              </Form.Item>
+            </Col>
 
-          <Col span={8}>
-            <Form.Item label="Tag" name="tag">
-              <Input
-                name="tag"
-                defaultValue={formData.tag}
-                onChange={handleInputChange}
-                readOnly
-              />
-            </Form.Item>
-          </Col>
-        </Row>
+            <Col span={8}>
+              <Form.Item label="Item Expiry Date" name="expdate">
+                <Input
+                  name="expdate"
+                  value={formData.expdate}
+                  onChange={handleInputChange}
+                  // placeholder="2025-10-13"
+                  type="date"
+                />
+              </Form.Item>
+            </Col>
 
-        <Form.Item>
-          <ButtonContainer>
-            <Button type="primary" onClick={handleSubmit}>
-              Add Item
-            </Button>
-            <br></br>
-            <Button onClick={handleViewItems}>View Item</Button>
-          </ButtonContainer>
-        </Form.Item>
-      </Form>
+            <Col span={6}>
+              <Form.Item label="Item Price" name="price">
+                <Input
+                  name="price"
+                  value={formData.price}
+                  // onChange={(e) => setTwo(e.target.value)}
+                  onChange={handleInputChange}
+                />
+              </Form.Item>
+            </Col>
+
+            <Col span={8}>
+              <Form.Item label="Total Cost" name="totcost">
+                <Input
+                  name="totcost"
+                  value={total}
+                  onChange={handleInputChange}
+                />
+                {/* console.log("total value", total) */}
+                {total}
+              </Form.Item>
+            </Col>
+
+            <Col span={8}>
+              <Form.Item label="Tag" name="tag">
+                <Input
+                  name="tag"
+                  defaultValue={formData.tag}
+                  onChange={handleInputChange}
+                  readOnly
+                />
+              </Form.Item>
+            </Col>
+          </Row>
+
+          <Form.Item>
+            <ButtonContainer>
+              <Button type="primary" onClick={handleSubmit}>
+                Add Item
+              </Button>
+              <br></br>
+              <Button onClick={handleViewItems}>View Item</Button>
+            </ButtonContainer>
+          </Form.Item>
+        </Form>
+      </FormWrapper>
     </>
   );
 }

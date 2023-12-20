@@ -1,6 +1,9 @@
 import styled from "styled-components";
 
-export const FormWrapper = styled.div``;
+export const FormWrapper = styled.div`
+  position: relative;
+  top: 10%;
+`;
 
 export const FormHeading = styled.div`
   font-size: 16pt;

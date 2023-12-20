@@ -176,14 +176,42 @@ function ProcessChart() {
       const processesArray = Object.values(mappedProcesses);
 
       // Log the mapped processes
-      console.log("processesArray",processesArray);
+      console.log("processesArray", processesArray);
 
-      setTasks(
-        processesArray.map((task) => ({
+      const updatedTasks = processesArray.map((task) => {
+        const newName = (
+          <>
+            <FcProcess />{" "}
+            {task.processId && (
+              <span style={{ color: "green" }}>
+                {task.processId.toUpperCase()}
+              </span>
+            )}{" "}
+            {task.subprocessId && (
+              <span style={{ color: "blue" }}>
+                {task.subprocessId.toUpperCase()}
+              </span>
+            )}{" "}
+            {task.type === "project"
+              ? task.name
+              : task.subprocesses
+              ? `${task.subprocesses.subname} - ${task.name}`
+              : task.name}
+            <ProcessTags
+              status={getStatusForProcess(task)}
+              style={{ display: "flex" }}
+            />
+          </>
+        );
+
+        return {
           ...task,
-        }))
-      );
-      
+          name: newName,
+          newName: task.name,
+          status: getStatusForProcess(task),
+        };
+      });
+      setTasks(updatedTasks);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -220,7 +248,6 @@ function ProcessChart() {
       }
     }
     setTasks(newTasks);
-    
   };
 
   const handleClick = (task) => {
@@ -244,7 +271,7 @@ function ProcessChart() {
   };
 
   const handleDeleteProcess = async (prId, sprId) => {
-    console.log("prId, sprId",prId, sprId);
+    console.log("prId, sprId", prId, sprId);
     try {
       await axios.delete(`${API_BASE_URL}/process/${prId}`);
       if (sprId) {
@@ -265,7 +292,13 @@ function ProcessChart() {
 
   return (
     <>
-      <Wrapper style={{ display:"flex", alignItems:"center", justifyContent:"center" }}>
+      <Wrapper
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
         <ViewSwitcher
           onViewModeChange={(viewMode) => setView(viewMode)}
           onViewListChange={setIsChecked}
@@ -285,7 +318,6 @@ function ProcessChart() {
             listCellWidth={isChecked ? "155px" : ""}
             columnWidth={columnWidth}
             onExpanderClick={handleExpanderClick}
-            
           />
           <Wrapper
             style={{
@@ -335,10 +367,10 @@ function ProcessChart() {
         </Chart>
       ) : (
         <>
-        <SpinWrapper>
-          <Spin size="large" />
-        </SpinWrapper>
-      </>
+          <SpinWrapper>
+            <Spin size="large" />
+          </SpinWrapper>
+        </>
       )}
     </>
   );

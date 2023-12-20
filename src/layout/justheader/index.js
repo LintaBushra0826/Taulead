@@ -1,63 +1,117 @@
 import React from "react";
-import { HeaderContainer, ProfileDropdown } from "./index.styled";
+import {
+  HeaderContainer,
+  ProfileDropdown,
+  NavBarWrapper,
+  AvatarWrapper,
+} from "./index.styled";
 import { Link } from "react-router-dom";
 // import { AudioOutlined } from "@ant-design/icons";
-import { Dropdown, Input, Space } from "antd";
+import { Avatar, Button, Divider, Dropdown, Input, Space } from "antd";
 import { CgProfile } from "react-icons/cg";
-
+import { FormHeading } from "../../styles/global.styled";
+import { DownOutlined, UserOutlined, SettingFilled } from "@ant-design/icons";
+import { SlSettings } from "react-icons/sl";
+import { LiaUserEditSolid } from "react-icons/lia";
+import { CiLogout } from "react-icons/ci";
+import { IoIosNotifications } from "react-icons/io";
 
 function DashboardHeader() {
   const items = [
     {
-      label: <Link to="/settings">Settings</Link>,
-      key: "0",
+      label: (
+        <Link
+          to="/profile"
+          style={{
+            color: "#360a5a",
+          }}
+        >
+          <LiaUserEditSolid
+            style={{
+              color: "#360a5a",
+            }}
+          />
+          {"  "}Profile
+        </Link>
+      ),
+      key: "profile",
     },
     {
-      label: <Link to="/logout">Logout</Link>,
+      label: (
+        <Link
+          to="/login"
+          style={{
+            color: "#360a5a",
+          }}
+        >
+          <CiLogout
+            style={{
+              color: "#360a5a",
+            }}
+          />
+          {"  "}Logout
+        </Link>
+      ),
       key: "logout",
     },
   ];
-  const { Search } = Input;
-  // const suffix = (
-  //   <AudioOutlined
-  //     style={{
-  //       fontSize: 16,
-  //       color: "#1677ff",
-  //     }}
-  //   />
-  // );
-  const onSearch = (value, _e, info) => console.log(info?.source, value);
+  const handleMenuClick = (e) => {};
+  const menuProps = {
+    items,
+    onClick: handleMenuClick,
+  };
 
   return (
     <>
-    <HeaderContainer>
-      <Space
-        direction="vertical"
-        // style={{
-        //   width: "100%",
-        //   height: "70px",
-        //   background: "white",
-        //   padding: "0px 15px",
-        //   boxShadow: "0 1px 1px 0 lightgray",
-        //   color: "white",
-        //   alignItems: "center",
-          
-        // }}
-      >
-        <Search
-          placeholder="input search text"
-          onSearch={onSearch}
-          style={{
-            width: "350px",
-            marginTop: "5%",
-
-          }}
-        />
-      </Space>
-      <Dropdown trigger={["click"]} menu={{ items }}>
-        <ProfileDropdown src={CgProfile} alt="profile" />
-      </Dropdown>
-      </HeaderContainer>
+      <NavBarWrapper>
+        {/* <BusinessLogo>{BusinessLogo}</BusinessLogo> */}
+        <FormHeading>Business Name</FormHeading>
+        <AvatarWrapper>
+          <IoIosNotifications
+            style={{
+              color: "#360a5a",
+              height: "20px",
+              width: "30px",
+            }}
+          />
+          {"   "}
+          <Avatar
+            style={{
+              backgroundColor: "#360a5a",
+            }}
+            icon={<UserOutlined />}
+          />{" "}
+          <Dropdown
+            menu={{
+              items,
+            }}
+          >
+            <a onClick={(e) => e.preventDefault()}>
+              <Space
+                style={{
+                  color: "#360a5a",
+                  fontSize: "12px",
+                }}
+              >
+                <span
+                  style={{
+                    color: "#360a5a",
+                    fontWeight: "bold",
+                  }}
+                >
+                  Username
+                </span>
+                <DownOutlined
+                  style={{
+                    color: "#360a5a",
+                    width: "20px",
+                  }}
+                />
+              </Space>
+            </a>
+          </Dropdown>
+        </AvatarWrapper>
+      </NavBarWrapper>
     </>
   );
 }

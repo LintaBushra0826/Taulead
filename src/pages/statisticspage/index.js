@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import SideMenu from "../../layout/sideMenu";
-import ProgressBar from "./components/progressbars";
 import RawMaterialChart from "./components/rawmaterialchart";
 import HumanResourceChart from "./components/humanrsourcechart";
 import RawMaterialTable from "./components/rawmaterialtable";
 import HumanResourceTable from "./components/humanresourcetable";
+import ProcessTable from "./components/processtable";
 import Table from "./components/rawmaterialtable";
 import { Select } from "antd";
 import {
@@ -106,7 +106,7 @@ function Statistics() {
         </div>
       );
     } else if (selectedValue === "process") {
-      return <div>Process Content</div>;
+      return <ProcessTable extractedProcessRecords={extractedProcessRecords} />;
     } else {
       return (
         <div>
@@ -133,15 +133,15 @@ function Statistics() {
             options={[
               {
                 value: "resource inventory",
-                label: "Resource Inventory",
+                label: "Resource Inventory Statistics View",
               },
-              {
-                value: "human resource",
-                label: "Human Resource",
-              },
+              // {
+              //   value: "human resource",
+              //   label: "Human Resource Statistics View",
+              // },
               {
                 value: "process",
-                label: "Process",
+                label: "Process Statistics View",
               },
             ]}
           />

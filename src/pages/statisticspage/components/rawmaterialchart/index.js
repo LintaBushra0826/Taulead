@@ -17,6 +17,7 @@ const RawMaterialChart = ({ extractedProcessRecords }) => {
     const dataset = [];
     const uniqueColors = {};
     const colors = ["#061161", "#F3904F", "#2a0845", "#F3B664", "#001B79"];
+    let colorIndex = 0;
 
     Object.values(extractedProcessRecords).forEach((item) => {
       const itemName = item.itemName || "";
@@ -32,7 +33,10 @@ const RawMaterialChart = ({ extractedProcessRecords }) => {
           const key = `${itemName}-${itemUnit}-${processId}`;
 
           if (!uniqueColors[key]) {
-            uniqueColors[key] = colors.shift();
+            if (colorIndex >= colors.length) {
+              colorIndex = 0;
+            }
+            uniqueColors[key] = colors[colorIndex++];
           }
 
           const processRecord = {
@@ -55,11 +59,11 @@ const RawMaterialChart = ({ extractedProcessRecords }) => {
     const labels = Array.from(
       new Set(dataset.map((item) => `${item.ProcessId} - ${item.ProcessName}`))
     );
-    
+
     const uniqueItems = Array.from(
       new Set(dataset.map((item) => `${item.ItemName} (${item.ItemUnit})`))
     );
-    
+
     const datasets = labels.map((processIdWithName) => {
       const [processId, processName] = processIdWithName.split(" - ");
       const data = dataset
@@ -71,7 +75,7 @@ const RawMaterialChart = ({ extractedProcessRecords }) => {
           itemName: `${record.ItemName} (${record.ItemUnit})`,
           usedQuan: record.UsedQuan !== "N/A" ? record.UsedQuan : 0,
         }));
-    
+
       const dataForChart = uniqueItems.map((item) => {
         const found = data.find((d) => d.itemName === item);
         return {
@@ -79,7 +83,7 @@ const RawMaterialChart = ({ extractedProcessRecords }) => {
           usedQuan: found ? found.usedQuan : 0,
         };
       });
-    
+
       return {
         label: processIdWithName,
         data: dataForChart.map((dataItem) => dataItem.usedQuan),
@@ -89,13 +93,13 @@ const RawMaterialChart = ({ extractedProcessRecords }) => {
         ).backgroundColor,
       };
     });
-    
+
     const chartData = {
       labels: uniqueItems,
       datasets: datasets,
     };
-    
-    console.log("chartData:", chartData);    
+
+    console.log("chartData:", chartData);
 
     const maxUsedQuan = Math.max(
       ...dataset.map((record) =>
@@ -110,6 +114,13 @@ const RawMaterialChart = ({ extractedProcessRecords }) => {
         y: {
           beginAtZero: true,
           suggestedMax: maxUsedQuan,
+        },
+      },
+      indexAxis: "y", // Display bars horizontally
+      elements: {
+        bar: {
+          borderWidth: 1,
+          barThickness: 3, // Adjust the bar width as needed
         },
       },
     };
@@ -140,11 +151,11 @@ const RawMaterialChart = ({ extractedProcessRecords }) => {
           borderRadius: "10px",
           boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
           marginTop: "2px",
-          marginRight: "2px",
+          // marginRight: "2px",
         }}
       >
-        <ChartWrapper style={{ overflowX: "auto" }}>
-          <canvas ref={chartRef} width={900} height={200} />
+        <ChartWrapper>
+          <canvas ref={chartRef} width={500} height={180} />
         </ChartWrapper>
         <br />
         <Space

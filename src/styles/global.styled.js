@@ -3,6 +3,7 @@ import styled from "styled-components";
 export const BodyWrapper = styled.div`
   display: flex;
   height: 100vh;
+  background: linear-gradient(140deg, #fafafa, #fafafa, #ebdcf7 120%);
 `;
 
 export const MainContainer = styled.div`
@@ -14,7 +15,10 @@ export const MainContainer = styled.div`
 
 export const FormHeading = styled.div`
   font-size: 16pt;
-  padding-bottom: 15px;
+  padding: 30px;
+  width: max-content;
+  color: #360a5a;
+
 `;
 
 export const TableWrapper = styled.div`

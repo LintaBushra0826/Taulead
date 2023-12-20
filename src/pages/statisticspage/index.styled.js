@@ -1,16 +1,14 @@
 import styled from "styled-components";
 
 export const ButtonWrapper = styled.div`
-  position: relative;
-  top: 30px;
   display: flex;
-  padding: 10px 30px;
+  padding: 30px 30px;
 `;
 
 export const ChartWrapper = styled.div`
   height: fit-content;
   position: absolute;
-  top: 100px;
+  top:80px;
   display: block;
   left: 280px;
   justify-content: flex-start;
