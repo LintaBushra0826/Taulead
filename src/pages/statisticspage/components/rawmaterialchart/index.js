@@ -116,11 +116,11 @@ const RawMaterialChart = ({ extractedProcessRecords }) => {
           suggestedMax: maxUsedQuan,
         },
       },
-      indexAxis: "y", // Display bars horizontally
+      indexAxis: "x",
       elements: {
         bar: {
           borderWidth: 1,
-          barThickness: 3, // Adjust the bar width as needed
+          barThickness: 3,
         },
       },
     };
@@ -151,11 +151,10 @@ const RawMaterialChart = ({ extractedProcessRecords }) => {
           borderRadius: "10px",
           boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
           marginTop: "2px",
-          // marginRight: "2px",
         }}
       >
         <ChartWrapper>
-          <canvas ref={chartRef} width={500} height={180} />
+          <canvas ref={chartRef} width={900} height={200} />
         </ChartWrapper>
         <br />
         <Space

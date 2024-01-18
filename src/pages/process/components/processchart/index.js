@@ -12,6 +12,8 @@ import ProcessTags from "./components/processtags";
 import UpdateProcess from "./components/updateprocess";
 import { FcProcess } from "react-icons/fc";
 import { SpinWrapper } from "../../../../styles/global.styled";
+import { FiEdit3 } from "react-icons/fi";
+import { MdOutlineDelete } from "react-icons/md";
 
 function ProcessChart() {
   const API_BASE_URL = "http://localhost:3005";
@@ -117,9 +119,6 @@ function ProcessChart() {
           new Date(item.start),
           new Date(item.end)
         );
-        console.log(
-          "Formatted ProcessdurationInHours: " + ProcessdurationInHours
-        );
 
         // Check if the item is already in mappedProcesses to avoid duplicates
         if (!mappedProcesses[item._id]) {
@@ -129,6 +128,7 @@ function ProcessChart() {
             end: new Date(item.end),
             name: item.name,
             id: item.name,
+            desc: item.desc,
             processId: item.pid,
             humanresource: item.humanResource,
             rawmaterial: item.rawMaterial,
@@ -152,6 +152,7 @@ function ProcessChart() {
                 end: new Date(subitem.subend),
                 name: subitem.subname,
                 id: subitem.subname,
+                subdesc: subitem.subdesc,
                 subprocessId: subitem.subId,
                 subhumanresource: subitem.humanResource,
                 subrawmaterial: subitem.rawMaterial,
@@ -174,9 +175,6 @@ function ProcessChart() {
 
       // Convert the mapped processes map to an array
       const processesArray = Object.values(mappedProcesses);
-
-      // Log the mapped processes
-      console.log("processesArray", processesArray);
 
       const updatedTasks = processesArray.map((task) => {
         const newName = (
@@ -227,7 +225,6 @@ function ProcessChart() {
   }
 
   const handleTaskChange = (task) => {
-    console.log("On date change Id:" + task.id);
     let newTasks = tasks.map((t) => (t.id === task.id ? task : t));
     if (task.project) {
       const [start, end] = getStartEndDateForProject(newTasks, task.project);
@@ -251,7 +248,6 @@ function ProcessChart() {
   };
 
   const handleClick = (task) => {
-    console.log("up-onc", task);
     setSelectedTaskData(task);
     setOpen(true);
   };
@@ -271,7 +267,6 @@ function ProcessChart() {
   };
 
   const handleDeleteProcess = async (prId, sprId) => {
-    console.log("prId, sprId", prId, sprId);
     try {
       await axios.delete(`${API_BASE_URL}/process/${prId}`);
       if (sprId) {
@@ -287,7 +282,6 @@ function ProcessChart() {
 
   const handleExpanderClick = (task) => {
     setTasks(tasks.map((t) => (t.id === task.id ? task : t)));
-    console.log("On expander click Id:" + task.id);
   };
 
   return (
@@ -340,27 +334,46 @@ function ProcessChart() {
                 onCancel={() => setOpen(false)}
               />
               <IconWrapper onContextMenu={handleContextMenu}>
-                <Dropdown
-                  overlay={menu}
-                  visible={contextMenuVisible}
-                  onVisibleChange={(visible) => setContextMenuVisible(visible)}
-                >
-                  <div>
-                    {" "}
-                    <Button
-                      type="text"
-                      style={{ border: "none", padding: 0, background: "none" }}
-                    >
-                      <MoreOutlined style={{ fontSize: "24px" }} />
-                    </Button>
-                    {updateModalVisible && (
-                      <UpdateProcess
-                        isVisible={updateModalVisible}
-                        onClose={handleCloseUpdateModal}
-                      />
-                    )}
-                  </div>
-                </Dropdown>
+                <div>
+                  <Button
+                    type="text"
+                    style={{ border: "none", padding: 0, background: "none" }}
+                    onClick={() => handleEditProcessClick(selectedTaskData.key)}
+                  >
+                    <FiEdit3
+                      style={{
+                        color: "#360a5a",
+                        width: "20px",
+                        height: "35px",
+                      }}
+                    />
+                  </Button>
+                  <Button
+                    type="text"
+                    style={{
+                      border: "none",
+                      padding: 0,
+                      background: "none",
+                      marginLeft: "25px",
+                    }}
+                    onClick={() => handleDeleteProcess(selectedTaskData.key)}
+                  >
+                    <MdOutlineDelete
+                      style={{
+                        color: "#360a5a",
+                        width: "20px",
+                        height: "35px",
+                      }}
+                    />
+                  </Button>
+                  {updateModalVisible && (
+                    <UpdateProcess
+                      isVisible={updateModalVisible}
+                      onClose={handleCloseUpdateModal}
+                      selectedTaskData={selectedTaskData}
+                    />
+                  )}
+                </div>
               </IconWrapper>
             </Modal>
           </Wrapper>

@@ -14,7 +14,6 @@ import {
   Wrapper2,
 } from "./index.styled";
 import invenImg from "../../../../assets/images/inventory.jpg";
-// import hrImg from "../../../../assets"
 import { Card, Carousel } from "antd";
 import Meta from "antd/es/card/Meta";
 import { CardWrapper } from "./index.styled";
@@ -88,11 +87,7 @@ export default function Features() {
                       style={{ width: "20%", color: "#ffaf7b", height: "20%" }}
                     />
                     <br />
-                    <span>
-                      Statistics
-                      <br />
-                      <br />
-                    </span>
+                    <span>Statistics</span>
                   </A>
                 </Card>
               </Li>
@@ -104,11 +99,31 @@ export default function Features() {
                       style={{ width: "20%", color: "#ffaf7b", height: "20%" }}
                     />
                     <br />
-                    <span>
-                      Logging
-                      <br />
-                      <br />
-                    </span>
+                    <span>Logs</span>
+                  </A>
+                </Card>
+              </Li>
+              <Li>
+                <Card class="card">
+                  <A href="">
+                    <MdTableRows
+                      class="model-name"
+                      style={{ width: "25%", color: "#ffaf7b", height: "20%" }}
+                    />
+                    <br />
+                    <span>Process-Resource Cost Analysis</span>
+                  </A>
+                </Card>
+              </Li>
+              <Li>
+                <Card class="card">
+                  <A href="">
+                    <MdTableRows
+                      class="model-name"
+                      style={{ width: "25%", color: "#ffaf7b", height: "20%" }}
+                    />
+                    <br />
+                    <span>Process Optimization</span>
                   </A>
                 </Card>
               </Li>

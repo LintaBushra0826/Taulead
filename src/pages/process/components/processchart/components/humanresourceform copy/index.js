@@ -1,16 +1,27 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { Space, Select, Table } from "antd";
-import { FormWrapper } from "../createprocessmodal/index.styled";
-import { FormHeader } from "../../index.styled";
+import { FormWrapper } from "../../../createprocessmodal/index.styled";
+import { FormHeader } from "../../../../index.styled";
 import axios from "axios";
 import { useSetAtom } from "jotai";
-import { UpdateHumanResourceAtom } from "../../../../atoms/process.atom";
-// import { ProcessAtom } from "../../../../atoms/process.atom";
+import { UpdateHumanResourceAtom } from "../../../../../../atoms/process.atom";
 
-function HumanResourceForm() {
+function HumanResourceForm(humanResourceData) {
   const [value, setValue] = useState([]);
   const [humanresource, setHumanResource] = useState([]);
-  const UpdateHumanResource = useSetAtom(UpdateHumanResourceAtom);
+  const [selectedHumanResource, setSelectedHumanResource] = useState([]);
+  const updatehr = useSetAtom(UpdateHumanResourceAtom);
+
+  const humanResourceArray = Object.values(humanResourceData);
+  const flatHumanResourceArray = humanResourceArray.flat(2);
+
+  useEffect(() => {
+    const updatedSelected = flatHumanResourceArray.map((item) => ({
+      ...item,
+    }));
+    setSelectedHumanResource(updatedSelected);
+    updatehr(updatedSelected);
+  }, [humanResourceData]);
 
   useEffect(() => {
     fetchHumanResource();
@@ -27,9 +38,36 @@ function HumanResourceForm() {
     }
   };
 
-  const onChange = (id) => {
-    setValue(id);
+  const onChange = (ids) => {
+    setValue(ids);
+
+    // Update selectedHumanResource based on the selected ids
+    const updatedSelected = [
+      ...flatHumanResourceArray, // Existing ones
+      ...ids.map((id) => humanresource.find((emp) => emp._id === id)),
+    ];
+
+    setSelectedHumanResource(updatedSelected);
+    updatehr(updatedSelected);
   };
+
+  const columns = [
+    {
+      title: "Employee Name",
+      dataIndex: "name",
+      key: "name",
+    },
+    {
+      title: "Employee Designation",
+      dataIndex: "desgn",
+      key: "desgn",
+    },
+    {
+      title: "Employee Skills",
+      dataIndex: "skills",
+      key: "skills",
+    },
+  ];
 
   const options = useMemo(
     () =>
@@ -51,40 +89,6 @@ function HumanResourceForm() {
     placeholder: "Select employee...",
     maxTagCount: "responsive",
   };
-
-  const selectedHumanResource = useMemo(() => {
-    return value.map((id) => {
-      const emp = humanresource.find((_emp) => id.includes(_emp._id));
-      return {
-        id: emp._id,
-        name: emp.name,
-        desgn: emp.desgn,
-        skills: emp.skills,
-      };
-    });
-  }, [value, humanresource]);
-
-  useEffect(() => {
-    UpdateHumanResource(selectedHumanResource);
-  }, [selectedHumanResource, UpdateHumanResource]);
-
-  const columns = [
-    {
-      title: "Employee Name",
-      dataIndex: "name",
-      key: "name",
-    },
-    {
-      title: "Employee Designation",
-      dataIndex: "desgn",
-      key: "desgn",
-    },
-    {
-      title: "Employee Skills",
-      dataIndex: "skills",
-      key: "skills",
-    },
-  ];
 
   return (
     <FormWrapper>

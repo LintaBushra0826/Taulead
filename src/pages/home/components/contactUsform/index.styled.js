@@ -27,34 +27,29 @@ export const Wrapper3 = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  /* background: linear-gradient(0deg, #cbb4d4, #e8cbc0); */
-  /* background: linear-gradient(0deg, #e2e2e2, #c9d6ff); */
   background: linear-gradient(
     100deg,
     rgba(6, 17, 97, 0.89) -100%,
     rgba(42, 8, 69, 0.9)
   );
+
   .contactbutton {
+    position: relative;
     width: 12%;
-    background-color: #d3cce3;
     border-color: #1d2b64;
     color: #1d2b64;
     height: 40px;
     font-weight: 500;
-    top: 35%;
-    left: -39%;
+    top: 10px;
+    justify-content: flex-start;
+    align-items: flex-start;
+    float: left;
+    color: #fff;
+    border: 1px solid;
   }
 
   .bg-image {
     animation: ${flip} 5s ease-out 0s infinite alternate;
-  }
-  .transparent-textarea {
-    color: #d3cce3;
-    font-size: 14px;
-    background-color: transparent !important;
-    border-color: #d3cce3;
-    resize: none;
-    height: 120px;
   }
 `;
 
@@ -62,7 +57,13 @@ export const ContactHead = styled.div`
   position: relative;
   font-size: 36px;
   color: #ffaf7b;
-  top: -100px;
-  left: -385px;
-  margin-bottom: 20%;
+  padding-bottom: 2%;
+  text-align: left;
+  font-style: italic;
+  font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif;
+`;
+
+export const FormWrapper = styled.div`
+  position: relative;
+  width: fit-content;
 `;

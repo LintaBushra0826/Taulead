@@ -7,9 +7,9 @@ import {
   FormHeader,
 } from "../../../../styles/global.styled";
 import { useNavigate } from "react-router-dom";
-
+import axios from "axios";
 function LoginForm() {
-  const [isLoggingIn] = useState(false); // Track login status
+  const [isLoggingIn, setIsLoggingIn] = useState(false); // Track login status
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
@@ -23,35 +23,55 @@ function LoginForm() {
   };
 
   const handleSubmit = async (event) => {
-    navigate("/dashboard");
-    // event.preventDefault();
+    event.preventDefault();
 
-    // // Prevent multiple login requests while one is in progress
-    // if (isLoggingIn) {
-    //   return;
-    // }
+    try {
+      console.log("Request body:", { email: formData.email, password: formData.password });
+      const response = await axios.post("http://localhost:3005/login", {
+        email: formData.email,
+        password: formData.password,
+      });
+      console.log("Login response:", response.data);
 
-    // console.log("Login button clicked");
-    // setIsLoggingIn(true);
+      if (response.data.token) {
+        try {
+          // Update saveLoginInfoRequestBody to set userId explicitly
+          console.log("UserId from login response:", response.data.userId);
+          const saveLoginInfoRequestBody = {
+            userId: response.data.userId, // Set userId explicitly
+            loginTime: new Date().toISOString(),
+          
+          };
 
-    // try {
-    //   const response = await axios.post(
-    //     "http://localhost:3005/login",
-    //     formData
-    //   );
-    //   console.log("Login response:", response.data)
-    //   alert(response.data.message);
+          const loginInfoResponse = await axios.post(
+            "http://localhost:3005/save-login-info",
+            saveLoginInfoRequestBody
+          );
 
-    //   // Redirect to home page after successful login
-    //   navigate("/home");
-    // } catch (error) {
-    //   console.error("Error during login:", error);
-    //   alert("Login failed. Please try again later.");
-    // } finally {
-    //   setIsLoggingIn(false);
-    // }
-  };
+          console.log("Login info response:", loginInfoResponse.data);
 
+          if (loginInfoResponse.data.success) {
+            // Store the token in localStorage
+            localStorage.setItem("token", response.data.token);
+            
+            navigate("/dashboard");
+          } else {
+            console.error("Failed to save login information");
+          }
+        } catch (error) {
+          console.error("Error during saving login information:", error);
+        }
+      } else {
+        alert("Invalid Email or Password");
+      }
+    } catch (error) {
+      console.error("Error during login:", error);
+      alert("Login failed. Please try again later.");
+    } finally {
+      setIsLoggingIn(false);
+    }
+  }; 
+  
   return (
     <FormWrapper>
       <FormHeader className="formheader">
@@ -68,7 +88,7 @@ function LoginForm() {
             Email
           </label>
           <Input
-            placeholder="email"
+            placeholder="abc@gmail.com"
             name="email"
             type="email"
             value={formData.email}
@@ -81,7 +101,7 @@ function LoginForm() {
             Password
           </label>
           <Input
-            placeholder="password"
+            placeholder="******"
             name="password"
             type="password"
             value={formData.password}

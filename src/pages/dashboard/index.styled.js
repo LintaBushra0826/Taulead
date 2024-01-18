@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { GlobalStyle } from "styled-components";
 
 export const Container1 = styled.div`
   position: relative;
@@ -14,11 +14,12 @@ export const CardContainer = styled.div`
 
 export const Paragraph = styled.div`
   display: flex;
-  justify-content: center;
-  font-size: 14px;
+  justify-content: left;
+  font-size: 13px;
   margin-top: -10px;
   padding-bottom: 5px;
   font-weight: bold;
+  color: #360a5a;
 `;
 export const Paragraph1 = styled.div`
   display: flex;
@@ -27,6 +28,7 @@ export const Paragraph1 = styled.div`
   margin-top: -10px;
   padding-bottom: 5px;
   font-weight: bold;
+  color: #360a5a;
 `;
 
 export const Container2 = styled.div`

@@ -1,40 +1,27 @@
 import React from "react";
 import logo from "../../assets/images/Logo white.png";
-// import profile from "../../assets/images/profile.png";
 import {
   HeaderContainer,
   Logo,
   LogoContainer,
   HeadMenu,
-  ButtonContainer,
-  // ProfileDropdown,
+  BtnContainer,
   HeadButton,
 } from "./index.styled";
-import {
-  //Dropdown,
-  Button,
-} from "antd";
+import { Button } from "antd";
 import { Link } from "react-router-dom";
 import { Menu } from "antd";
 
-function Header() {
-  //   const items = [
-  //     {
-  //       label: <Link to="/settings">Settings</Link>,
-  //       key: "0",
-  //     },
-  //     {
-  //       label: <Link to="/logout">Logout</Link>,
-  //       key: "logout",
-  //     },
-  //   ];
+
+function Header({ scrollToContactUs }) {
+
 
   const ToService = () => {
-    window.scrollTo({ top: window.innerHeight, behavior: "smooth" });
+    window.scrollTo({ top: window.outerHeight, behavior: "smooth" });
   };
-  const ToContactUs = () => {
-    window.scrollTo({ top: window.innerHeight, behavior: "smooth" });
-  };
+    const ToContactUs = () => {
+      scrollToContactUs(); 
+    };
   const items = [
     {
       label: <Link to="/home">Home</Link>,
@@ -43,25 +30,25 @@ function Header() {
     {
       label: "About Us",
       key: (
-        <a href="#contactUsform" onClick={ToContactUs}>
-          Services
-        </a>
+        <p onClick={ToContactUs}>
+          About Us
+        </p>
       ),
     },
     {
       label: (
-        <a href="#services-card" onClick={ToService}>
+        <p onClick={ToService}>
           Services
-        </a>
+        </p>
       ),
       key: "Services",
     },
     {
       label: "Contact Us",
       key: (
-        <a href="#contactUsform" onClick={ToContactUs}>
-          Services
-        </a>
+        <p onClick={ToContactUs}>
+          Contact Us
+        </p>
       ),
     },
   ];
@@ -80,17 +67,16 @@ function Header() {
         />
       </HeadMenu>
       <HeadButton>
-        <ButtonContainer>
-          <a href="/login">Login</a>
+        <BtnContainer>
+        <Link to="/login">
+          <Button className="loginbtn">Login</Button>
+          </Link>
           <br></br>
           <Link to="/signup">
             <Button className="signupbtn">Get Started</Button>
           </Link>
-        </ButtonContainer>
+        </BtnContainer>
       </HeadButton>
-      {/* <Dropdown trigger={["click"]} menu={{ items }}>
-        <ProfileDropdown src={profile} alt="profile" />
-      </Dropdown> */}
     </HeaderContainer>
   );
 }

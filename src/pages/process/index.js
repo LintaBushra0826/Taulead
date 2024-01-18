@@ -22,22 +22,21 @@ function Process() {
     <>
       <BodyWrapper>
         <SideMenu />
-        {/* <Header /> */}
-         
-          <ChartWrapper>
-            <ProcessChart />
-          </ChartWrapper>
+        <Header />
 
-          <ButtonWrapper>
-            <Button type="primary" onClick={handleOpenModal}>
-              Create Process
-            </Button>
-          </ButtonWrapper>
+        <ChartWrapper>
+          <ProcessChart />
+        </ChartWrapper>
+
+        <ButtonWrapper>
+          <Button type="primary" onClick={handleOpenModal}>
+            Create New Process
+          </Button>
+        </ButtonWrapper>
 
         <CreateProcessModal
           isVisible={isModalVisible}
           onClose={handleCloseModal}
-          
         />
       </BodyWrapper>
     </>

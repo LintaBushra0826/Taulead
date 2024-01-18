@@ -17,11 +17,6 @@ export const Wrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  /* background: linear-gradient(
-    0deg,
-    rgba(42, 8, 69, 0.88),
-    rgba(42, 8, 69, 0.88)
-  ); */
   background: linear-gradient(
     100deg,
     rgba(6, 17, 97, 0.89) -100%,
@@ -48,14 +43,14 @@ export const Box = styled.div`
     position: relative;
     flex-direction: column;
     margin-top: 20px;
-    margin-left:170px;
+    margin-left: 170px;
     max-width: 800px;
   }
   .card-row {
     display: flex;
-    gap:40px;
+    gap: 40px;
     .card {
-      flex: 0 0 calc(30% - 0px); /* Adjust the width as needed with some spacing */
+      flex: 0 0 calc(30% - 0px);
       height: 10rem;
       border-radius: 20px;
       background: linear-gradient(100deg, #d3cce3, #e9e4f0);
@@ -64,11 +59,9 @@ export const Box = styled.div`
       margin-top: 20px;
       margin-right: 5px;
       border-color: 2px solid transparent;
-
-      /* animation: ${slideUp} s ease-out 2s 1; */
     }
   }
   .card:hover {
-  border-color: #2a0845; /* Change the border color on hover */
-}
+    border-color: #2a0845;
+  }
 `;

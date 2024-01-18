@@ -5,11 +5,10 @@ import {
   FormHeading,
 } from "../../../humanresource/components/humanResourceForm/index.styled";
 import axios from "axios";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { AutoComplete } from "antd";
-import LimitForm from "./component/limitform";
-import { Link } from "react-router-dom";
 import { FormWrapper } from "./index.style";
+// import LimitForm from "./component/limitform";
 
 function RawMaterialForm() {
   const location = useLocation();
@@ -31,7 +30,6 @@ function RawMaterialForm() {
   const [one, setOne] = useState("");
   const [two, setTwo] = useState("");
   const [total, setTotal] = useState(0);
-  const [size, setSize] = useState("small");
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -50,17 +48,6 @@ function RawMaterialForm() {
       await axios.post(`${API_BASE_URL}/rawMaterial`, formData);
       alert("Raw material item added successfully!");
       window.location.reload();
-      // setFormData({
-      //   Name: "",
-      //   Desc: "",
-      //   unit: "",
-      //   quan: "",
-      //   expdate: "",
-      //   price: "",
-      //   totcost: 0,
-      //   tag: "available",
-      //   itemlimit: 0,
-      // });
     } catch (error) {
       alert("Error adding raw material item");
     }
@@ -125,49 +112,11 @@ function RawMaterialForm() {
 
   console.log("total", total);
 
-  // useEffect(() => {
-  //   fetchRawMaterials();
-  // }, []);
-
-  // const fetchRawMaterials = async () => {
-  //   try {
-  //     const response = await axios.get("http://localhost:3005/rawMaterial");
-  //     const rawData = response.data.data;
-
-  //     // Ensure data is an array
-  //     const dataArray = Array.isArray(rawData) ? rawData : [];
-
-  //     setData(dataArray); // Set the data array here
-  //   } catch (error) {
-  //     console.error("Error fetching raw materials:", error);
-  //   }
-  // };
-
   return (
     <>
       <FormWrapper>
-        {/* <FormHeading className="HeaderHeading">
-          Raw Material Inventory
-        </FormHeading> */}
-
-        {/* <LimitForm />
-        <Divider /> */}
-
         <Form name="basic" layout="vertical" autoComplete="off">
           <Row gutter={20}>
-            {/* <Col span={8}>
-            <Form.Item label="Inventory Limit" name="itemlimit">
-              <Input
-                name="itemlimit"
-                defaultValue={formData.itemlimit}
-                onChange={handleInputChange}
-              />
-            </Form.Item>
-          </Col> */}
-            {/* <br />
-          <Divider />
-          <br /> */}
-
             <Col span={8}>
               <Form.Item label="Item Name" name="Name">
                 <Input
@@ -188,11 +137,11 @@ function RawMaterialForm() {
               </Form.Item>
             </Col>
 
-            <Col span={6}>
+            <Col span={8}>
               <Form.Item label="Item Unit" name="unit">
                 <div style={{ display: "flex" }}>
                   <AutoComplete
-                    value={searchValue}
+                    placeholder={searchValue}
                     options={options.map((option) => ({ value: option }))}
                     onSelect={handleSelect}
                     onSearch={handleSearch}
@@ -249,7 +198,7 @@ function RawMaterialForm() {
               </Form.Item>
             </Col>
 
-            <Col span={6}>
+            <Col span={8}>
               <Form.Item label="Item Price" name="price">
                 <Input
                   name="price"
@@ -261,14 +210,23 @@ function RawMaterialForm() {
             </Col>
 
             <Col span={8}>
+              <Form.Item label="Item Limit" name="itemlimit">
+                <Input
+                  name="itemlimit"
+                  value={formData.itemlimit}
+                  onChange={handleInputChange}
+                />
+              </Form.Item>
+            </Col>
+
+            <Col span={8}>
               <Form.Item label="Total Cost" name="totcost">
                 <Input
                   name="totcost"
                   value={total}
+                  placeholder={total}
                   onChange={handleInputChange}
                 />
-                {/* console.log("total value", total) */}
-                {total}
               </Form.Item>
             </Col>
 

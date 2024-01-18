@@ -27,8 +27,6 @@ function SideMenu({ selectedTaskData, onCancel }) {
   const [data, setData] = useState(null);
   const [hrdata, setHRData] = useState(null);
 
-  console.log("selectedTaskData", selectedTaskData);
-
   function formatDuration(start, end) {
     const durationInmilliseconds = end - start;
     const hours = Math.floor(durationInmilliseconds / (1000 * 60 * 60));
@@ -75,7 +73,6 @@ function SideMenu({ selectedTaskData, onCancel }) {
       // Ensure data is an array
       const dataArray = Array.isArray(rawData) ? rawData : [];
       setHRData(dataArray);
-      console.log("data", hrdata);
     } catch (error) {
       console.error("Error fetching human resource:", error);
     }
@@ -83,31 +80,35 @@ function SideMenu({ selectedTaskData, onCancel }) {
 
   const handleSubmit = async () => {
     try {
-      // setExecutedProcess({
-      //   name: selectedTaskData.newName,
-      //   start: selectedTaskData.start,
-      //   end: selectedTaskData.end,
-      //   desc: selectedTaskData.desc,
-      //   duration: selectedTaskData.duration,
-      //   pid: selectedTaskData.processId,
-      //   humanresource: selectedTaskData.humanresource,
-      //   rawmaterial: selectedTaskData.rawmaterial,
-      // });
+      let response;
 
-      // console.log("executedProcess", executedProcess);
-
-      const response = await axios.post(`${API_BASE_URL}/executed-process`, {
-        name: selectedTaskData.newName,
-        start: selectedTaskData.start,
-        end: selectedTaskData.end,
-        desc: selectedTaskData.desc,
-        duration: selectedTaskData.duration,
-        pid: selectedTaskData.processId,
-        humanresource: selectedTaskData.humanresource,
-        rawmaterial: selectedTaskData.rawmaterial,
-        key: selectedTaskData.key,
-        executedstatus: "executed",
-      });
+      if (selectedTaskData.type === "project") {
+        response = await axios.post(`${API_BASE_URL}/executed-process`, {
+          name: selectedTaskData.newName,
+          start: selectedTaskData.start,
+          end: selectedTaskData.end,
+          desc: selectedTaskData.desc,
+          duration: selectedTaskData.duration,
+          pid: selectedTaskData.processId,
+          humanresource: selectedTaskData.humanresource,
+          rawmaterial: selectedTaskData.rawmaterial,
+          key: selectedTaskData.key,
+          executedstatus: "executed",
+        });
+      } else if (selectedTaskData.type === "task") {
+        response = await axios.post(`${API_BASE_URL}/executed-process`, {
+          name: selectedTaskData.newName,
+          start: selectedTaskData.start,
+          end: selectedTaskData.end,
+          desc: selectedTaskData.desc,
+          duration: selectedTaskData.duration,
+          pid: selectedTaskData.subprocessId,
+          humanresource: selectedTaskData.subhumanresource,
+          rawmaterial: selectedTaskData.subrawmaterial,
+          key: selectedTaskData.key,
+          executedstatus: "executed",
+        });
+      }
 
       await fetchRawMaterials();
       if (response.status === 200) {
@@ -125,18 +126,16 @@ function SideMenu({ selectedTaskData, onCancel }) {
           const updatedItem = rawMaterials.find(
             (item) => item.id === material.id
           );
-          console.log("updatedItem", updatedItem);
+
           const originalItems = dataArray.find(
             (dataItem) => dataItem._id === material.id
           );
-          console.log("originalItems", originalItems);
 
           const updatedQuantity = originalItems.quan - updatedItem.quan;
 
           const existingProcessRecords = dataArray.find(
             (dataItem) => dataItem._id === material.id
           );
-          console.log("existingProcessRecords", existingProcessRecords);
 
           const newRecord = {
             processKey: selectedTaskData.key,
@@ -154,7 +153,6 @@ function SideMenu({ selectedTaskData, onCancel }) {
             ? [...material.processRecords, newRecord]
             : [newRecord];
 
-          console.log("updatedProcessRecords", updatedProcessRecords);
           try {
             const response = await axios.put(
               `${API_BASE_URL}/rawMaterial/${material.id}`,
@@ -165,7 +163,6 @@ function SideMenu({ selectedTaskData, onCancel }) {
               }
             );
 
-            console.log("UPDATED SUCCCCC");
             return response.data;
           } catch (error) {
             console.error(
@@ -180,18 +177,16 @@ function SideMenu({ selectedTaskData, onCancel }) {
           const updatedHR = HumanResource.find(
             (item) => item.id === employee.id
           );
-          console.log("updatedHR", updatedHR);
+
           const originalHR = hrdataArray.find(
             (dataItem) => dataItem._id === employee.id
           );
-          console.log("originalHR", originalHR);
 
           // const updatedQuantity = originalItems.quan - updatedItem.quan;
 
           const existingHRProcessRecords = hrdataArray.find(
             (dataItem) => dataItem._id === employee.id
           );
-          console.log("existingHRProcessRecords", existingHRProcessRecords);
 
           const newRecord = {
             processKey: selectedTaskData.key,
@@ -208,7 +203,6 @@ function SideMenu({ selectedTaskData, onCancel }) {
             ? [...employee.processRecords, newRecord]
             : [newRecord];
 
-          console.log("updatedHRProcessRecords", updatedHRProcessRecords);
           try {
             const response = await axios.put(
               `${API_BASE_URL}/humanresource/${employee.id}`,
@@ -344,9 +338,6 @@ function SideMenu({ selectedTaskData, onCancel }) {
       } else {
         alert("Error Executed process");
       }
-
-      console.log("response", response);
-      // console.log("hrresponse", hrResponse);
     } catch (error) {
       alert("Error Executed process");
     }
@@ -511,7 +502,7 @@ function SideMenu({ selectedTaskData, onCancel }) {
                     (subrawmaterial, index) => (
                       <TableRow key={index}>
                         <TableCell>{subrawmaterial.Name}</TableCell>
-                        <TableCell>{subrawmaterial.quantity}</TableCell>
+                        <TableCell>{subrawmaterial.quan}</TableCell>
                         <TableCell>{subrawmaterial.unit}</TableCell>
                       </TableRow>
                     )

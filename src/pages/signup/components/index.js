@@ -1,20 +1,23 @@
 import React, { useState } from "react";
 import { Button, Checkbox, message } from "antd";
 import { FormWrapper, FormHeader, Container, Btn } from "./index.styled";
-// import { Checkbox } from "antd/es";
-// import { Footer } from "../../../../styles/global.styled";
 import { Input, Form, Divider } from "antd";
 import { Footer } from "../../../styles/global.styled";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { useLocation } from "react-router-dom";
 
 function SignupForm() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const API_BASE_URL = "http://localhost:3005";
   const [formData, setFormData] = useState({
     username: "",
     email: "",
     password: "",
     confirmpassword: "",
     businessname: "",
+    status: "",
   });
 
   const handleChange = (event) => {
@@ -22,101 +25,42 @@ function SignupForm() {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = async (event) => {
-    navigate("/dashboard");
-    // event.preventDefault();
-    // console.log("ON SUBMIT FUNCTION CALLED");
-    // try {
-    //   const response = await fetch("http://localhost:3005/signup", {
-    //     method: "POST",
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //     },
-    //     body: JSON.stringify(formData),
-    //   });
-
-    //   if (response.ok) {
-    //     const data = await response.json();
-    //     console.log("Registration successful");
-    //     message.success(data.message);
-    //     setFormData({
-    //       username: "",
-    //       email: "",
-    //       password: "",
-    //       confirmpassword: "",
-    //       businessname: "",
-    //     });
-    //   } else {
-    //     const errorData = await response.json();
-    //     message.error(errorData.message);
-    //   }
-    // } catch (error) {
-    //   console.error("Error during signup:", error);
-    //   message.error("Signup failed. Please try again later.");
-    // }
+  const handleSubmit = async () => {
+    try {
+      const sign = await axios.post(`${API_BASE_URL}/signup`, formData);
+      console.log(sign);
+      alert("Account created successfully!");
+      navigate("/login");
+    } catch (error) {
+      alert("Error creating account");
+    }
   };
 
   return (
     <>
       <FormWrapper>
         <FormHeader>
-          <div className="logintext">Create account</div>
+          <div className="logintext">Create Account</div>
           <div className="loginDesc">
             Get access to exclusive features by creating an account
           </div>
         </FormHeader>
 
-        {/* <form onSubmit={handleSubmit}>
-          <input
-            label="User Name"
-            type="text"
-            name="username"
-            placeholder="Username"
-            value={formData.username}
-            onChange={handleChange} // Add onChange event handler
-          />
-          <input
-            label="Email"
-            type="email"
-            name="email"
-            placeholder="Email"
-            value={formData.email}
-            onChange={handleChange} // Add onChange event handler
-          />
-          <input
-            label="Password"
-            type="password"
-            name="password"
-            placeholder="Password"
-            value={formData.password}
-            onChange={handleChange} // Add onChange event handler
-          />
-          <input
-            label="Confirm Password"
-            type="password"
-            name="confirmpassword"
-            placeholder="Confirm Password"
-            value={formData.confirmpassword}
-            onChange={handleChange} // Add onChange event handler
-          />
-          <input
-            label="Business Name"
-            type="text"
-            name="businessname"
-            placeholder="Business Name"
-            value={formData.businessname}
-            onChange={handleChange} // Add onChange event handler
-          />
-          <button type="submit">Sign Up</button>
-        </form> */}
-
-        <Form name="normal_login" className="login-form" layout="vertical">
+        <Form
+          name="basic"
+          className="login-form"
+          layout="vertical"
+          autoComplete="off"
+          initialValues={{
+            remember: true,
+          }}
+        >
           <Form.Item>
             <label className="Username" name="username">
               Username
             </label>
             <Input
-              placeholder="username"
+              placeholder="Username"
               name="username"
               value={formData.username}
               onChange={handleChange}
@@ -129,7 +73,7 @@ function SignupForm() {
             </label>
             <Input
               type="email"
-              placeholder="email"
+              placeholder="Email"
               name="email"
               value={formData.email}
               onChange={handleChange}
@@ -142,7 +86,7 @@ function SignupForm() {
             </label>
             <Input
               type="password"
-              placeholder="password"
+              placeholder="Password"
               name="password"
               value={formData.password}
               onChange={handleChange}
@@ -155,7 +99,7 @@ function SignupForm() {
             </label>
             <Input
               type="password"
-              placeholder="confirm password"
+              placeholder="Confirm Password"
               name="confirmpassword"
               value={formData.confirmpassword}
               onChange={handleChange}
@@ -167,9 +111,20 @@ function SignupForm() {
               Business Name
             </label>
             <Input
-              placeholder="business name"
+              placeholder="Business Name"
               name="businessname"
               value={formData.businessname}
+              onChange={handleChange}
+            />
+          </Form.Item>
+          <Form.Item>
+            <label className="Status" name="status">
+              Who You Are?
+            </label>
+            <Input
+              placeholder="status"
+              name="status"
+              value={formData.status}
               onChange={handleChange}
             />
           </Form.Item>
@@ -188,7 +143,7 @@ function SignupForm() {
                 className="login-form-button"
                 onClick={handleSubmit}
               >
-                create my account
+                Create my Account
               </Button>
             </Container>
 

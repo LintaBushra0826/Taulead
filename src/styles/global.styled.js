@@ -3,7 +3,8 @@ import styled from "styled-components";
 export const BodyWrapper = styled.div`
   display: flex;
   height: 100vh;
-  background: linear-gradient(140deg, #fafafa, #fafafa, #ebdcf7 120%);
+  background: linear-gradient(140deg, #fafafa, #fafafa, #ebdcf7 150%);
+  /* background: linear-gradient(140deg, #faf1eb, #fafafa, #f5f0fa 80%); */
 `;
 
 export const MainContainer = styled.div`
@@ -18,7 +19,6 @@ export const FormHeading = styled.div`
   padding: 30px;
   width: max-content;
   color: #360a5a;
-
 `;
 
 export const TableWrapper = styled.div`

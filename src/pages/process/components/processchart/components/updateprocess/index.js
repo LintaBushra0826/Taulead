@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Modal, Steps, Checkbox, Button, Divider } from "antd";
 import { FormWrapper } from "./index.styled";
 import axios from "axios";
@@ -8,9 +8,9 @@ import {
   StepsFormDiv,
   SubProcessHeader,
 } from "./index.styled";
-import ProcessForm from "../../../processform";
-import RawMaterialForm from "../../../rawmaterialform";
-import HumanResourceForm from "../../../humanresourceform";
+import ProcessForm from "../updateprocessform";
+import RawMaterialForm from "../rawmaterialform copy";
+import HumanResourceForm from "../humanresourceform copy";
 import { useAtomValue } from "jotai";
 import { ProcessAtom } from "../../../../../../atoms/process.atom";
 import SubProcessForm from "../../../createprocessmodal/components/subprocessmodal/components/subprocessform";
@@ -18,7 +18,7 @@ import SubRawMaterialForm from "../../../createprocessmodal/components/subproces
 import SubHumanResourceForm from "../../../createprocessmodal/components/subprocessmodal/components/subprocesshumanresource";
 import { SubProcessAtom } from "../../../../../../atoms/subprocess.atom";
 
-function UpdateProcess({ isVisible, onClose }) {
+function UpdateProcess({ isVisible, onClose, selectedTaskData }) {
   const [formData, setFormData] = useState({});
   const process = useAtomValue(ProcessAtom);
   const subprocess = useAtomValue(SubProcessAtom);
@@ -28,12 +28,15 @@ function UpdateProcess({ isVisible, onClose }) {
   const [showSubprocessContent, setShowSubprocessContent] = useState(false);
   const [subprocessCount, setSubprocessCount] = useState(0);
 
+  useEffect(() => {
+    setFormData(selectedTaskData);
+  }, [selectedTaskData]);
+
   const handleCloseModal = () => {
     setSubIsModalVisible(false);
   };
 
   const onChangeValue = (value) => {
-    console.log("onChange:", value);
     setCurrent(value);
   };
 
@@ -74,38 +77,37 @@ function UpdateProcess({ isVisible, onClose }) {
   };
 
   const handleSubmit = async () => {
+    console.log("process", process);
     try {
       const combinedData = {
         ...process,
       };
 
-      const response = await axios.post(
-        `${API_BASE_URL}/process`,
+      const response = await axios.put(
+        `${API_BASE_URL}/update-process/${selectedTaskData.key}`,
         combinedData
       );
 
       if (response.status === 200) {
-        alert("Process added successfully!");
+        alert("Process updated successfully!");
         setFormData(response.data);
 
-        // Check if the checkbox is checked before opening the subprocess modal
         if (showSubprocessContent) {
           setSubIsModalVisible(true);
         }
       } else {
-        alert("Error adding process");
+        alert("Error updating process");
       }
     } catch (error) {
-      alert("Error adding process");
+      alert("Error updating process");
     }
   };
 
   const handleSubSubmit = async () => {
     try {
-      console.log("subprocess", subprocess);
-
       const combinedData = {
         ...subprocess,
+        ...formData,
       };
 
       const response = await axios.post(
@@ -115,8 +117,6 @@ function UpdateProcess({ isVisible, onClose }) {
       if (response.status === 200) {
         alert("Subprocess added successfully!");
         setSubprocessCount((prevCount) => prevCount + 1);
-
-        // Clear the form fields for the next subprocess
         setFormData({});
       } else {
         alert("Error adding subprocess");
@@ -132,62 +132,61 @@ function UpdateProcess({ isVisible, onClose }) {
   return (
     <FormWrapper>
       <Modal
-        open={isVisible}
+        visible={isVisible}
         onCancel={onClose}
         centered
-        footer={null}
         width={1000}
-        // onOk={handleSubmit}
+        onOk={handleSubmit}
       >
         <SubProcessHeader>
-          <FormLabel>Process Creation</FormLabel>
+          <FormLabel>Edit Process</FormLabel>
         </SubProcessHeader>
+
         <br />
 
         <StepsFormDiv>
           <Steps
             current={current}
-            labelPlacement="Horizontal"
+            labelPlacement="horizontal"
             items={items}
             onChange={(c) => {
               setCurrent(0);
             }}
           />
           <br />
-          <ProcessForm formData={formData} setFormData={setFormData} />
-          <Divider />
-
-          <Steps
-            current={current}
-            labelPlacement="Horizontal"
-            onChange={onChangeValue}
-            items={materialitems}
-          />
-
-          <RawMaterialForm />
+          <ProcessForm processData={formData} />
 
           <Divider />
 
           <Steps
             current={current}
-            labelPlacement="Horizontal"
+            labelPlacement="horizontal"
             onChange={onChangeValue}
             items={hritems}
           />
+          <HumanResourceForm humanResourceData={formData.humanresource} />
 
-          <HumanResourceForm />
+          <Divider />
+
+          <Steps
+            current={current}
+            labelPlacement="horizontal"
+            onChange={onChangeValue}
+            items={materialitems}
+          />
+          {/* <RawMaterialForm rawMaterialData={formData.rawmaterial} /> */}
         </StepsFormDiv>
 
-        <CreateProcessCon>
+        {/* <CreateProcessCon>
           <Checkbox onChange={handleCheckboxChange}>Create Subprocess</Checkbox>
           <Button type="primary" onClick={handleSubmit}>
-            Submit Process
+           Update 
           </Button>
-        </CreateProcessCon>
+        </CreateProcessCon> */}
 
         {isSubModalVisible && (
           <Modal
-            open={isSubModalVisible}
+            visible={isSubModalVisible}
             onCancel={handleCloseModal}
             centered
             footer={null}
@@ -204,7 +203,7 @@ function UpdateProcess({ isVisible, onClose }) {
                 <StepsFormDiv>
                   <Steps
                     current={current}
-                    labelPlacement="Horizontal"
+                    labelPlacement="horizontal"
                     items={subitems}
                     onChange={(c) => {
                       setCurrent(0);
@@ -222,7 +221,7 @@ function UpdateProcess({ isVisible, onClose }) {
                   <Divider />
                   <Steps
                     current={current}
-                    labelPlacement="Horizontal"
+                    labelPlacement="horizontal"
                     onChange={onChangeValue}
                     items={submaterialitems}
                   />
@@ -231,7 +230,7 @@ function UpdateProcess({ isVisible, onClose }) {
                   <Divider />
                   <Steps
                     current={current}
-                    labelPlacement="Horizontal"
+                    labelPlacement="horizontal"
                     onChange={onChangeValue}
                     items={subhritems}
                   />
@@ -239,18 +238,6 @@ function UpdateProcess({ isVisible, onClose }) {
                 </StepsFormDiv>
               </>
             )}
-
-            <CreateProcessCon>
-              {/* <Checkbox onChange={handleCheckboxChange}>
-                Create another Subprocess
-              </Checkbox> */}
-
-              <Button onClick={handleSubSubmit}>Cancel</Button>
-
-              <Button type="primary" onClick={handleSubSubmit}>
-                Update
-              </Button>
-            </CreateProcessCon>
           </Modal>
         )}
       </Modal>

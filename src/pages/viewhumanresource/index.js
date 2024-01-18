@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from "react";
-import Header from "../../layout/dashboardheader";
+import Header from "../../layout/justheader";
 import SideMenu from "../../layout/sideMenu";
-import {
-  BodyWrapper,
-  SpinWrapper,
-  TableWrapper,
-} from "../../styles/global.styled";
+import { BodyWrapper, SpinWrapper } from "../../styles/global.styled";
 import { Table, Typography, Modal, Input, Form, Tag, Spin } from "antd";
 import axios from "axios";
+import { TableWrapper } from "./index.styled";
+import { FiEdit3 } from "react-icons/fi";
+import { MdOutlineDelete } from "react-icons/md";
 
 function ViewHumanResource() {
   const API_BASE_URL = "http://localhost:3005";
@@ -102,18 +101,30 @@ function ViewHumanResource() {
       width: "fit-content",
     },
     {
-      title: "Phone Number",
-      dataIndex: "phoneNumber",
+      title: "Status",
+      dataIndex: "tag",
+      width: "fit-content",
+      render: (_, record) => (
+        <Tag color={getTagColor(record)} key={record}>
+          {record.tag.toUpperCase()}
+        </Tag>
+      ),
+    },
+    {
+      title: "Designation",
+      dataIndex: "desgn",
       width: "fit-content",
     },
     {
-      title: "Address",
-      dataIndex: "address",
+      title: "Skills",
+      dataIndex: "skills",
       width: "fit-content",
     },
+
     {
-      title: "Email",
-      dataIndex: "email",
+      title: "Job Description",
+      dataIndex: "desgnesc",
+      width: "fit-content",
     },
     {
       title: "Salary",
@@ -128,30 +139,20 @@ function ViewHumanResource() {
       width: "fit-content",
     },
     {
-      title: "Designation",
-      dataIndex: "desgn",
+      title: "Phone Number",
+      dataIndex: "phoneNumber",
       width: "fit-content",
     },
     {
-      title: "Job Description",
-      dataIndex: "desgnesc",
+      title: "Address",
+      dataIndex: "address",
       width: "fit-content",
     },
     {
-      title: "Skills",
-      dataIndex: "skills",
-      width: "fit-content",
+      title: "Email",
+      dataIndex: "email",
     },
-    {
-      title: "Status",
-      dataIndex: "tag",
-      width: "fit-content",
-      render: (_, record) => (
-        <Tag color={getTagColor(record)} key={record}>
-          {record.tag.toUpperCase()}
-        </Tag>
-      ),
-    },
+
     {
       title: "Operation",
       dataIndex: "operation",
@@ -159,41 +160,19 @@ function ViewHumanResource() {
       render: (_, record) => {
         return (
           <>
-            <Typography.Link
-              disabled={editingKey !== ""}
+            <FiEdit3
               onClick={() => showModal(record._id)}
-              style={{
-                fontSize: "12px",
-                // padding: "2%",
-                backgroundColor: "#ECF8F9",
-                color: "#00A9FF",
-                borderColor: "#AEE2FF",
-                border: "1px",
-                borderStyle: "solid",
-                borderRadius: "5px",
-                padding: "5px",
-                marginRight: "6px",
-              }}
-            >
-              UPDATE
-            </Typography.Link>
-            <Typography.Link
-              disabled={editingKey !== ""}
+              style={{ color: "#360a5a", width: "20px", height: "35px" }}
+            />
+            <MdOutlineDelete
               onClick={() => handleDeleteItem(record._id)}
               style={{
-                Left: "5%",
-                fontSize: "12px",
-                backgroundColor: "#FFE5E5",
-                color: "#BB2525",
-                borderColor: "#FF9B82",
-                border: "1px",
-                borderStyle: "solid",
-                borderRadius: "4px",
-                padding: "5px",
+                marginLeft: "25px",
+                color: "#360a5a",
+                width: "20px",
+                height: "35px",
               }}
-            >
-              DELETE
-            </Typography.Link>
+            />
           </>
         );
       },
@@ -221,7 +200,7 @@ function ViewHumanResource() {
   };
   return (
     <div className="divform">
-      {/* <Header /> */}
+      <Header />
       <BodyWrapper>
         <SideMenu />
         <TableWrapper>
@@ -231,8 +210,7 @@ function ViewHumanResource() {
               dataSource={data}
               loading={loading}
               scroll={{
-                x: 80, // Set a fixed height for vertical scrolling (can be 'number' or 'string')
-                scrollToFirstRowOnChange: true, // Scroll to the top of the table when paging, sorting, filtering changes
+                x: 100,
               }}
             />
           ) : (

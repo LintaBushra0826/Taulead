@@ -27,6 +27,6 @@ export const AvatarWrapper = styled.div`
   text-align: start;
   position: absolute;
   border-radius: 15px 15px;
-  box-shadow: 0 1px 4px #EAE6EE;
+  box-shadow: 0 1px 4px #eae6ee;
   padding: 5px;
 `;

@@ -11,7 +11,6 @@ function Signup() {
 
     <div>
       <BodyWrapper>
-        {/* <Justheader /> */}
         <TransitionContainer>
           <Transition.Img src={signup} alt="" />
           <Transition.Heading>τau_Lead</Transition.Heading>

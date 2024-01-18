@@ -1,33 +1,23 @@
 import styled from "styled-components";
 
-export const BodyWrapper = styled.div`
-  /* display: flex; */
-  flex-direction: column;
-  justify-content: flex-start;
+export const TableWrapper = styled.div`
   position: relative;
-  top: 30px;
-  width: 800px;
-
-  .ant-table-tbody .purple-row {
-    background-color: #ede4ff !important;
-    color: black !important;
-  }
-
-  .ant-table-tbody .white-row {
-    background-color: white !important;
-    color: black !important;
-  }
+  top: 10%;
+  overflow: scroll;
+  padding-left: 40px;
+  padding-right: 40px;
+  width: 100%;
+  height: 90vh;
 `;
 
-export const Container = styled.div`
-  /* display: flex; */
-  align-items: center;
+export const AvatarWrapper = styled.div`
   width: fit-content;
-  padding-bottom: "20px";
-`;
-
-export const CardContainer = styled.div`
-  /* margin: 5 5px;
-  /* overflow: hidden; */
-  /*width: 100%; */
+  right: 40px;
+  background-color: white;
+  top: 20px;
+  text-align: start;
+  position: absolute;
+  border-radius: 15px 15px;
+  box-shadow: 0 1px 4px #eae6ee;
+  padding: 5px;
 `;

@@ -5,6 +5,7 @@ export const FooterWrapper = styled.div`
   font-family: "Roboto", sans-serif;
   /* background: #654ea3; */
   background-color: #060047;
+  /* background: linear-gradient(100deg, #2a0845, #2a0845, #061161 120%); */
   color: white;
   padding: 20px; /* Add padding as needed */
 

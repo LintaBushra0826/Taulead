@@ -133,7 +133,7 @@ const StatsTable = (extractedProcessRecords) => {
         title="Resource Inventory Table View"
         style={{
           width: "99%",
-          height: "280px",
+          height: "275px",
           borderRadius: "10px",
           // boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
           marginTop: "20px",
@@ -144,7 +144,7 @@ const StatsTable = (extractedProcessRecords) => {
           dataSource={Datasetdata}
           size="middle"
           scroll={{
-            y: 80,
+            y: 70,
             scrollToFirstRowOnChange: true,
           }}
         />

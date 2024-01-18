@@ -11,9 +11,10 @@ const slideDown = keyframes`
 
 export const HeaderContainer = styled.div`
   position: absolute;
+  top: 0;
+  z-index: 1000;
   width: 100%;
   height: 70px;
-  background-color: transparent;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -85,35 +86,20 @@ export const HeadMenu = styled.div`
   animation: ${slideDown} 2s ease-out 0.5ms both;
 `;
 
-// export const ButtonContainer = styled.div`
-//   position:relative;
-//   display:flex;
-//   justify-content: flex-end;
-//   gap:10px;
-//   padding-top:16px;
-//   a{
-//     color: #210062;
-//   }
-//   .signupbtn{
-//     display:flex;
-//     background-color: #654ea3;
-//     color:white;
-//     height: 30px;
-//   }
-// `;
-
-export const ButtonContainer = styled.div`
-  position: relative;
+export const BtnContainer = styled.div`
   display: flex;
   justify-content: flex-end;
-  align-items: center; /* Align items vertically in the center */
+  align-items: center;
   gap: 10px;
   padding-top: 3px;
 
-  a {
-    /* color: #210062; */
+  .loginbtn {
     color: #fff;
-    display: inline-block; /* Display the login link as an inline block */
+    display: inline-block;
+    border: 1px solid;
+  }
+  .loginbtn:hover {
+    border: 1px solid;
   }
   .signupbtn {
     width: fit-content;

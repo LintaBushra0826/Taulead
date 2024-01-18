@@ -6,17 +6,7 @@ import { FormWrapper } from "./index.styled";
 import MeasuringUnitForm from "./components/index";
 
 function measuringUnitForm() {
-  return (
-    <div className="divform">
-      {/* <Header /> */}
-      <BodyWrapper>
-        <SideMenu />
-        <FormWrapper>
-         <MeasuringUnitForm />
-        </FormWrapper>
-      </BodyWrapper>
-    </div>
-  );
+  return <MeasuringUnitForm />;
 }
 
 export default measuringUnitForm;

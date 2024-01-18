@@ -6,7 +6,7 @@ export const BodyWrapper = styled.div`
   align-items: left;
   text-align: left;
   /* background: linear-gradient(100deg, #2a0845, #2a0845, #061161 120%); */
-  background: linear-gradient(100deg,#2a0845, #2a0845,  #061161 120%);
+  background: linear-gradient(100deg, #2a0845, #2a0845, #061161 120%);
   width: 100%;
   height: 100vh;
   opacity: 1.05;
@@ -94,16 +94,12 @@ export const Heading = styled.h1`
   color: #fff;
   left: 200px;
   background: linear-gradient(135deg, #eaafc8, #d3cce3, #91eae4);
-  -webkit-background-clip: text; /* Apply gradient to text */
-  background-clip: text; /* Apply gradient to text */
-  /* -webkit-text-fill-color: transparent; Hide the text color */
+  -webkit-background-clip: text;
+  background-clip: text;
+
   animation: ${slideUp} 1s ease-out 0.9s both;
 
   .headerSpan {
-    /* background: linear-gradient(135deg,#FF8235,#ff9966,#f7b733);
-    -webkit-background-clip: text;  //Apply gradient to text 
-     background-clip: text;  //Apply gradient to text 
-    -webkit-text-fill-color: transparent; */
     color: #ffaf7b;
   }
 `;
@@ -118,6 +114,7 @@ export const Paragraph = styled.p`
   color: #fff;
 
   animation: ${slideUp} 1s ease-out 0.9s both;
+  
 `;
 
 export const BgImg = styled.img`

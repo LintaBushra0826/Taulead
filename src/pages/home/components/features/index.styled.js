@@ -1,6 +1,5 @@
 import styled, { keyframes } from "styled-components";
 
-
 const circular = keyframes`
   0% {
     transform: translate(-50%, -50%) rotate(-90deg) translateY(300px) rotate(90deg); 
@@ -41,7 +40,7 @@ export const Void = styled.div`
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
-    background: #ffffff;
+    background-color: rgba(255, 255, 255, 0.9);
     box-shadow: 0px 18px 36px -18px rgba(12, 5, 46, 0.3),
       0px 30px 60px -12px rgba(12, 5, 46, 0.25);
     border-radius: 50%;
@@ -68,7 +67,7 @@ export const Li = styled.li`
   top: 50%;
   left: 45%;
   width: 24%;
-  height:20%;
+  height: 20%;
   opacity: 0;
   animation: none;
   &:nth-child(1) {
@@ -99,6 +98,14 @@ export const Li = styled.li`
     opacity: 0;
     animation: ${circular} 30s linear 16s infinite;
   }
+  /* &:nth-child(8) {
+    opacity: 0;
+    animation: ${circular} 30s linear 18s infinite;
+  }
+  &:nth-child(9) {
+    opacity: 0;
+    animation: ${circular} 30s linear 20s infinite;
+  } */
 `;
 
 export const Card = styled.div`
@@ -214,11 +221,13 @@ export const FeaturesHead = styled.div`
   text-align: center;
   padding-top: 90px;
   margin-bottom: 20px;
+  font-style: italic;
+  font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif;
 `;
 
 export const Wrapper2 = styled.div`
   width: 100%;
-  min-height: 50vh;
+  min-height: 10vh;
   background: linear-gradient(
     0deg,
     rgba(42, 8, 69, 0.88),

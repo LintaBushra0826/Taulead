@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
-import Header from "../../layout/dashboardheader";
+import Header from "../../layout/justheader";
 import SideMenu from "../../layout/sideMenu";
-import { BodyWrapper, TableWrapper } from "../../styles/global.styled";
-import { Table, Typography, Modal, Input, Form, Tag, InputNumber } from "antd";
+import { TableWrapper } from "./index.styled";
+import { Table, Modal, Input, Form, Tag, InputNumber } from "antd";
 import { Spin } from "antd";
 import axios from "axios";
-import { SpinWrapper } from "../../styles/global.styled";
+import { BodyWrapper, SpinWrapper } from "../../styles/global.styled";
 import { MdOutlineDelete } from "react-icons/md";
 import { FiEdit3 } from "react-icons/fi";
 
@@ -21,14 +21,6 @@ function ViewRawMaterial() {
   const [one, setOne] = useState("");
   const [two, setTwo] = useState("");
   const [total, setTotal] = useState(0);
-  // const [spinning, setSpinning] = React.useState(false);
-
-  // const showLoader = () => {
-  //   setSpinning(true);
-  //   setTimeout(() => {
-  //     setSpinning(false);
-  //   }, 3000);
-  // };
 
   function getTagColor(record) {
     console.log("record", record.quan);
@@ -52,6 +44,29 @@ function ViewRawMaterial() {
       setOne(value);
     } else if (name === "quan") {
       setTwo(value);
+    }
+  };
+
+  const handleInChange = async (value, itemId) => {
+    try {
+      const selectedItem = data.find((item) => item._id === itemId);
+
+      const previousPrice = selectedItem.price;
+
+      selectedItem.price = value;
+
+      await axios.put(`${API_BASE_URL}/rawMaterial/${itemId}`, selectedItem);
+
+      await axios.post(`${API_BASE_URL}/priceLog`, {
+        itemId: selectedItem._id,
+        itemName: selectedItem.Name,
+        previousPrice: previousPrice,
+        updatedPrice: value,
+      });
+
+      fetchRawMaterials();
+    } catch (error) {
+      console.error("Error updating price:", error);
     }
   };
 
@@ -150,33 +165,34 @@ function ViewRawMaterial() {
     {
       title: "Quantity",
       dataIndex: "quan",
+      key: "quan",
       width: "fit-content",
       editable: true,
-      render: (record, item) => {
-        return (
-          <InputNumber
-            defaultValue={item.quan}
-            onChange={(value) => handleInputChange(value, item._id)}
-            style={{ width: "50%", position: "relative" }}
-          />
-        );
-      },
     },
 
     {
       title: "Price",
       dataIndex: "price",
+      key: "price",
       width: "fit-content",
       editable: true,
-      render: (text) => `Rs.${text}`,
+      render: (record, item) => {
+        return (
+          <InputNumber
+            defaultValue={item.price}
+            onChange={(value) => handleInChange(value, item._id)}
+            style={{ width: "100%", position: "relative" }}
+          />
+        );
+      },
     },
-    // {
-    //   title: "Limit",
-    //   dataIndex: "itemlimit",
-    //   key: "itemlimit",
-    //   render: (text, record) => `${text} ${record.unit}`,
-    //   width: "fit-content",
-    // },
+    {
+      title: "Limit",
+      dataIndex: "itemlimit",
+      key: "itemlimit",
+      render: (text, record) => `${text} ${record.unit}`,
+      width: "fit-content",
+    },
     {
       title: "Total Price",
       dataIndex: "totcost",
@@ -201,24 +217,6 @@ function ViewRawMaterial() {
       render: (_, record) => {
         return (
           <>
-            {/* <Typography.Link
-              disabled={editingKey !== ""}
-              onClick={() => showModal(record._id)}
-              style={{
-                fontSize: "12px",
-                // padding: "2%",
-                backgroundColor: "#ECF8F9",
-                color: "#00A9FF",
-                borderColor: "#AEE2FF",
-                border: "1px",
-                borderStyle: "solid",
-                borderRadius: "5px",
-                padding: "5px",
-                marginRight: "6px",
-              }}
-            >
-              UPDATE
-            </Typography.Link> */}
             <FiEdit3
               onClick={() => showModal(record._id)}
               style={{ color: "#360a5a", width: "20px", height: "35px" }}
@@ -232,23 +230,6 @@ function ViewRawMaterial() {
                 height: "35px",
               }}
             />
-            {/* <Typography.Link
-              disabled={editingKey !== ""}
-              onClick={() => handleDeleteItem(record._id)}
-              style={{
-                Left: "5%",
-                fontSize: "12px",
-                backgroundColor: "#FFE5E5",
-                color: "#BB2525",
-                borderColor: "#FF9B82",
-                border: "1px",
-                borderStyle: "solid",
-                borderRadius: "4px",
-                padding: "5px",
-              }}
-            >
-              DELETE
-            </Typography.Link> */}
           </>
         );
       },
@@ -277,7 +258,7 @@ function ViewRawMaterial() {
 
   return (
     <div className="divform">
-      {/* <Header /> */}
+      <Header />
       <BodyWrapper>
         <SideMenu />
         <TableWrapper>
@@ -286,7 +267,7 @@ function ViewRawMaterial() {
               columns={columns}
               dataSource={data}
               loading={loading}
-              style={{ width: "100" }}
+            
               rowKey={(record) => record.uid}
             />
           ) : (

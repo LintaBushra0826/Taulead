@@ -19,8 +19,7 @@ export const UpdateRawMaterialAtom = atom(null, (get, set, update) => {
   // Update 'quan' field and 'processRecords' array
   set(RawMaterialAtom, {
     ...value,
-    quan: value.quan + quanIncrement, // Update 'quan' based on the provided increment
+    quan: value.quan + quanIncrement,
     processRecords: [...value.processRecords, ...processRecords],
-    // Assuming 'processRecords' contains the new records to be added
   });
 });

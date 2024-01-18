@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import Header from "../../layout/justheader";
 import SideMenu from "../../layout/sideMenu";
 import RawMaterialChart from "./components/rawmaterialchart";
 import HumanResourceChart from "./components/humanrsourcechart";
@@ -121,6 +122,7 @@ function Statistics() {
     <>
       <BodyWrapper>
         <SideMenu />
+        <Header />
         <ButtonWrapper>
           <Select
             showSearch

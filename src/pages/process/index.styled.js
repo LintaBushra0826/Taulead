@@ -4,13 +4,13 @@ export const ChartWrapper = styled.div`
   width: 100%;
   padding: 15px;
   overflow: scroll;
+  padding-top: 2%;
 `;
 
 export const ButtonWrapper = styled.div`
   position: fixed;
   bottom: 20px;
   right: 35px;
-  //overflow: scroll;
 `;
 
 export const FormHeader = styled.div`

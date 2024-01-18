@@ -11,11 +11,23 @@ export default function Features() {
       <Box className={`col-lg-6 my-5 col-12 col-md-6 col-sm-10 `}>
         <h5
           className="h5"
-          style={{  color: "#279EFF" }}
+          style={{
+            color: "#279EFF",
+          }}
         >
           Our Partners
         </h5>
-        <h1 className="h1" style={{color:"#ffaf7b"}}>Business Communities</h1>
+        <h1
+          className="h1"
+          style={{
+            color: "#ffaf7b",
+            fontWeight: "bold",
+            fontStyle: "italic",
+            fontFamily: "Palatino Linotype, Book Antiqua, Palatino, serif",
+          }}
+        >
+          Business Communities
+        </h1>
         <div className="Container">
           <div className="card-container">
             <div className="card-row">
@@ -23,7 +35,7 @@ export default function Features() {
                 <div className="card-body mt-2">
                   <img
                     src={nastp}
-                    alt= "nastp"
+                    alt="nastp"
                     style={{
                       display: "flex",
                       width: "75%",
@@ -42,7 +54,7 @@ export default function Features() {
                 <div className="card-body mt-2">
                   <img
                     src={siber}
-                    alt= "siber"
+                    alt="siber"
                     style={{
                       display: "flex",
                       width: "120%",

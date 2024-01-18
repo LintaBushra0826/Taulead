@@ -23,7 +23,7 @@ function Execution() {
     <>
       <BodyWrapper>
         <SideMenu />
-        {/* <Header /> */}
+        <Header />
 
         <ChartWrapper>
           <ProcessChart />
@@ -36,12 +36,6 @@ function Execution() {
             </Button>
           </Link>
         </ButtonWrapper>
-
-        {/* <CreateProcessModal
-          isVisible={isModalVisible}
-          onClose={handleCloseModal}
-        
-        /> */}
       </BodyWrapper>
     </>
   );

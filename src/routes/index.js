@@ -17,10 +17,6 @@ import ViewHumanResource from "../pages/viewhumanresource";
 import Dashboard from "../pages/dashboard";
 import Statistics from "../pages/statisticspage";
 import Execution from "../pages/execution";
-// import RawMaterialStats from "../pages/rawmaterialstats";
-// import HumanResourceStats from "../pages/humanresourcestats";
-// import ColorPlatte from "../layout/colorPlatte";
-// import ProtectedRoute  from "./protected";
 
 const router = createBrowserRouter([
   {
@@ -65,7 +61,11 @@ const router = createBrowserRouter([
   },
   {
     path: "/MeasuringUnit",
-    element: <MeasuringUnit />,
+    element: (
+      <PrivateRoute>
+        <MeasuringUnit />
+      </PrivateRoute>
+    ),
   },
   {
     path: "/ViewRawMaterial",

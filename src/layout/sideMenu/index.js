@@ -1,19 +1,16 @@
 import React, { useState } from "react";
-import { Divider, Menu } from "antd";
-import { LogoutDiv, MenuDiv, SideMenuContainer } from "./index.styled";
+import {  Menu } from "antd";
+import {  MenuDiv, SideMenuContainer } from "./index.styled";
 import "./index.styled";
 import { Link } from "react-router-dom";
 import logo from "../../assets/images/Logo white.png";
-import { Logo, LogoContainer, Span } from "./index.styled";
+import { Logo, LogoContainer } from "./index.styled";
 import { PiHouse } from "react-icons/pi";
 import { MdOutlineDashboard } from "react-icons/md";
 import { MdOutlineInventory2 } from "react-icons/md";
-import { MdInventory } from "react-icons/md";
-import { GoPersonFill } from "react-icons/go";
 import { TbRulerMeasure } from "react-icons/tb";
 import { VscServerProcess } from "react-icons/vsc";
 import { ImStatsBars } from "react-icons/im";
-import { MdTableRows } from "react-icons/md";
 import { IoCreateOutline } from "react-icons/io5";
 import { FcProcess } from "react-icons/fc";
 import { MdOutlinePriceChange } from "react-icons/md";
@@ -165,7 +162,7 @@ const items = [
         type: "Process Logs",
         name: "Process Logs",
         label: (
-          <Link to="/viewprocesslogs">
+          <Link to="/processlogs">
             <VscServerProcess />
             {"  "}Process Logs
           </Link>
@@ -175,7 +172,7 @@ const items = [
         type: "Price Logs",
         name: "Price Logs",
         label: (
-          <Link to="/viewpricelogs">
+          <Link to="/pricelogs">
             <MdOutlinePriceChange />
             {"  "}Price Logs
           </Link>
@@ -238,8 +235,8 @@ function SideMenu() {
         />
       </div>
 
-      <div className="menudiv" style={{position:"fixed", bottom:"100px"}}>
-        <Menu style={{ width: 256}} mode="inline" items={logout} />
+      <div className="menudiv" style={{ position: "fixed", bottom: "100px" }}>
+        <Menu style={{ width: 256 }} mode="inline" items={logout} />
       </div>
       <br />
 

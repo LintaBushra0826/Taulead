@@ -17,7 +17,6 @@ import React, { useEffect, useMemo, useState } from "react";
 import { ProcessAtom } from "../../../../atoms/process.atom";
 import { DownOutlined } from "@ant-design/icons";
 import axios from "axios";
-import moment from "moment";
 
 function ProcessForm({ formData, setFormData }) {
   const setProcess = useSetAtom(ProcessAtom);
@@ -26,38 +25,57 @@ function ProcessForm({ formData, setFormData }) {
   const [isParallel, setIsParallel] = useState(false);
   const [isSequential, setIsSequential] = useState(false);
 
-  const onStartChange = (value, dateString) => {
-    console.log("Selected Start Time: ", value);
-    console.log("Formatted Selected Start Time: ", dateString);
-
-    // Convert the js object to a JavaScript Date object
-    const startDate = value ? value.toDate() : null;
-
-    setFormData((prevData) => ({
-      ...prevData,
-      start: startDate,
-    }));
-    setProcess((prevProcess) => ({
-      ...prevProcess,
-      start: startDate,
-    }));
+  const onStartChange = (value, placeholder, dateString) => {
+    if (value) {
+      const startDate = value.toDate();
+      setFormData((prevData) => ({
+        ...prevData,
+        start: startDate,
+      }));
+      setProcess((prevProcess) => ({
+        ...prevProcess,
+        start: startDate,
+      }));
+    } else if (placeholder.$d) {
+      // Handle the case when only a placeholder is present
+      const startDate = placeholder.$d.toDate();
+      setFormData((prevData) => ({
+        ...prevData,
+        start: startDate,
+      }));
+      setProcess((prevProcess) => ({
+        ...prevProcess,
+        start: startDate,
+      }));
+    }
   };
 
-  const onEndChange = (value, dateString) => {
-    console.log("Selected End Time: ", value);
-    console.log("Formatted Selected End Time: ", dateString);
+  const onEndChange = (value, placeholder, dateString) => {
+    if (value) {
+      // Convert the js object to a JavaScript Date object
+      const endDate = value ? value.toDate() : null;
 
-    // Convert the js object to a JavaScript Date object
-    const endDate = value ? value.toDate() : null;
+      setFormData((prevData) => ({
+        ...prevData,
+        end: endDate,
+      }));
+      setProcess((prevProcess) => ({
+        ...prevProcess,
+        end: endDate,
+      }));
+    } else if (placeholder) {
+      // Convert the js object to a JavaScript Date object
+      const endDate = placeholder ? placeholder.$d.toDate() : null;
 
-    setFormData((prevData) => ({
-      ...prevData,
-      end: endDate,
-    }));
-    setProcess((prevProcess) => ({
-      ...prevProcess,
-      end: endDate,
-    }));
+      setFormData((prevData) => ({
+        ...prevData,
+        end: endDate,
+      }));
+      setProcess((prevProcess) => ({
+        ...prevProcess,
+        end: endDate,
+      }));
+    }
   };
 
   const handleInputChange = (event) => {
@@ -66,10 +84,6 @@ function ProcessForm({ formData, setFormData }) {
     setProcess((prevProcess) => ({ ...prevProcess, [name]: value }));
   };
 
-  const handleMenuClick = (e) => {
-    message.info("Click on menu item.");
-    console.log("click", e);
-  };
   function formatDuration(start, end) {
     const durationInmilliseconds = end - start;
     const hours = Math.floor(durationInmilliseconds / (1000 * 60 * 60));
@@ -77,13 +91,19 @@ function ProcessForm({ formData, setFormData }) {
       (durationInmilliseconds % (1000 * 60 * 60)) / (1000 * 60)
     );
 
+    let ProcessDuration;
     if (hours === 0) {
-      return `${minutes} minute(s)`;
+      ProcessDuration = `${minutes} minute(s)`;
     } else if (minutes === 0) {
-      return `${hours} hour(s)`;
+      ProcessDuration = `${hours} hour(s)`;
     } else {
-      return `${hours} hour(s) and ${minutes} minute(s)`;
+      ProcessDuration = `${hours} hour(s) and ${minutes} minute(s)`;
     }
+
+    setProcess((prevProcess) => ({
+      ...prevProcess,
+      duration: ProcessDuration,
+    }));
   }
 
   const handleCheckboxChange = async (e) => {
@@ -94,11 +114,12 @@ function ProcessForm({ formData, setFormData }) {
 
       if (checked && value.length >= 1) {
         const selectedProcess = linkprocess.find(
-          (process) => process.name === process.name
+          (process) => process.name.trim() === value.trim()
         );
+
         if (selectedProcess) {
-          const startDate = new Date(selectedProcess.start);
-          const endDate = new Date(selectedProcess.end);
+          const startDate = selectedProcess.start;
+          const endDate = selectedProcess.end;
 
           // Update the form data and process atom with the selected dates
           setFormData((prevData) => ({
@@ -113,46 +134,33 @@ function ProcessForm({ formData, setFormData }) {
           }));
         }
       }
-    } else if (name === "sequential") {
+    }
+    if (name === "sequential") {
       setIsSequential(checked);
       setIsParallel(false);
 
       if (checked && value.length >= 1) {
         const selectedProcess = linkprocess.find(
-          (process) => process.name === process.name
+          (process) => process.name.trim() === value.trim()
         );
 
         if (selectedProcess) {
-          const selectedProcessEndDate = selectedProcess.end;
-
-          // Set the start date of the process to 1 minute after the end date of the selected process
-          const newStartDate = new Date(
-            selectedProcessEndDate.getTime() + 60000
+          const selectedProcessEndDate = new Date(
+            selectedProcess.end.getTime() + 60000
           );
-          // Update the form data with the new start date
+
           setFormData((prevData) => ({
             ...prevData,
-            start: newStartDate,
+            start: selectedProcessEndDate,
+            end: null,
+          }));
+          setProcess((prevProcess) => ({
+            ...prevProcess,
+            start: selectedProcessEndDate,
+            end: new Date(),
           }));
         }
       }
-    }
-
-    // Set the pre-filled start and end dates based on checkbox state
-    if (checked && (name === "parallel" || name === "sequential")) {
-      const now = new Date();
-      const oneHourLater = new Date(now.getTime() + 60 * 60 * 1000); // Add 1 hour to current time
-
-      // Set the start and end dates based on the checkbox checked
-      const startDate = checked ? now : undefined;
-      const endDate = checked ? oneHourLater : undefined;
-
-      // Update the form data with pre-filled start and end dates
-      setFormData((prevData) => ({
-        ...prevData,
-        start: startDate,
-        end: endDate,
-      }));
     }
   };
 
@@ -228,6 +236,7 @@ function ProcessForm({ formData, setFormData }) {
       console.error("Error fetching data:", error);
     }
   };
+
   const options = useMemo(
     () =>
       linkprocess.map((process) => ({
@@ -245,17 +254,6 @@ function ProcessForm({ formData, setFormData }) {
     }));
   };
 
-  // const startDateMoment = formData.start
-  //   ? (console.log("Start Date String:", formData.start),
-  //     moment(formData.start, "ddd MMM DD YYYY HH:mm:ss ZZ"))
-  //   : null;
-  // const endDateMoment = formData.end
-  //   ? (console.log("End Date String:", formData.end),
-  //     moment(formData.end, "ddd MMM DD YYYY HH:mm:ss ZZ"))
-  //   : null;
-
-  // const startDateJSDate = startDateMoment ? startDateMoment.toDate() : null;
-  // const endDateJSDate = endDateMoment ? endDateMoment.toDate() : null;
   return (
     <Form name="basic" layout="vertical" initialValues={{}} autoComplete="off">
       <Row gutter={20}>
@@ -265,7 +263,7 @@ function ProcessForm({ formData, setFormData }) {
               name="pid"
               value={formData.pid}
               onChange={handleInputChange}
-              placeholder="PPP-1"
+              placeholder="Enter Process Id i.e, PPP-1"
             />
           </Form.Item>
         </Col>
@@ -275,6 +273,7 @@ function ProcessForm({ formData, setFormData }) {
               name="name"
               value={formData.name}
               onChange={handleInputChange}
+              placeholder="Enter Process Name"
             />
           </Form.Item>
         </Col>
@@ -284,6 +283,7 @@ function ProcessForm({ formData, setFormData }) {
               name="desc"
               value={formData.desc}
               onChange={handleInputChange}
+              placeholder="Enter Process Description"
             />
           </Form.Item>
         </Col>
@@ -294,7 +294,7 @@ function ProcessForm({ formData, setFormData }) {
             <Select
               allowClear
               style={{ display: "block", width: "27%" }}
-              placeholder="Please select"
+              placeholder="Select Process"
               onChange={onChange}
               options={options}
             />
@@ -322,12 +322,24 @@ function ProcessForm({ formData, setFormData }) {
       <Row gutter={20} justify="start">
         <Col span={8}>
           <Form.Item label="Process Start Date/Time" name="start">
-            <DatePicker showTime onChange={onStartChange} />
+            <DatePicker
+              showTime
+              placeholder={formData.start}
+              onChange={onStartChange}
+              style={{ width: "1000px" }}
+              // placeholder="Select Start Date"
+            />
           </Form.Item>
         </Col>
         <Col padding="0px" span={8}>
           <Form.Item label="Process End Date/Time" name="end">
-            <DatePicker showTime onChange={onEndChange} />
+            <DatePicker
+              showTime
+              placeholder={formData.end}
+              onChange={onEndChange}
+              style={{ width: "250px" }}
+              // placeholder="Select End Date"
+            />
           </Form.Item>
         </Col>
       </Row>

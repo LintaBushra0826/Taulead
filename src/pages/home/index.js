@@ -16,7 +16,6 @@ import backgroundpic from "../../assets/images/bgAnimation.png";
 import Features from "../home/components/features";
 import Partners from "../home/components/partners";
 import Contact from "../home/components/contactUsform";
-// import Monitoring from "../home/components/monitoring copy";
 
 function Home() {
   const ToDown = () => {
@@ -37,7 +36,8 @@ function Home() {
 
         <Heading>
           Manage Your{" "}
-          <span className="headerSpan">Manufacturing Resource Pipeline </span>{" "}
+          <span className="headerSpan">Manufacturing Resource Pipeline </span>
+          {"\t "}
           with Excellence
         </Heading>
 
@@ -62,14 +62,8 @@ function Home() {
         </Section2>
 
         <Section2>
-          {/* <Monitoring /> */}
-        </Section2>
-
-        <Section2>
           <Contact />
-        </Section2> 
-
-        {/* <Section4></Section4> */}
+        </Section2>
 
         <Footer />
       </BodyWrapper>

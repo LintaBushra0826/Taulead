@@ -1,171 +1,154 @@
-import React, { useState } from "react";
-// import Header from "../../layout/dashboardheader";
+import React, { useEffect, useState } from "react";
+import Header from "../../layout/justheader";
 import SideMenu from "../../layout/sideMenu";
-import { BodyWrapper, TableWrapper } from "../../styles/global.styled";
-import { Table, Typography } from "antd";
+import { BodyWrapper } from "../../styles/global.styled";
+import { Table } from "antd";
+import { MdOutlineDelete } from "react-icons/md";
+import axios from "axios";
+import { TableWrapper } from "./index.styled";
 
 function ViewPriceLogs() {
-  const data = [
-    {
-      key: "1",
-      name: "Milk",
-      desc: "Milk is made by tetrapack",
-      unit: "kg",
-      quan: 1000,
-      status: "available",
-      price: 150,
-      totprice: 115000,
-    },
-    {
-      key: "1",
-      name: "Milk",
-      desc: "Milk is made by tetrapack",
-      unit: "kg",
-      quan: 1000,
-      status: "available",
-      price: 150,
-      totprice: 115000,
-    },
-    {
-      key: "1",
-      name: "Milk",
-      desc: "Milk is made by tetrapack",
-      unit: "kg",
-      quan: 1000,
-      status: "available",
-      price: 150,
-      totprice: 115000,
-    },
-    {
-      key: "1",
-      name: "Milk",
-      desc: "Milk is made by tetrapack",
-      unit: "kg",
-      quan: 200,
-      status: "available",
-      price: 150,
-      totprice: 115000,
-    },
-  ];
-  const [editingKey, setEditingKey] = useState("");
-  // const isEditing = (record) => record.key === editingKey;
-  const edit = (record) => {
-    setEditingKey(record.key);
+  const API_BASE_URL = "http://localhost:3005";
+  const [data, setData] = useState(null);
+
+  console.log("pricelog data", data);
+
+  const handleDeleteItem = async (itemId) => {
+    console.log(itemId);
+    try {
+      await axios.delete(`${API_BASE_URL}/pricelog/${itemId}`);
+      alert("Log deteted successfully");
+
+      window.location.reload();
+    } catch (error) {
+      alert("Log could not be deteted");
+    }
   };
-  // const [filteredInfo, setFilteredInfo] = useState({});
-  // const [sortedInfo, setSortedInfo] = useState({});
-  // const handleChange = (pagination, filters, sorter) => {
-  //   console.log("Various parameters", pagination, filters, sorter);
-  //   setFilteredInfo(filters);
-  //   setSortedInfo(sorter);
-  // };
-  // const clearFilters = () => {
-  //   setFilteredInfo({});
-  // };
-  // const clearAll = () => {
-  //   setFilteredInfo({});
-  //   setSortedInfo({});
-  // };
-  // const setAgeSort = () => {
-  //   setSortedInfo({
-  //     order: "descend",
-  //     columnKey: "age",
-  //   });
-  // };
+
+  useEffect(() => {
+    fetchpricelogs();
+  }, []);
+
+  const fetchpricelogs = async () => {
+    try {
+      const response = await axios.get("http://localhost:3005/pricelogs");
+      const rawData = response.data.data;
+      const dataArray = Array.isArray(rawData) ? rawData : [];
+
+      setData(dataArray);
+    } catch (error) {
+      console.error("Error fetching raw materials:", error);
+    }
+  };
+
   const columns = [
     {
-      title: "Name",
-      dataIndex: "name",
-      key: "name",
+      title: "Item Name",
+      dataIndex: "itemName",
+      key: "itemName",
       width: "fit-content",
-      // filters: [                                    //filteration code...
-      //   {
-      //     text: "Joe",
-      //     value: "Joe",
-      //   },
-      //   {
-      //     text: "Jim",
-      //     value: "Jim",
-      //   },
-      // ],
-      // filteredValue: filteredInfo.name || null,
-      // onFilter: (value, record) => record.name.includes(value),
-      // sorter: (a, b) => a.name.length - b.name.length,
-      // sortOrder: sortedInfo.columnKey === "name" ? sortedInfo.order : null,
-      // ellipsis: true,
     },
     {
-      title: "Description",
-      dataIndex: "desc",
+      title: "Previous Price",
+      dataIndex: "previousPrice",
+      key: "previousPrice",
       width: "fit-content",
-      editable: true,
-      // sorter: (a, b) => a.age - b.age,
-      // sortOrder: sortedInfo.columnKey === "age" ? sortedInfo.order : null,
-      // ellipsis: true,
+      align: "center",
     },
     {
-      title: "Unit",
-      dataIndex: "unit",
+      title: "Updated Price",
+      dataIndex: "updatedPrice",
+      key: "updatedPrice",
       width: "fit-content",
-      editable: true,
+      align: "center",
     },
     {
-      title: "Quantity",
-      dataIndex: "quan",
+      title: "Modification Date",
+      dataIndex: "timestamp",
+      key: "timestamp",
       width: "fit-content",
-      editable: true,
+      render: (text) => formatDate(text),
+      align: "center",
     },
     {
-      title: "Status",
-      dataIndex: "status",
+      title: "Modification Time",
+      dataIndex: "timestamp",
+      key: "timestamp",
       width: "fit-content",
-      editable: true,
-    },
-    {
-      title: "Price",
-      dataIndex: "price",
-      width: "fit-content",
-      editable: true,
-    },
-    {
-      title: "Total Price",
-      dataIndex: "totprice",
-      width: "fit-content",
-      editable: true,
+      render: (text) => formatTime(text),
+      align: "center",
     },
     {
       title: "Operation",
       dataIndex: "operation",
+      key: "operation",
       width: "fit-content",
+      align: "center",
       render: (_, record) => {
         return (
           <>
-            <Typography.Link
-              disabled={editingKey !== ""}
-              onClick={() => edit(record)}
-            >
-              Update
-            </Typography.Link>
-            <Typography.Link
-              disabled={editingKey !== ""}
-              onClick={() => edit(record)}
-              style={{ padding: "10%" }}
-            >
-              Delete
-            </Typography.Link>
+            <MdOutlineDelete
+              onClick={() => handleDeleteItem(record._id)}
+              style={{
+                alignItem: "center",
+                justifyContent: "center",
+                color: "#360a5a",
+                width: "20px",
+                height: "35px",
+              }}
+            />
           </>
         );
       },
     },
   ];
 
+  // Function to format date (dd Month yyyy)
+  const formatDate = (timestamp) => {
+    const months = [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
+    ];
+
+    const date = new Date(timestamp);
+
+    const day = String(date.getDate()).padStart(2, "0");
+    const monthIndex = date.getMonth();
+    const year = String(date.getFullYear());
+
+    const monthName = months[monthIndex];
+
+    return `${day} ${monthName} ${year}`;
+  };
+
+  // Function to format time (hh:mm:ss)
+  const formatTime = (timestamp) => {
+    const date = new Date(timestamp);
+
+    const hours = String(date.getHours()).padStart(2, "0");
+    const minutes = String(date.getMinutes()).padStart(2, "0");
+    const seconds = String(date.getSeconds()).padStart(2, "0");
+
+    return `${hours}:${minutes}:${seconds}`;
+  };
+
   return (
     <div className="divform">
-      {/* <Header /> */}
+      <Header />
       <BodyWrapper>
         <SideMenu />
         <TableWrapper>
-          <Table columns={columns} dataSource={data} />
+          <Table columns={columns} dataSource={data} scroll={{ y: 590 }} />
         </TableWrapper>
       </BodyWrapper>
     </div>
