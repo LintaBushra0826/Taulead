@@ -288,39 +288,22 @@ function ProcessChart() {
           return;
         } else {
           console.log("task before post in inprogress", task);
-          if (task.type === "project") {
+          if (task.type === "project" || task.type === "task") {
             const response = await axios.post(`${API_BASE_URL}/${endpoint}`, {
               name: task.newName,
               start: task.start,
               end: task.end,
               desc: task.desc,
               duration: task.duration,
-              pid: task.processId,
-              humanresource: task.humanresource,
-              rawmaterial: task.rawmaterial,
-              key: task.key,
-              status: task.status,
-              progress: task.progress,
-            });
-
-            if (response.status === 200) {
-              console.log(
-                `Successfully added ${endpoint} process`,
-                response.data.data
-              );
-            } else {
-              console.error(`Error adding ${endpoint} process`);
-            }
-          } else if (task.type === "task") {
-            const response = await axios.post(`${API_BASE_URL}/${endpoint}`, {
-              name: task.newName,
-              start: task.start,
-              end: task.end,
-              desc: task.desc,
-              duration: task.duration,
-              pid: task.subprocessId,
-              humanresource: task.subhumanresource,
-              rawmaterial: task.subrawmaterial,
+              pid: task.type === "project" ? task.processId : task.subprocessId,
+              humanresource:
+                task.type === "project"
+                  ? task.humanresource
+                  : task.subhumanresource,
+              rawmaterial:
+                task.type === "project"
+                  ? task.rawmaterial
+                  : task.subrawmaterial,
               key: task.key,
               status: task.status,
               progress: task.progress,
@@ -335,6 +318,108 @@ function ProcessChart() {
               console.error(`Error adding ${endpoint} process`);
             }
           }
+
+          console.log("task details", task);
+          if (task.status == "completed") {
+            console.log("isCompletedProcess", task.newName);
+
+            // Update the completedtag attribute in HR process record
+            if (task) {
+              console.log("Yes isCompletedProcess", task);
+              // Fetch the human resource record
+              const hrResponse = await axios.get(
+                `${API_BASE_URL}/humanresource`
+              );
+              console.log("hrResponse", hrResponse);
+              const hrResponsedata = hrResponse.data.data;
+              const flattenedArray = hrResponsedata.flat();
+              console.log("flattenedArray", flattenedArray);
+              console.log("task.humanResource", task.humanresource);
+
+              // Extract names from hrResponsedata
+              const hrNames = hrResponsedata.map((hr) => hr.name);
+
+              // Filter task.humanresource based on matching names
+              const matchingHumanResources = task.humanresource.filter(
+                (taskHR) => hrNames.includes(taskHR.name)
+              );
+              console.log("matchingHumanResources", matchingHumanResources);
+              // Now, let's find HR process records for each matching human resource
+              const matchingHRProcessRecords = matchingHumanResources.map(
+                (matchingHR) => {
+                  const hrRecord = hrResponsedata.find(
+                    (hr) => hr.name === matchingHR.name
+                  );
+                  return {
+                    ...hrRecord,
+                    HRprocessRecords: hrRecord.HRprocessRecords || [],
+                  };
+                }
+              );
+
+              console.log("matchingHRProcessRecords", matchingHRProcessRecords);
+              if (
+                matchingHRProcessRecords &&
+                matchingHRProcessRecords.length > 0
+              ) {
+                // Use find to get the first element with HRprocessRecords property
+                const firstMatchingRecord = matchingHRProcessRecords.find(
+                  (record) => record.HRprocessRecords
+                );
+
+                if (firstMatchingRecord) {
+                  // Extract HRprocessRecords array from the found record
+                  const hrProcessRecords = firstMatchingRecord.HRprocessRecords;
+                  console.log("firstMatchingRecord", hrProcessRecords);
+
+                  // Extract names from hrProcessRecords
+                  const matchingHR = hrProcessRecords.map((hr) => hr);
+
+                  console.log("matchingHR", matchingHR);
+
+                  // const completedProcessRecord = matchingHRProcessRecords.HRprocessRecord.find(
+                  //   (record) => record.processId === task.processId
+                  // );
+                  // console.log("completedProcessRecord", completedProcessRecord);
+                  // Update the completed tag attribute
+                  if (matchingHR) {
+                    console.log("YES matchingHR", matchingHR);
+
+                    // Add completedtag property to each element in hrProcessRecords
+                    const updatedHRProcessRecords = firstMatchingRecord.HRprocessRecords.map(
+                      (record) => ({
+                        ...record,
+                        completedtag: "completed",
+                      })
+                    );
+
+                    console.log(
+                      "updatedHRProcessRecords",
+                      updatedHRProcessRecords
+                    );
+                    // Update the HR record with the modified HRprocessRecord
+                    try {
+                      const updatedHumanResource = {
+                        ...firstMatchingRecord,
+                        HRprocessRecords: updatedHRProcessRecords,
+                      };
+
+                      // Use the updatedHumanResource object in the PUT request
+                      await axios.put(
+                        `${API_BASE_URL}/humanresource/${firstMatchingRecord._id}`,
+                        updatedHumanResource
+                      );
+
+                      alert("UPDATED hrRecord");
+                      console.log("UPDATED hrRecord", updatedHumanResource);
+                    } catch (error) {
+                      console.error("Error updating HR record:", error);
+                    }
+                  }
+                }
+              }
+            }
+          }
         }
       } catch (error) {
         console.error(`Error posting ${endpoint} process data:`, error);
@@ -343,6 +428,75 @@ function ProcessChart() {
       console.log(`Task with key ${key} already exists in ${endpoint}`);
     }
   };
+
+  // const postTaskIfNotExists = async (task, endpoint) => {
+  //   const key = task.key;
+  //   const taskExists = await checkExistingTask(key, endpoint);
+  //   console.log("taskExists", taskExists);
+
+  //   if (!taskExists) {
+  //     try {
+  //       const ttaskExists = await checkExistingTask(key, endpoint);
+  //       console.log("ttaskExists", ttaskExists);
+  //       if (ttaskExists) {
+  //         return;
+  //       } else {
+  //         console.log("task before post in inprogress", task);
+  //         if (task.type === "project") {
+  //           const response = await axios.post(`${API_BASE_URL}/${endpoint}`, {
+  //             name: task.newName,
+  //             start: task.start,
+  //             end: task.end,
+  //             desc: task.desc,
+  //             duration: task.duration,
+  //             pid: task.processId,
+  //             humanresource: task.humanresource,
+  //             rawmaterial: task.rawmaterial,
+  //             key: task.key,
+  //             status: task.status,
+  //             progress: task.progress,
+  //           });
+
+  //           if (response.status === 200) {
+  //             console.log(
+  //               `Successfully added ${endpoint} process`,
+  //               response.data.data
+  //             );
+  //           } else {
+  //             console.error(`Error adding ${endpoint} process`);
+  //           }
+  //         } else if (task.type === "task") {
+  //           const response = await axios.post(`${API_BASE_URL}/${endpoint}`, {
+  //             name: task.newName,
+  //             start: task.start,
+  //             end: task.end,
+  //             desc: task.desc,
+  //             duration: task.duration,
+  //             pid: task.subprocessId,
+  //             humanresource: task.subhumanresource,
+  //             rawmaterial: task.subrawmaterial,
+  //             key: task.key,
+  //             status: task.status,
+  //             progress: task.progress,
+  //           });
+
+  //           if (response.status === 200) {
+  //             console.log(
+  //               `Successfully added ${endpoint} process`,
+  //               response.data.data
+  //             );
+  //           } else {
+  //             console.error(`Error adding ${endpoint} process`);
+  //           }
+  //         }
+  //       }
+  //     } catch (error) {
+  //       console.error(`Error posting ${endpoint} process data:`, error);
+  //     }
+  //   } else {
+  //     console.log(`Task with key ${key} already exists in ${endpoint}`);
+  //   }
+  // };
 
   const processData = async (tasksData) => {
     try {

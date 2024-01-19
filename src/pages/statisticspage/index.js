@@ -8,12 +8,7 @@ import HumanResourceTable from "./components/humanresourcetable";
 import ProcessTable from "./components/processtable";
 import Table from "./components/rawmaterialtable";
 import { Select } from "antd";
-import {
-  ButtonWrapper,
-  ChartWrapper,
-  TableWrapper,
-  BarWrapper,
-} from "./index.styled";
+import { ButtonWrapper, ChartWrapper } from "./index.styled";
 import { BodyWrapper } from "../../styles/global.styled";
 import axios from "axios";
 
@@ -55,8 +50,6 @@ function Statistics() {
     }
   };
 
-  // console.log("RawMaterial Data", rawMaterialData);
-
   const extractedProcessRecords = rawMaterialData.reduce((result, item) => {
     if (item.hasOwnProperty("processRecords")) {
       result.push({
@@ -73,22 +66,44 @@ function Statistics() {
     }
     return result;
   }, []);
+  useEffect(() => {
+    fetchHumanResource();
+  }, []);
 
-  console.log("Extracted Process Records:", extractedProcessRecords);
+  const fetchHumanResource = async () => {
+    try {
+      const response = await axios.get("http://localhost:3005/humanresource");
+      const rawData = response.data.data;
 
-  const onChange = (value) => {
-    console.log(`selected ${value}`);
+      // Ensure data is an array
+      const dataArray = Array.isArray(rawData) ? rawData : [];
+
+      setHumanResourceData(dataArray);
+    } catch (error) {
+      console.error("Error fetching raw materials:", error);
+    }
   };
-  const onSearch = (value) => {
-    console.log("search:", value);
-  };
+
+  const extractedHRRecords = humanResourceData.reduce((result, emp) => {
+    if (emp.hasOwnProperty("HRprocessRecords")) {
+      result.push({
+        empId: emp._id,
+        empName: emp.name,
+        empTag: emp.tag,
+        empDesgn: emp.desgn,
+        empRecords: emp.HRprocessRecords,
+      });
+    }
+    return result;
+  }, []);
+
+  const onSearch = (value) => {};
 
   const filterOption = (input, option) =>
     option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0;
 
   const [selectedValue, setSelectedValue] = useState(null);
   const handleChange = (value) => {
-    // Reset the selectedValue to null when a new option is selected
     setSelectedValue(value);
   };
   const renderConditionalContent = () => {
@@ -102,8 +117,8 @@ function Statistics() {
     } else if (selectedValue === "human resource") {
       return (
         <div>
-          <HumanResourceChart />
-          <HumanResourceTable />
+          <HumanResourceChart extractedHRRecords={extractedHRRecords} />
+          <HumanResourceTable extractedHRRecords={extractedHRRecords} />
         </div>
       );
     } else if (selectedValue === "process") {
@@ -137,10 +152,10 @@ function Statistics() {
                 value: "resource inventory",
                 label: "Resource Inventory Statistics View",
               },
-              // {
-              //   value: "human resource",
-              //   label: "Human Resource Statistics View",
-              // },
+              {
+                value: "human resource",
+                label: "Human Resource Statistics View",
+              },
               {
                 value: "process",
                 label: "Process Statistics View",

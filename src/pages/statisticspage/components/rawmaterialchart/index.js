@@ -99,8 +99,6 @@ const RawMaterialChart = ({ extractedProcessRecords }) => {
       datasets: datasets,
     };
 
-    console.log("chartData:", chartData);
-
     const maxUsedQuan = Math.max(
       ...dataset.map((record) =>
         record.UsedQuan !== "N/A" ? record.UsedQuan : 0
@@ -154,7 +152,7 @@ const RawMaterialChart = ({ extractedProcessRecords }) => {
         }}
       >
         <ChartWrapper>
-          <canvas ref={chartRef} width={900} height={200} />
+          <canvas ref={chartRef} width={900} height={180} />
         </ChartWrapper>
         <br />
         <Space

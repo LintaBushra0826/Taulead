@@ -20,7 +20,12 @@ function HumanResourceForm() {
     try {
       const response = await axios.get("http://localhost:3005/humanresource");
       const rawData = response.data.data;
-      const dataArray = Array.isArray(rawData) ? rawData : [];
+
+      // Filter the array to include only human resources with the tag "available"
+      const dataArray = Array.isArray(rawData)
+        ? rawData.filter((resource) => resource.tag == "available")
+        : [];
+
       setHumanResource(dataArray);
     } catch (error) {
       console.error("Error fetching human resources:", error);

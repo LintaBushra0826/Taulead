@@ -1,11 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { Table, Divider } from "antd";
-import { BodyWrapper } from "./index.styled";
-import Paragraph from "antd/es/skeleton/Paragraph";
+import { Table } from "antd";
 import { CardContainer } from "./index.styled";
 import { Card, Space } from "antd";
-import { Head } from "../rawmaterialchart/index.styled";
-import axios from "axios";
 
 const columns = [
   {
@@ -56,7 +52,7 @@ const StatsTable = (extractedProcessRecords) => {
     const extractedArray = Object.values(extractedProcessRecords).map(
       (item) => item
     );
-    console.log("extractedArray", extractedArray);
+    // console.log("extractedArray", extractedArray);
 
     const dataset = [];
 
@@ -80,7 +76,7 @@ const StatsTable = (extractedProcessRecords) => {
             item.processRecords.length > 0
           ) {
             item.processRecords.forEach((recordItem) => {
-              console.log("recordItem.processName", recordItem.processName);
+              // console.log("recordItem.processName", recordItem.processName);
               const processRecord = {
                 ...record,
                 ProcessId: recordItem.processId.toUpperCase(),
@@ -107,7 +103,7 @@ const StatsTable = (extractedProcessRecords) => {
       }
     });
     // Displaying the single dataset object with merged attributes for each item
-    console.log("Dataset:", dataset);
+    // console.log("Dataset:", dataset);
 
     const formattedData = dataset.map((item) => {
       return {
@@ -135,7 +131,6 @@ const StatsTable = (extractedProcessRecords) => {
           width: "99%",
           height: "275px",
           borderRadius: "10px",
-          // boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
           marginTop: "20px",
         }}
       >
