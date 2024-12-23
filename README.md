@@ -1,4 +1,4 @@
-# Taulead
+# Taulead ABC
 It is my final year project. Below is the description of my project:
 The system enables manufacturers to efficiently manage their operations through comprehensive modules for user account management, raw material inventory, human resources, process planning, and execution. Key features include secure user registration and authentication, customizable raw material and unit management, employee record handling, and robust process execution with real-time monitoring and reporting capabilities.
 
