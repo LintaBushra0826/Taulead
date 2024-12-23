@@ -23,10 +23,8 @@ function ProcessChart() {
   const [selectedTaskData, setSelectedTaskData] = useState(null);
   const [open, setOpen] = useState(false);
   const [contextMenuVisible, setContextMenuVisible] = useState(false);
-  const [showUpdate, setShowUpdate] = useState(false);
   const [updateModalVisible, setUpdateModalVisible] = useState(false);
   const [selectedProcessData, setSelectedProcessData] = useState(null);
-  const [loading, setLoading] = useState(true);
 
   const handleEditProcessClick = (selectedTaskData) => {
     setSelectedProcessData(selectedTaskData);
@@ -38,7 +36,7 @@ function ProcessChart() {
   };
 
   const handleContextMenu = (e) => {
-    e.preventDefault(); // Prevent the default context menu from appearing
+    e.preventDefault();
     setContextMenuVisible(true);
   };
 
@@ -83,15 +81,20 @@ function ProcessChart() {
 
   const fetchProcessData = async () => {
     try {
-      const [response, subprocessResponse] = await Promise.all([
-        axios.get("http://localhost:3005/process"),
-        axios.get("http://localhost:3005/subprocess"),
+      const token = localStorage.getItem("token");
+
+      const headers = {
+        Authorization: token,
+      };
+
+      const [processResponse, subprocessResponse] = await Promise.all([
+        axios.get(`${API_BASE_URL}/process`, { headers }),
+        axios.get(`${API_BASE_URL}/subprocess`, { headers }),
       ]);
 
-      const process = response.data.data;
+      const process = processResponse.data.data;
       const subprocess = subprocessResponse.data.data;
 
-      // console.log("process.rawMaterial.id",process);
       // Iterate through the subprocess array
       subprocess.forEach((sub) => {
         // Find the corresponding process using the "pName" field
@@ -253,7 +256,6 @@ function ProcessChart() {
   };
 
   const handleMenuClick = (e) => {
-    // Handle menu item click here
     setContextMenuVisible(false);
   };
   const getStatusForProcess = (process) => {
@@ -268,10 +270,17 @@ function ProcessChart() {
 
   const handleDeleteProcess = async (prId, sprId) => {
     try {
-      await axios.delete(`${API_BASE_URL}/process/${prId}`);
+      const token = localStorage.getItem("token");
+
+      const headers = {
+        Authorization: token,
+      };
+      await axios.delete(`${API_BASE_URL}/process/${prId}`, { headers });
+
       if (sprId) {
-        await axios.delete(`${API_BASE_URL}/subprocess/${sprId}`);
+        await axios.delete(`${API_BASE_URL}/subprocess/${sprId}`, { headers });
       }
+
       alert("Process deleted successfully");
       window.location.reload();
     } catch (error) {

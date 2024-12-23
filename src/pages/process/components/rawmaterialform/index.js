@@ -12,7 +12,7 @@ function RawMaterialForm() {
   const [value, setValue] = useState([]);
   const [rawMaterial, setRawMaterial] = useState([]);
   const [selectedItems, setSelectedItems] = useState([]);
-  // const [selectedMaterials, setSelectedMaterials] = useState([]); // New state variable
+  const API_BASE_URL = "http://localhost:3005";
 
   const onChange = (newValue) => {
     setValue(newValue);
@@ -38,7 +38,6 @@ function RawMaterialForm() {
 
   useEffect(() => {
     updateRawMaterial(selectedItems);
-    console.log("selectedItems",selectedItems);
   }, [selectedItems]);
 
   useEffect(() => {
@@ -54,13 +53,25 @@ function RawMaterialForm() {
     [rawMaterial]
   );
 
-  console.log("options", options);
-
   const fetchRawMaterials = async () => {
     try {
-      const response = await axios.get("http://localhost:3005/rawMaterial");
-      const rawData = response.data.data;
+      const token = localStorage.getItem("token");
+
+      // Include the token in the headers
+      const response = await fetch(`${API_BASE_URL}/rawMaterial`, {
+        method: "GET",
+        headers: {
+          Authorization: token,
+        },
+      });
+
+      const data = await response.json();
+
+      const rawData = data.data;
+
+      // Ensure rawData is an array
       const dataArray = Array.isArray(rawData) ? rawData : [];
+
       setRawMaterial(dataArray);
     } catch (error) {
       console.error("Error fetching raw materials:", error);
@@ -106,19 +117,6 @@ function RawMaterialForm() {
       // }
     }
   };
-
-  // const selectedMaterials = useMemo(() => {
-  //   return value.map((id) => {
-  //     const item = rawMaterial.find((_item) => id === _item._id);
-  //     if (item) {
-  //       return {
-  //         ...item,
-  //         quan: 1,
-  //       };
-  //     }
-  //     return item;
-  //   });
-  // }, [value]);
 
   const columns = [
     {

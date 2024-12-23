@@ -23,6 +23,7 @@ function RawMaterialForm(rawMaterialData) {
   const [rawMaterial, setRawMaterial] = useState([]);
   const [selectedItems, dispatch] = useReducer(reducer, []);
   const [selectedItem, setSelectedItems] = useState([]);
+  const API_BASE_URL = "http://localhost:3005";
 
   const rawMaterialArray = Object.values(rawMaterialData);
   const flatRawMaterialArray = rawMaterialArray.flat(2);
@@ -30,8 +31,18 @@ function RawMaterialForm(rawMaterialData) {
   useEffect(() => {
     const fetchRawMaterials = async () => {
       try {
-        const response = await axios.get("http://localhost:3005/rawMaterial");
-        const rawData = response.data.data;
+        const token = localStorage.getItem("token");
+
+        // Include the token in the headers
+        const response = await fetch(`${API_BASE_URL}/rawMaterial`, {
+          method: "GET",
+          headers: {
+            Authorization: token,
+          },
+        });
+
+        const data = await response.json();
+        const rawData = data.data.data;
 
         // Check if rawData is an array before processing
         const dataArray = Array.isArray(rawData) ? rawData : [];

@@ -18,7 +18,13 @@ function HumanresourceForm() {
 
   const handleSubmit = async () => {
     try {
-      await axios.post(`${API_BASE_URL}/humanresource`, formData);
+      const token = localStorage.getItem("token");
+
+      await axios.post(`${API_BASE_URL}/humanresource`, formData, {
+        headers: {
+          Authorization: token,
+        },
+      });
       alert("Employee added successfully!");
     } catch (error) {
       alert("Error adding employee");
@@ -32,9 +38,6 @@ function HumanresourceForm() {
   };
   return (
     <FormWrapper>
-      {/* <FormHeading className="HeaderHeading">
-        Human Resource Inventory
-      </FormHeading> */}
       <Form
         name="basic"
         layout="vertical"
@@ -79,6 +82,7 @@ function HumanresourceForm() {
                 name="email"
                 value={formData.email}
                 onChange={handleInputChange}
+                placeholder="abc@gmail.com"
               />
             </Form.Item>
           </Col>
@@ -99,6 +103,7 @@ function HumanresourceForm() {
                 name="hired"
                 value={formData.hired}
                 onChange={handleInputChange}
+                placeholder="YYYY-MM-DD"
               />
             </Form.Item>
           </Col>

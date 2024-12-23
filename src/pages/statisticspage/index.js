@@ -15,6 +15,7 @@ import axios from "axios";
 function Statistics() {
   const [rawMaterialData, setRawMaterialData] = useState([]);
   const [humanResourceData, setHumanResourceData] = useState([]);
+  const API_BASE_URL = "http://localhost:3005";
 
   function formatDuration(start, end) {
     const durationInmilliseconds = end - start;
@@ -38,9 +39,19 @@ function Statistics() {
 
   const fetchRawMaterials = async () => {
     try {
-      const response = await axios.get("http://localhost:3005/rawMaterial");
-      const rawData = response.data.data;
+      const token = localStorage.getItem("token");
 
+      // Include the token in the headers
+      const response = await fetch(`${API_BASE_URL}/rawMaterial`, {
+        method: "GET",
+        headers: {
+          Authorization: token,
+        },
+      });
+
+      const data = await response.json();
+
+      const rawData = data.data;
       // Ensure data is an array
       const dataArray = Array.isArray(rawData) ? rawData : [];
 
@@ -72,15 +83,26 @@ function Statistics() {
 
   const fetchHumanResource = async () => {
     try {
-      const response = await axios.get("http://localhost:3005/humanresource");
-      const rawData = response.data.data;
+      const token = localStorage.getItem("token");
+
+      // Include the token in the headers
+      const response = await fetch(`${API_BASE_URL}/humanresource`, {
+        method: "GET",
+        headers: {
+          Authorization: token,
+        },
+      });
+
+      const data = await response.json();
+
+      const rawData = data.data;
 
       // Ensure data is an array
       const dataArray = Array.isArray(rawData) ? rawData : [];
 
       setHumanResourceData(dataArray);
     } catch (error) {
-      console.error("Error fetching raw materials:", error);
+      console.error("Error fetching humanresource:", error);
     }
   };
 

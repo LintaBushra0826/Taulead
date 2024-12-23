@@ -35,7 +35,6 @@ function SubRawMaterialForm() {
   }, [value]);
 
   useEffect(() => {
-    console.log(selectedItems, "pjpj");
     updateSubRawMaterialAtom(selectedItems);
   }, [selectedItems]);
 
@@ -74,15 +73,6 @@ function SubRawMaterialForm() {
       setSelectedItems(updatedSelectedItems);
     }
   };
-
-  // const selectedMaterials = useMemo(() => {
-  //   return value.map((item) => {
-  //     const rawMaterialItem = process.rawMaterial.find(
-  //       (_item) => item.id === _item._id
-  //     );
-  //     return rawMaterialItem;
-  //   });
-  // }, [value]);
 
   const columns = [
     {

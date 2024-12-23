@@ -8,6 +8,7 @@ import axios from "axios";
 import { BodyWrapper, SpinWrapper } from "../../styles/global.styled";
 import { MdOutlineDelete } from "react-icons/md";
 import { FiEdit3 } from "react-icons/fi";
+import { get } from "lodash";
 
 function ViewRawMaterial() {
   const API_BASE_URL = "http://localhost:3005";
@@ -54,15 +55,28 @@ function ViewRawMaterial() {
       const previousPrice = selectedItem.price;
 
       selectedItem.price = value;
+      const token = localStorage.getItem("token");
 
-      await axios.put(`${API_BASE_URL}/rawMaterial/${itemId}`, selectedItem);
-
-      await axios.post(`${API_BASE_URL}/priceLog`, {
-        itemId: selectedItem._id,
-        itemName: selectedItem.Name,
-        previousPrice: previousPrice,
-        updatedPrice: value,
+      await axios.put(`${API_BASE_URL}/rawMaterial/${itemId}`, selectedItem, {
+        headers: {
+          Authorization: token,
+        },
       });
+
+      await axios.post(
+        `${API_BASE_URL}/priceLog`,
+        {
+          itemId: selectedItem._id,
+          itemName: selectedItem.Name,
+          previousPrice: previousPrice,
+          updatedPrice: value,
+        },
+        {
+          headers: {
+            Authorization: token,
+          },
+        }
+      );
 
       fetchRawMaterials();
     } catch (error) {
@@ -81,16 +95,23 @@ function ViewRawMaterial() {
     }
   };
 
-  const handleDeleteItem = async (itemId) => {
-    console.log(itemId);
+  const handleDeleteItem = async (rawMaterialId) => {
     try {
-      await axios.delete(`${API_BASE_URL}/rawMaterial/${itemId}`);
-      alert("Item deteted successfully");
+      const token = localStorage.getItem("token");
+
+      await axios.delete(`${API_BASE_URL}/rawMaterial/${rawMaterialId}`, {
+        headers: {
+          Authorization: token,
+        },
+      });
+
+      alert("Raw material item deleted successfully");
+
       // Reload the current route
       window.location.reload();
     } catch (error) {
-      // Handle error
-      alert("Item could not be deteted");
+      console.error("Error deleting raw material item:", error);
+      alert("Error deleting raw material item");
     }
   };
 
@@ -108,16 +129,26 @@ function ViewRawMaterial() {
         itemlimit: formData.itemlimit,
       };
 
+      const token = localStorage.getItem("token");
+
       await axios.put(
         `${API_BASE_URL}/rawMaterial/${selectedItem._id}`,
-        updateData
+        updateData,
+        {
+          headers: {
+            Authorization: token,
+          },
+        }
       );
-      alert("Item Updated");
+
+      alert("Raw material item updated successfully");
+
+      // Handle success or navigate to a different page
       setOpen(false);
       window.location.reload();
     } catch (error) {
-      // Handle error
-      console.error("Error updating item:", error);
+      console.error("Error updating raw material item:", error);
+      alert("Error updating raw material item");
     }
     setConfirmLoading(true);
     setTimeout(() => {
@@ -125,6 +156,7 @@ function ViewRawMaterial() {
       setConfirmLoading(false);
     }, 2000);
   };
+
   const handleCancel = () => {
     setOpen(false);
   };
@@ -242,13 +274,25 @@ function ViewRawMaterial() {
 
   const fetchRawMaterials = async () => {
     try {
-      const response = await axios.get("http://localhost:3005/rawMaterial");
-      const rawData = response.data.data;
+      const token = localStorage.getItem("token");
 
-      // Ensure data is an array
+      // Include the token in the headers
+      const response = await fetch(`${API_BASE_URL}/rawMaterial`, {
+        method: "GET",
+        headers: {
+          Authorization: token,
+        },
+      });
+
+      const data = await response.json();
+
+      const rawData = data.data;
+
+      // Ensure rawData is an array
       const dataArray = Array.isArray(rawData) ? rawData : [];
 
-      setData(dataArray); // Set the data array here
+      setData(dataArray);
+
       setLoading(false);
     } catch (error) {
       console.error("Error fetching raw materials:", error);
@@ -267,7 +311,6 @@ function ViewRawMaterial() {
               columns={columns}
               dataSource={data}
               loading={loading}
-            
               rowKey={(record) => record.uid}
             />
           ) : (

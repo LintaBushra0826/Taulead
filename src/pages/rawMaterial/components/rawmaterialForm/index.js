@@ -45,13 +45,20 @@ function RawMaterialForm() {
 
   const handleSubmit = async () => {
     try {
-      await axios.post(`${API_BASE_URL}/rawMaterial`, formData);
+      const token = localStorage.getItem("token");
+
+      await axios.post(`${API_BASE_URL}/rawMaterial`, formData, {
+        headers: {
+          Authorization: token,
+        },
+      });
       alert("Raw material item added successfully!");
       window.location.reload();
     } catch (error) {
       alert("Error adding raw material item");
     }
   };
+
   const handleViewItems = () => {
     // Use the useLocation hook to navigate
     const viewItemsPath = "/viewrawmaterial";

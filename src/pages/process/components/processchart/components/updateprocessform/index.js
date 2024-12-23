@@ -88,8 +88,6 @@ function ProcessForm({ processData }) {
       ProcessDuration = `${hours} hour(s) and ${minutes} minute(s)`;
     }
 
-    console.log("duration before set", ProcessDuration);
-
     setProcess((prevProcess) => ({
       ...prevProcess,
       duration: ProcessDuration,

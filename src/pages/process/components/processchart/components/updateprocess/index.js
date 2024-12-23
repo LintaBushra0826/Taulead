@@ -77,15 +77,21 @@ function UpdateProcess({ isVisible, onClose, selectedTaskData }) {
   };
 
   const handleSubmit = async () => {
-    console.log("process", process);
     try {
       const combinedData = {
         ...process,
       };
+      const token = localStorage.getItem("token");
 
+      const headers = {
+        Authorization: token,
+      };
+
+      // Assuming combinedData is the data you want to send in the request body
       const response = await axios.put(
         `${API_BASE_URL}/update-process/${selectedTaskData.key}`,
-        combinedData
+        combinedData,
+        { headers }
       );
 
       if (response.status === 200) {

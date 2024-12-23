@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from "react";
-import Header from "../../layout/dashboardheader";
+import Header from "../../layout/justheader";
 import SideMenu from "../../layout/sideMenu";
-import { BodyWrapper, SpinWrapper, TableWrapper } from "../../styles/global.styled";
+import { BodyWrapper, SpinWrapper } from "../../styles/global.styled";
+import { TableWrapper } from "./index.styled";
 import { Table, Typography, Modal, Input, Form, Spin } from "antd";
 import axios from "axios";
+import { FiEdit3 } from "react-icons/fi";
+import { MdOutlineDelete } from "react-icons/md";
 
 function ViewMeauringUnit() {
   const API_BASE_URL = "http://localhost:3005";
@@ -12,7 +15,7 @@ function ViewMeauringUnit() {
   const [editingKey] = useState("");
   const [open, setOpen] = useState(false);
   const [confirmLoading] = useState(false);
-  const [data, setData] = useState(null); // Initialize data as null instead of an empty array
+  const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
 
   const handleInputChange = (event) => {
@@ -37,7 +40,13 @@ function ViewMeauringUnit() {
   const handleDeleteItem = async (unitId) => {
     console.log(unitId);
     try {
-      await axios.delete(`${API_BASE_URL}/MeasuringUnit/${unitId}`);
+      const token = localStorage.getItem("token");
+
+      await axios.delete(`${API_BASE_URL}/MeasuringUnit/${unitId}`, {
+        headers: {
+          Authorization: token,
+        },
+      });
       alert("Unit deleted successfully");
       // Reload the current route
       window.location.reload();
@@ -50,17 +59,24 @@ function ViewMeauringUnit() {
   const handleOk = async () => {
     try {
       const updateData = {
-        name: selectedUnit.name,
-        desc: selectedUnit.desc,
-        type: selectedUnit.type,
-        scale: selectedUnit.scale,
+        name: formData.name,
+        desc: formData.desc,
+        type: formData.type,
+        scale: formData.scale,
       };
 
-      console.log("Update Data:", updateData);
-      // const response = await axios.put(
-      //   `${API_BASE_URL}/MeasuringUnit/${selectedUnit._id}`,
-      //   updateData
-      // );
+      const token = localStorage.getItem("token");
+
+      await axios.put(
+        `${API_BASE_URL}/MeasuringUnit/${selectedUnit._id}`,
+        updateData,
+        {
+          headers: {
+            Authorization: token,
+          },
+        }
+      );
+
       alert("Unit Updated");
       setOpen(false);
       window.location.reload();
@@ -107,20 +123,19 @@ function ViewMeauringUnit() {
       render: (_, record) => {
         return (
           <>
-            <Typography.Link
-              disabled={editingKey !== ""}
+            <FiEdit3
               onClick={() => showModal(record._id)}
-              style={{ padding: "10%" }}
-            >
-              Update
-            </Typography.Link>
-            <Typography.Link
-              disabled={editingKey !== ""}
+              style={{ color: "#360a5a", width: "20px", height: "35px" }}
+            />
+            <MdOutlineDelete
               onClick={() => handleDeleteItem(record._id)}
-              style={{ padding: "10%" }}
-            >
-              Delete
-            </Typography.Link>
+              style={{
+                marginLeft: "25px",
+                color: "#360a5a",
+                width: "20px",
+                height: "35px",
+              }}
+            />
           </>
         );
       },
@@ -133,11 +148,25 @@ function ViewMeauringUnit() {
 
   const fetchMeasuringUnit = async () => {
     try {
-      const response = await axios.get("http://localhost:3005/MeasuringUnit");
-      const rawData = response.data.data;
+      const token = localStorage.getItem("token");
+      console.log("Token in fetch:", token);
 
-      // Ensure data is an array
+      // Include the token in the headers
+      const response = await fetch(`${API_BASE_URL}/MeasuringUnit`, {
+        method: "GET",
+        headers: {
+          Authorization: token,
+        },
+      });
+
+      const data = await response.json();
+      console.log("Data from fetch:", data);
+
+      const rawData = data.data;
+
+      // Ensure rawData is an array
       const dataArray = Array.isArray(rawData) ? rawData : [];
+      console.log("dataArray", dataArray);
 
       setData(dataArray);
       setLoading(false);
@@ -148,7 +177,7 @@ function ViewMeauringUnit() {
   };
   return (
     <>
-      {/* <Header /> */}
+      <Header />
       <BodyWrapper>
         <SideMenu />
         <TableWrapper>

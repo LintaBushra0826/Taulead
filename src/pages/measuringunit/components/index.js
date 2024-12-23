@@ -20,7 +20,13 @@ function MeasuringUnitForm() {
 
   const handleSubmit = async () => {
     try {
-      await axios.post(`${API_BASE_URL}/MeasuringUnit`, formData);
+      const token = localStorage.getItem("token");
+
+      await axios.post(`${API_BASE_URL}/MeasuringUnit`, formData, {
+        headers: {
+          Authorization: token,
+        },
+      });
       alert("Unit added successfully!");
     } catch (error) {
       alert("Error adding measuring unit");
@@ -38,7 +44,6 @@ function MeasuringUnitForm() {
       <br />
       <br />
       <FormWrapper>
-        <FormHeading className="HeaderHeading">Measuring Units</FormHeading>
         <Form
           name="basic"
           layout="vertical"

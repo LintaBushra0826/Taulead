@@ -45,7 +45,6 @@ export const FormHeader = styled.div`
     background-clip: text; //Apply gradient to text
     -webkit-text-fill-color: transparent;
     font-size: 22px;
-    // color: Black;
     font-weight: bold;
     padding-bottom: 10px;
   }
@@ -56,10 +55,6 @@ export const FormHeader = styled.div`
     padding-bottom: 40px;
     text-align: justify;
   }
-  /* .ant-form-item-label{
-    display:flex;
-    justify-content: space-between;
-  } */
 `;
 
 export const Container = styled.div`
@@ -67,6 +62,7 @@ export const Container = styled.div`
   justify-content: space-between;
   padding-bottom: 20px;
 `;
+
 export const Footer = styled.div`
   position: relative;
   display: flex;

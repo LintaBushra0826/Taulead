@@ -49,13 +49,24 @@ function SideMenu({ selectedTaskData, onCancel }) {
 
   const fetchRawMaterials = async () => {
     try {
-      const response = await axios.get("http://localhost:3005/rawMaterial");
-      const rawData = response.data.data;
+      const token = localStorage.getItem("token");
+
+      // Include the token in the headers
+      const response = await fetch(`${API_BASE_URL}/rawMaterial`, {
+        method: "GET",
+        headers: {
+          Authorization: token,
+        },
+      });
+
+      const data = await response.json();
+
+      const rawData = data.data;
 
       // Ensure data is an array
       const dataArray = Array.isArray(rawData) ? rawData : [];
 
-      setData(dataArray); // Set the data array here
+      setData(dataArray);
     } catch (error) {
       console.error("Error fetching raw materials:", error);
     }
@@ -67,8 +78,19 @@ function SideMenu({ selectedTaskData, onCancel }) {
 
   const fetchHumanResource = async () => {
     try {
-      const response = await axios.get("http://localhost:3005/humanresource");
-      const rawData = response.data.data;
+      const token = localStorage.getItem("token");
+
+      // Include the token in the headers
+      const response = await fetch(`${API_BASE_URL}/humanresource`, {
+        method: "GET",
+        headers: {
+          Authorization: token,
+        },
+      });
+
+      const data = await response.json();
+
+      const rawData = data.data;
 
       // Ensure data is an array
       const dataArray = Array.isArray(rawData) ? rawData : [];
@@ -80,34 +102,47 @@ function SideMenu({ selectedTaskData, onCancel }) {
 
   const handleSubmit = async () => {
     try {
+      const token = localStorage.getItem("token");
+      const headers = {
+        Authorization: token,
+      };
+
       let response;
 
       if (selectedTaskData.type === "project") {
-        response = await axios.post(`${API_BASE_URL}/executed-process`, {
-          name: selectedTaskData.newName,
-          start: selectedTaskData.start,
-          end: selectedTaskData.end,
-          desc: selectedTaskData.desc,
-          duration: selectedTaskData.duration,
-          pid: selectedTaskData.processId,
-          humanresource: selectedTaskData.humanresource,
-          rawmaterial: selectedTaskData.rawmaterial,
-          key: selectedTaskData.key,
-          executedstatus: "executed",
-        });
+        response = await axios.post(
+          `${API_BASE_URL}/executed-process`,
+          {
+            name: selectedTaskData.newName,
+            start: selectedTaskData.start,
+            end: selectedTaskData.end,
+            desc: selectedTaskData.desc,
+            duration: selectedTaskData.duration,
+            pid: selectedTaskData.processId,
+            humanresource: selectedTaskData.humanresource,
+            rawmaterial: selectedTaskData.rawmaterial,
+            key: selectedTaskData.key,
+            executedstatus: "executed",
+          },
+          { headers }
+        );
       } else if (selectedTaskData.type === "task") {
-        response = await axios.post(`${API_BASE_URL}/executed-process`, {
-          name: selectedTaskData.newName,
-          start: selectedTaskData.start,
-          end: selectedTaskData.end,
-          desc: selectedTaskData.desc,
-          duration: selectedTaskData.duration,
-          pid: selectedTaskData.subprocessId,
-          humanresource: selectedTaskData.subhumanresource,
-          rawmaterial: selectedTaskData.subrawmaterial,
-          key: selectedTaskData.key,
-          executedstatus: "executed",
-        });
+        response = await axios.post(
+          `${API_BASE_URL}/executed-process`,
+          {
+            name: selectedTaskData.newName,
+            start: selectedTaskData.start,
+            end: selectedTaskData.end,
+            desc: selectedTaskData.desc,
+            duration: selectedTaskData.duration,
+            pid: selectedTaskData.subprocessId,
+            humanresource: selectedTaskData.subhumanresource,
+            rawmaterial: selectedTaskData.subrawmaterial,
+            key: selectedTaskData.key,
+            executedstatus: "executed",
+          },
+          { headers }
+        );
       }
 
       await fetchRawMaterials();
@@ -143,7 +178,6 @@ function SideMenu({ selectedTaskData, onCancel }) {
             processName: selectedTaskData.newName,
             usedQuan: updatedItem.quan,
             availableQuan: updatedQuantity,
-            // originalQuan:  updatedQuantity,
             updatedQuan: updatedQuantity,
             usedQuanUnit: updatedItem.unit,
             itemId: updatedItem.id,
@@ -154,12 +188,18 @@ function SideMenu({ selectedTaskData, onCancel }) {
             : [newRecord];
 
           try {
+            const jwtToken = localStorage.getItem("token");
+
             const response = await axios.put(
               `${API_BASE_URL}/rawMaterial/${material.id}`,
               {
                 quan: updatedQuantity,
-                // originalQuan:updatedQuantity,
                 $push: { processRecords: updatedProcessRecords },
+              },
+              {
+                headers: {
+                  Authorization: jwtToken,
+                },
               }
             );
 
@@ -204,49 +244,21 @@ function SideMenu({ selectedTaskData, onCancel }) {
             : [newRecord];
 
           try {
+            const jwtToken = localStorage.getItem("token");
+
             const response = await axios.put(
               `${API_BASE_URL}/humanresource/${employee.id}`,
               {
                 tag: "Busy",
                 $push: { HRprocessRecords: updatedHRProcessRecords },
+              },
+              {
+                headers: {
+                  Authorization: jwtToken,
+                },
               }
             );
 
-            //     const currentTime = new Date();
-            //     console.log(
-            //       "current , start, end time ",
-            //       currentTime,
-            //       starttime,
-            //       endtime
-            //     );
-            //     const timeDifference = endtime - currentTime;
-
-            //     console.log("timedifference", timeDifference);
-
-            //  if (timeDifference < 0) {
-            //       // Update HumanResource status to "available" if process end time has passed
-            //       const updateHrAvailabilityRequests = HumanResource.map(
-            //         async (employee) => {
-            //           try {
-            //             const response = await axios.put(
-            //               `${API_BASE_URL}/humanresource/${employee.id}`,
-            //               {
-            //                 tag: "available",
-            //               }
-            //             );
-
-            //             return response.data;
-            //             alert("Employee status updated to AVAILABLE");
-            //           } catch (error) {
-            //             console.error(
-            //               `Error updating employee tag with ID ${employee.id}`,
-            //               error
-            //             );
-            //             throw error;
-            //           }
-            //         }
-            //       );
-            //     }
             return response;
           } catch (error) {
             console.error(
@@ -270,69 +282,6 @@ function SideMenu({ selectedTaskData, onCancel }) {
         } catch (error) {
           console.error("Error updating employees:", error);
         }
-
-        // // Wait until the end time of the process
-        // const currentTime = new Date();
-        // console.log("current , start, end time ", currentTime,starttime, endtime);
-        // const timeDifference = endtime - currentTime;
-
-        // console.log("timedifference", timeDifference);
-
-        // if (timeDifference > 0) {
-        //   // Wait until the end time to update HumanResource status to "busy"
-        //   setTimeout(async () => {
-        //     const updateHrAvailabilityRequests = HumanResource.map(
-        //       async (employee) => {
-        //         try {
-        //           const response = await axios.put(
-        //             `${API_BASE_URL}/humanresource/${employee.id}`,
-        //             {
-        //               tag: "busy",
-        //             }
-        //           );
-
-        //           return response.data;
-        //           alert("Employee status updated to BUSY");
-        //         } catch (error) {
-        //           console.error(
-        //             `Error updating employee tag with ID ${employee.id}`,
-        //             error
-        //           );
-        //           throw error;
-        //         }
-        //       }
-        //     );
-
-        //     // Execute update requests for HumanResource availability
-        //     await Promise.all(updateHrAvailabilityRequests);
-        //   }, timeDifference);
-        // } else if (timeDifference < 0) {
-        //   // Update HumanResource status to "available" if process end time has passed
-        //   const updateHrAvailabilityRequests = HumanResource.map(
-        //     async (employee) => {
-        //       try {
-        //         const response = await axios.put(
-        //           `${API_BASE_URL}/humanresource/${employee.id}`,
-        //           {
-        //             tag: "available",
-        //           }
-        //         );
-
-        //         return response.data;
-        //         alert("Employee status updated to AVAILABLE");
-        //       } catch (error) {
-        //         console.error(
-        //           `Error updating employee tag with ID ${employee.id}`,
-        //           error
-        //         );
-        //         throw error;
-        //       }
-        //     }
-        //   );
-
-        //   // Execute update requests for HumanResource availability
-        //   await Promise.all(updateHrAvailabilityRequests);
-        // }
 
         alert("Executed successfully!");
       } else {

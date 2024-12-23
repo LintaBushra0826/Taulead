@@ -24,6 +24,7 @@ function ProcessForm({ formData, setFormData }) {
   const [value, setvalue] = useState([]);
   const [isParallel, setIsParallel] = useState(false);
   const [isSequential, setIsSequential] = useState(false);
+  const API_BASE_URL = "http://localhost:3005";
 
   const onStartChange = (value, placeholder, dateString) => {
     if (value) {
@@ -170,12 +171,17 @@ function ProcessForm({ formData, setFormData }) {
 
   const fetchProcessData = async () => {
     try {
-      const [response, subprocessResponse] = await Promise.all([
-        axios.get("http://localhost:3005/process"),
-        axios.get("http://localhost:3005/subprocess"),
+      const token = localStorage.getItem("token");
+
+      const headers = {
+        Authorization: token,
+      };
+      const [processResponse, subprocessResponse] = await Promise.all([
+        axios.get(`${API_BASE_URL}/process`, { headers }),
+        axios.get(`${API_BASE_URL}/subprocess`, { headers }),
       ]);
 
-      const process = response.data.data;
+      const process = processResponse.data.data;
       const subprocess = subprocessResponse.data.data;
 
       // Iterate through the subprocess array
@@ -199,7 +205,7 @@ function ProcessForm({ formData, setFormData }) {
 
       // Create a map of subprocesses by their _id for efficient lookup
       const subprocessMap = {};
-      // Iterate through the process array
+
       process.forEach((item) => {
         const ProcessdurationInHours = formatDuration(
           new Date(item.start),
@@ -327,7 +333,6 @@ function ProcessForm({ formData, setFormData }) {
               placeholder={formData.start}
               onChange={onStartChange}
               style={{ width: "1000px" }}
-              // placeholder="Select Start Date"
             />
           </Form.Item>
         </Col>
@@ -338,7 +343,6 @@ function ProcessForm({ formData, setFormData }) {
               placeholder={formData.end}
               onChange={onEndChange}
               style={{ width: "250px" }}
-              // placeholder="Select End Date"
             />
           </Form.Item>
         </Col>

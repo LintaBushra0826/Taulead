@@ -31,6 +31,7 @@ import {
 } from "@ant-design/icons";
 
 function Dashboard() {
+  const API_BASE_URL = "http://localhost:3005";
   const [usedItems, setUsedItems] = useState(0);
   const [unusedItems, setUnusedItems] = useState(0);
   const [totalRawMaterials, setTotalRawMaterials] = useState(0);
@@ -71,8 +72,19 @@ function Dashboard() {
 
   const fetchData = useCallback(async () => {
     try {
-      const response = await axios.get("http://localhost:3005/rawMaterial");
-      const rawData = response.data.data;
+      const token = localStorage.getItem("token");
+
+      // Include the token in the headers
+      const response = await fetch(`${API_BASE_URL}/rawMaterial`, {
+        method: "GET",
+        headers: {
+          Authorization: token,
+        },
+      });
+
+      const data = await response.json();
+
+      const rawData = data.data;
 
       // Ensure data is an array
       const dataArray = Array.isArray(rawData) ? rawData : [];
@@ -122,7 +134,6 @@ function Dashboard() {
         })
       );
 
-      console.log("processedDataArray", processedDataArray);
       // Convert the object values into an array
       const itemProcessCostsArray = Object.values(itemProcessCosts);
 
@@ -169,8 +180,19 @@ function Dashboard() {
 
   const fetchHRData = useCallback(async () => {
     try {
-      const response = await axios.get("http://localhost:3005/humanresource");
-      const rawData = response.data.data;
+      const token = localStorage.getItem("token");
+
+      // Include the token in the headers
+      const response = await fetch(`${API_BASE_URL}/humanresource`, {
+        method: "GET",
+        headers: {
+          Authorization: token,
+        },
+      });
+
+      const data = await response.json();
+
+      const rawData = data.data;
 
       // Ensure data is an array
       const dataArray = Array.isArray(rawData) ? rawData : [];
@@ -179,6 +201,8 @@ function Dashboard() {
       const availableEmployees = dataArray.filter(
         (item) => item.tag === "available"
       );
+
+      console.log("availableEmployees", availableEmployees);
       const busyEmployees = dataArray.filter((item) => item.tag === "Busy");
 
       const availableEmployeesCount = availableEmployees.length;
@@ -196,14 +220,22 @@ function Dashboard() {
 
   const fetchComProcessData = useCallback(async () => {
     try {
-      const completedResponse = await axios.get(
-        "http://localhost:3005/completed-process"
-      );
-      const rawData = completedResponse.data.data;
+      const token = localStorage.getItem("token");
+
+      // Include the token in the headers
+      const response = await fetch(`${API_BASE_URL}/completed-process`, {
+        method: "GET",
+        headers: {
+          Authorization: token,
+        },
+      });
+
+      const data = await response.json();
+
+      const rawData = data.data;
       const dataArray = Array.isArray(rawData) ? rawData : [];
       setCompletedProcessesCount(dataArray.length);
       setCompletedProcessObj(dataArray);
-      console.log("completed process", dataArray);
     } catch (error) {
       console.error("Error fetching completed process:", error);
     }
@@ -211,15 +243,22 @@ function Dashboard() {
 
   const fetchInProgProcessData = useCallback(async () => {
     try {
-      const inProgressResponse = await axios.get(
-        "http://localhost:3005/inprogress-process"
-      );
-      const rawData = inProgressResponse.data.data;
+      const token = localStorage.getItem("token");
+
+      // Include the token in the headers
+      const response = await fetch(`${API_BASE_URL}/inprogress-process`, {
+        method: "GET",
+        headers: {
+          Authorization: token,
+        },
+      });
+
+      const data = await response.json();
+
+      const rawData = data.data;
       const dataArray = Array.isArray(rawData) ? rawData : [];
       setInProgressProcessesCount(dataArray.length);
       setInprogProcessObj(dataArray);
-
-      console.log("dataArray", dataArray);
     } catch (error) {
       console.error("Error fetching inprogress process:", error);
     }
@@ -227,13 +266,21 @@ function Dashboard() {
 
   const fetchExecutedProcess = useCallback(async () => {
     try {
-      const executedResponse = await axios.get(
-        "http://localhost:3005/executed-process"
-      );
-      const rawData = executedResponse.data.data;
+      const token = localStorage.getItem("token");
+
+      // Include the token in the headers
+      const response = await fetch(`${API_BASE_URL}/executed-process`, {
+        method: "GET",
+        headers: {
+          Authorization: token,
+        },
+      });
+
+      const data = await response.json();
+
+      const rawData = data.data;
       const dataArray = Array.isArray(rawData) ? rawData : [];
       setExecutedData(dataArray);
-      console.log("executed processes", executedData);
     } catch (error) {
       console.error("Error fetching executed process:", error);
     }
@@ -241,16 +288,33 @@ function Dashboard() {
 
   const fetchBackLogProcess = useCallback(async () => {
     try {
-      const backlogResponse = await axios.get("http://localhost:3005/process");
-      const backlogData = backlogResponse.data.data;
-      const backlogArray = Array.isArray(backlogData) ? backlogData : [];
+      const token = localStorage.getItem("token");
 
-      // Fetch executed processes
-      const executedResponse = await axios.get(
-        "http://localhost:3005/executed-process"
-      );
-      const exerawData = executedResponse.data.data;
-      const exedataArray = Array.isArray(exerawData) ? exerawData : [];
+      // Include the token in the headers
+      const response = await fetch(`${API_BASE_URL}/process`, {
+        method: "GET",
+        headers: {
+          Authorization: token,
+        },
+      });
+
+      const data = await response.json();
+
+      const rawData = data.data;
+      const backlogArray = Array.isArray(rawData) ? rawData : [];
+
+      // Include the token in the headers
+      const rresponse = await fetch(`${API_BASE_URL}/executed-process`, {
+        method: "GET",
+        headers: {
+          Authorization: token,
+        },
+      });
+
+      const ddata = await rresponse.json();
+
+      const rrawData = ddata.data;
+      const exedataArray = Array.isArray(rrawData) ? rrawData : [];
 
       // Find processes in backlog that haven't been executed
       const backlogNotExecuted = backlogArray.filter((backlogItem) => {
@@ -267,10 +331,16 @@ function Dashboard() {
       setBacklogProcessesCount(backlogNotExecuted.length);
 
       // Fetch inventory data
-      const inventoryResponse = await axios.get(
-        "http://localhost:3005/rawMaterial"
-      );
-      let inventory = inventoryResponse.data.data;
+      // Include the token in the headers
+      const rawresponse = await fetch(`${API_BASE_URL}/rawMaterial`, {
+        method: "GET",
+        headers: {
+          Authorization: token,
+        },
+      });
+
+      const rawMdata = await rawresponse.json();
+      let inventory = rawMdata.data;
       inventory = Array.isArray(inventory) ? inventory : [];
 
       const processExecutionCounts = [];
@@ -524,11 +594,6 @@ function Dashboard() {
     {
       title: "Process Name",
       dataIndex: "name",
-      // render: (_, record) => (
-      //   <span style={{ color: "#360a5a" }}>
-      //     {capitalizeFirstLetter(record.name)}
-      //   </span>
-      // ),
     },
     {
       title: "Possible Executions",
@@ -819,7 +884,7 @@ function Dashboard() {
         >
           <Table
             dataSource={AvailableObjects.map((processRecord) => ({
-              key: `${processRecord.name}_${processRecord.desgn}`,
+              // key: `${processRecord.name}_${processRecord.desgn}`,
               name: processRecord.name,
               designation: processRecord.desgn,
             }))}
@@ -836,7 +901,7 @@ function Dashboard() {
             size="small"
             scroll={{
               x: 500,
-              y: 250,
+              y: 165,
             }}
             pagination={false}
             style={{ background: "transparent" }}
@@ -1310,8 +1375,6 @@ function Dashboard() {
                   textAlign: "right",
                   boxShadow: "0 1px 8px #f3edf7",
                   background: "transparent",
-                  // background:
-                  //   "linear-gradient(140deg, #fafafa, #fafafa, #faece3 120%)",
                 }}
               >
                 <Paragraph

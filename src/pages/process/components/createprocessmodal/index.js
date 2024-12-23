@@ -75,16 +75,20 @@ function CreateProcessModal({ isVisible, onClose }) {
 
   const handleSubmit = async () => {
     try {
-      console.log("process.humanresource", process.humanResource);
+      const token = localStorage.getItem("token");
+
       const combinedData = {
         ...process,
       };
 
-      console.log("combineddata", combinedData);
-
       const response = await axios.post(
         `${API_BASE_URL}/process`,
-        combinedData
+        combinedData,
+        {
+          headers: {
+            Authorization: token,
+          },
+        }
       );
 
       if (response.status === 200) {
@@ -101,27 +105,32 @@ function CreateProcessModal({ isVisible, onClose }) {
     } catch (error) {
       alert("Error adding process");
     }
-    
   };
 
   const handleSubSubmit = async () => {
     try {
-      console.log("subprocess", subprocess);
-
       const combinedData = {
         ...subprocess,
       };
 
+      const token = localStorage.getItem("token");
       const response = await axios.post(
         `${API_BASE_URL}/subprocess`,
-        combinedData
+        combinedData,
+        {
+          headers: {
+            Authorization: token,
+          },
+        }
       );
+
       if (response.status === 200) {
         console.log("response", response);
         alert("SubProcess added successfully!");
         setSubprocessCount((prevCount) => prevCount + 1);
 
         if (showSubprocessContent) {
+          console.log("set subprocesscount", subprocessCount);
           setSubIsModalVisible(true);
         }
         setFormData({});
@@ -134,7 +143,7 @@ function CreateProcessModal({ isVisible, onClose }) {
   };
 
   const processName = `${process.name}`;
-  const pID = `${process._id}`;
+  const pID = `${process.pid}`;
 
   return (
     <FormWrapper>

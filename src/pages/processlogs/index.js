@@ -26,7 +26,7 @@ const UserColumnRenderer = ({ userData }) => (
       <div style={{ color: "#360a5a", fontWeight: "bold", fontSize: "11px" }}>
         {userData.Name}
       </div>
-      <div style={{ color: "#360a5a", fontSize: "11px", marginLeft: "-25px" }}>
+      <div style={{ color: "#360a5a", fontSize: "11px", marginLeft: "-1px" }}>
         {userData.Status}
       </div>
     </div>
@@ -69,10 +69,19 @@ const ProcessLogsTable = () => {
         Status: userDataFromServer.Status,
       });
 
-      const processLogsResponse = await axios.get(
-        `${API_BASE_URL}/processlogs`
-      );
-      const rawData = processLogsResponse.data.data;
+      const ttoken = localStorage.getItem("token");
+
+      // Include the token in the headers
+      const rresponse = await fetch(`${API_BASE_URL}/processlogs`, {
+        method: "GET",
+        headers: {
+          Authorization: ttoken,
+        },
+      });
+
+      const data = await rresponse.json();
+
+      const rawData = data.data;
       const dataArray = Array.isArray(rawData) ? rawData : [];
       console.log("dataArray", dataArray);
 
@@ -90,7 +99,6 @@ const ProcessLogsTable = () => {
           timestamp: item.timestamp,
           changes: Array.isArray(item.changes) ? item.changes : [],
         };
-        console.log("item changes", item.changes);
 
         // if (item.modelType === "Process") {
         //   if (item.action === "Create") {
@@ -132,7 +140,6 @@ const ProcessLogsTable = () => {
         return processedItem;
       });
       setData(processedData);
-      console.log("processedData", processedData);
 
       const changesData = processedData.flatMap((item) => {
         if (item.changes && Array.isArray(item.changes)) {
@@ -163,7 +170,6 @@ const ProcessLogsTable = () => {
         }
         return [];
       });
-      console.log("changesData", changesData);
 
       // Flatten changesData and skip changes for "rawMaterial" and "humanResource
       const flattenedChangesData = changesData.flatMap((item) => {
@@ -266,9 +272,9 @@ const ProcessLogsTable = () => {
       title: "User",
       dataIndex: "user",
       key: "user",
-      width: 140,
+      width: 200,
       render: (userData) => <UserColumnRenderer userData={userData} />,
-      align: "center",
+      align: "left",
     },
     {
       title: "Entity Id",

@@ -31,11 +31,27 @@ function ViewPriceLogs() {
 
   const fetchpricelogs = async () => {
     try {
-      const response = await axios.get("http://localhost:3005/pricelogs");
-      const rawData = response.data.data;
-      const dataArray = Array.isArray(rawData) ? rawData : [];
+      const token = localStorage.getItem("token");
+      console.log("Token in fetch:", token);
 
-      setData(dataArray);
+      // Include the token in the headers
+      const response = await fetch(`${API_BASE_URL}/pricelogs`, {
+        method: "GET",
+        headers: {
+          Authorization: token,
+        },
+      });
+
+      const data = await response.json();
+      console.log("Data from fetch:", data);
+
+      const rawData = data.data;
+
+      // Ensure rawData is an array
+      const dataArray = Array.isArray(rawData) ? rawData : [];
+      console.log("dataArray", dataArray);
+
+      setData(dataArray); // Set the data array here
     } catch (error) {
       console.error("Error fetching raw materials:", error);
     }

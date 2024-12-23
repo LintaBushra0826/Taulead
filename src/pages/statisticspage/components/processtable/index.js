@@ -41,10 +41,19 @@ function ProcessLogs() {
 
   const fetchComProcessData = async () => {
     try {
-      const completedresponse = await axios.get(
-        "http://localhost:3005/completed-process"
-      );
-      const rawData = completedresponse.data.data;
+      const token = localStorage.getItem("token");
+
+      // Include the token in the headers
+      const response = await fetch(`${API_BASE_URL}/completed-process`, {
+        method: "GET",
+        headers: {
+          Authorization: token,
+        },
+      });
+
+      const data = await response.json();
+
+      const rawData = data.data;
 
       // Ensure data is an array
       const dataArray = Array.isArray(rawData) ? rawData : [];
@@ -57,10 +66,19 @@ function ProcessLogs() {
 
   const fetchInProgProcessData = async () => {
     try {
-      const inprogressresponse = await axios.get(
-        "http://localhost:3005/inprogress-process"
-      );
-      const rawData = inprogressresponse.data.data;
+      const token = localStorage.getItem("token");
+
+      // Include the token in the headers
+      const response = await fetch(`${API_BASE_URL}/inprogress-process`, {
+        method: "GET",
+        headers: {
+          Authorization: token,
+        },
+      });
+
+      const data = await response.json();
+
+      const rawData = data.data;
 
       // Ensure data is an array
       const dataArray = Array.isArray(rawData) ? rawData : [];
@@ -73,10 +91,19 @@ function ProcessLogs() {
 
   const fetchExecutedProcess = async () => {
     try {
-      const executedresponse = await axios.get(
-        "http://localhost:3005/executed-process"
-      );
-      const rawData = executedresponse.data.data;
+      const token = localStorage.getItem("token");
+
+      // Include the token in the headers
+      const response = await fetch(`${API_BASE_URL}/executed-process`, {
+        method: "GET",
+        headers: {
+          Authorization: token,
+        },
+      });
+
+      const data = await response.json();
+
+      const rawData = data.data;
 
       // Ensure data is an array
       const dataArray = Array.isArray(rawData) ? rawData : [];
@@ -88,11 +115,21 @@ function ProcessLogs() {
   };
   const fetchBackLogProcess = async () => {
     try {
-      const backlogresponse = await axios.get("http://localhost:3005/process");
-      const backlogData = backlogresponse.data.data;
+      const token = localStorage.getItem("token");
 
+      // Include the token in the headers
+      const response = await fetch(`${API_BASE_URL}/process`, {
+        method: "GET",
+        headers: {
+          Authorization: token,
+        },
+      });
+
+      const data = await response.json();
+
+      const rawData = data.data;
       // Ensure data is an array
-      const backlogArray = Array.isArray(backlogData) ? backlogData : [];
+      const backlogArray = Array.isArray(rawData) ? rawData : [];
 
       const backlogNotExecuted = backlogArray.filter((backlogItem) => {
         return !Executeddata.some(
@@ -324,8 +361,6 @@ function ProcessLogs() {
     ];
     // console.log("BackLogdata", BackLogdata);
     setCombinedData(combined);
-
-    console.log("combined process stats", combined);
   }, [Compdata, Inprogdata, Executeddata]);
 
   const formatTimestamp = (timestamp) => {
@@ -557,7 +592,7 @@ function ProcessLogs() {
             ),
           },
         ]}
-        scroll={{ x: true, y: 590, hideScrollbar: true }}
+        scroll={{ x: true, y: 520, hideScrollbar: true }}
         expandable={{
           expandedRowRender: (record) => (
             <p style={{ margin: 0 }}>

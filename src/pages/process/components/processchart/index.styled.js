@@ -2,13 +2,14 @@ import styled from "styled-components";
 
 export const Chart = styled.div`
   ._WuQ0f {
-    /* max-width: 200px; */
     min-width: 200px;
   }
-  ._3lLk3{
-    /* max-width: 200px; */
+  ._3lLk3 {
     min-width: 200px;
   }
+  overflow: scroll;
+  height: 85vh;
+  width: 100%;
 `;
 
 export const Wrapper = styled.div`

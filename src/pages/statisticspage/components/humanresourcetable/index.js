@@ -49,7 +49,6 @@ function StatsTable(extractedHRRecords) {
     const extractedArray = Object.values(extractedHRRecords).map(
       (item) => item
     );
-    // console.log("extractedArray", extractedArray);
 
     // Assuming dataset is defined before this logic
     const dataset = [];
@@ -62,7 +61,7 @@ function StatsTable(extractedHRRecords) {
           const empName = emp.empName || "";
           const empTag = emp.empTag || "";
           const empDesgn = emp.empDesgn || 0;
-          let empCount = 0; // Count for each employee
+          let empCount = 0;
 
           if (Array.isArray(emp.empRecords) && emp.empRecords.length > 0) {
             emp.empRecords.forEach((recordItem) => {
@@ -106,7 +105,7 @@ function StatsTable(extractedHRRecords) {
           }
 
           // Adding the count to each employee's record
-          emp.completedprocess = empCount;
+          emp.completedprocess = totalCount;
         });
       } else {
         console.log(
@@ -114,9 +113,6 @@ function StatsTable(extractedHRRecords) {
         );
       }
     });
-
-    // Displaying the single dataset object with merged attributes for each item
-    console.log("Dataset:", dataset);
 
     // Creating a formattedData array
     const formattedData = dataset.map((emp) => ({
@@ -129,8 +125,6 @@ function StatsTable(extractedHRRecords) {
       processName: emp.ProcessName,
       completedprocess: emp.completedprocess || 0,
     }));
-
-    console.log("Formatted Data:", formattedData);
 
     // Set the formatted data to the state variable
     setDataSetData(formattedData);

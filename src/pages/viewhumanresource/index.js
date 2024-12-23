@@ -46,7 +46,13 @@ function ViewHumanResource() {
 
   const handleDeleteItem = async (hrId) => {
     try {
-      await axios.delete(`${API_BASE_URL}/humanresource/${hrId}`);
+      const token = localStorage.getItem("token");
+
+      await axios.delete(`${API_BASE_URL}/humanresource/${hrId}`, {
+        headers: {
+          Authorization: token,
+        },
+      });
       alert("Employee data deleted successfully");
 
       // Reload the current route
@@ -71,9 +77,16 @@ function ViewHumanResource() {
         tag: formData.tag,
       };
 
+      const token = localStorage.getItem("token");
+
       await axios.put(
         `${API_BASE_URL}/humanresource/${selectedHR._id}`,
-        updateData
+        updateData,
+        {
+          headers: {
+            Authorization: token,
+          },
+        }
       );
       alert("Employee data Updated");
 
@@ -185,12 +198,26 @@ function ViewHumanResource() {
 
   const fetchHumanResource = async () => {
     try {
-      const response = await axios.get("http://localhost:3005/humanresource");
-      const rawData = response.data.data;
+      const token = localStorage.getItem("token");
+      console.log("Token in fetch:", token);
 
-      // Ensure data is an array
+      // Include the token in the headers
+      const response = await fetch(`${API_BASE_URL}/humanresource`, {
+        method: "GET",
+        headers: {
+          Authorization: token,
+        },
+      });
+
+      const data = await response.json();
+      console.log("Data from fetch:", data);
+
+      const rawData = data.data;
+
+      // Ensure rawData is an array
       const dataArray = Array.isArray(rawData) ? rawData : [];
-      setData(dataArray);
+
+      setData(dataArray); // Set the data array here
       console.log("data", data);
       setLoading(false);
     } catch (error) {

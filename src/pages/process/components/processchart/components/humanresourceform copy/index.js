@@ -11,6 +11,7 @@ function HumanResourceForm(humanResourceData) {
   const [humanresource, setHumanResource] = useState([]);
   const [selectedHumanResource, setSelectedHumanResource] = useState([]);
   const updatehr = useSetAtom(UpdateHumanResourceAtom);
+  const API_BASE_URL = "http://localhost:3005";
 
   const humanResourceArray = Object.values(humanResourceData);
   const flatHumanResourceArray = humanResourceArray.flat(2);
@@ -29,8 +30,18 @@ function HumanResourceForm(humanResourceData) {
 
   const fetchHumanResource = async () => {
     try {
-      const response = await axios.get("http://localhost:3005/humanresource");
-      const rawData = response.data.data;
+      const token = localStorage.getItem("token");
+
+      // Include the token in the headers
+      const response = await fetch(`${API_BASE_URL}/humanresource`, {
+        method: "GET",
+        headers: {
+          Authorization: token,
+        },
+      });
+
+      const data = await response.json();
+      const rawData = data.data.data;
       const dataArray = Array.isArray(rawData) ? rawData : [];
       setHumanResource(dataArray);
     } catch (error) {

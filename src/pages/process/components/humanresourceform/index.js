@@ -11,6 +11,7 @@ function HumanResourceForm() {
   const [value, setValue] = useState([]);
   const [humanresource, setHumanResource] = useState([]);
   const UpdateHumanResource = useSetAtom(UpdateHumanResourceAtom);
+  const API_BASE_URL = "http://localhost:3005";
 
   useEffect(() => {
     fetchHumanResource();
@@ -18,8 +19,19 @@ function HumanResourceForm() {
 
   const fetchHumanResource = async () => {
     try {
-      const response = await axios.get("http://localhost:3005/humanresource");
-      const rawData = response.data.data;
+      const token = localStorage.getItem("token");
+
+      // Include the token in the headers
+      const response = await fetch(`${API_BASE_URL}/humanresource`, {
+        method: "GET",
+        headers: {
+          Authorization: token,
+        },
+      });
+
+      const data = await response.json();
+
+      const rawData = data.data;
 
       // Filter the array to include only human resources with the tag "available"
       const dataArray = Array.isArray(rawData)
